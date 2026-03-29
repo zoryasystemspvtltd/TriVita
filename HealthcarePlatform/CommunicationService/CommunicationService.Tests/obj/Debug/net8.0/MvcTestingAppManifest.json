@@ -1,9 +1,0 @@
-{
-  "CommunicationService.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "I:\\Projects\\TriVita\\HealthcarePlatform\\CommunicationService\\CommunicationService.API",
-  "CommunicationService.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "I:\\Projects\\TriVita\\HealthcarePlatform\\CommunicationService\\CommunicationService.Application",
-  "CommunicationService.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "I:\\Projects\\TriVita\\HealthcarePlatform\\CommunicationService\\CommunicationService.Contracts",
-  "CommunicationService.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "I:\\Projects\\TriVita\\HealthcarePlatform\\CommunicationService\\CommunicationService.Domain",
-  "CommunicationService.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "I:\\Projects\\TriVita\\HealthcarePlatform\\CommunicationService\\CommunicationService.Infrastructure",
-  "Healthcare.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Common",
-  "Healthcare.Swagger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Swagger"
-}

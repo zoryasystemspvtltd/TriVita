@@ -1,0 +1,30 @@
+# --- .NET / MSBuild ---
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Source Link and other SDK outputs under obj (never commit)
+*.sourcelink.json
+
+# Test & code coverage (Coverlet, VSTest, ReportGenerator)
+TestResults/
+
+# Visual Studio / VS Code
+.vs/
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+
+# NuGet
+*.nupkg
+**/packages/*
+!**/packages/build/
+
+# Rider
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

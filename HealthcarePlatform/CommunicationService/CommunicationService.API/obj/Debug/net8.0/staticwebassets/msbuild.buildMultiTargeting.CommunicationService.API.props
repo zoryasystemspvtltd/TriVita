@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\CommunicationService.API.props" />
-</Project>
