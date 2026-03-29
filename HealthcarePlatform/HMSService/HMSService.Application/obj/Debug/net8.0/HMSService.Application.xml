@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HMSService.Application</name>
+    </assembly>
+    <members>
+        <member name="T:HMSService.Application.Abstractions.INotificationHelper">
+            <summary>Routes HMS domain events to CommunicationService (never sends SMTP/SMS directly).</summary>
+        </member>
+        <member name="T:HMSService.Application.DTOs.Appointments.AppointmentResponseDto">
+            <summary>Appointment returned by the API (never expose domain entities).</summary>
+        </member>
+        <member name="P:HMSService.Application.DTOs.Appointments.AppointmentResponseDto.Id">
+            <summary>Surrogate key.</summary>
+        </member>
+        <member name="T:HMSService.Application.DTOs.Appointments.CreateAppointmentDto">
+            <summary>Payload to create an OPD appointment.</summary>
+        </member>
+        <member name="P:HMSService.Application.DTOs.Appointments.CreateAppointmentDto.PatientId">
+            <summary>Shared-domain patient identifier.</summary>
+        </member>
+        <member name="P:HMSService.Application.DTOs.Extended.CreateAppointmentQueueDto.QueueToken">
+            <summary>Optional; generated server-side when empty.</summary>
+        </member>
+        <member name="P:HMSService.Application.DTOs.Extended.CreateBillingHeaderDto.BillNo">
+            <summary>Optional; generated server-side when empty.</summary>
+        </member>
+        <member name="P:HMSService.Application.DTOs.Extended.CreatePrescriptionDto.PrescriptionNo">
+            <summary>Optional; generated server-side when empty.</summary>
+        </member>
+        <member name="T:HMSService.Application.Integration.LabInvoiceSummaryDto">
+            <summary>Subset of LMS lab invoice for HMS billing / payment tracking views.</summary>
+        </member>
+        <member name="T:HMSService.Application.Options.HmsNotificationIntegrationOptions">
+            <summary>Maps HMS flows to CommunicationService reference data (configure per tenant seed).</summary>
+        </member>
+        <member name="T:HMSService.Application.Services.Extended.HmsCrudServiceBase`5">
+            <summary>
+            Generic CRUD for HMS extended entities (tenant + optional facility scoped via <see cref="P:HMSService.Application.Services.Extended.HmsCrudServiceBase`5.RequiresFacilityId"/>).
+            </summary>
+        </member>
+        <member name="P:HMSService.Application.Services.Extended.HmsCrudServiceBase`5.RequiresFacilityId">
+            <summary>When true, Create requires <see cref="P:Healthcare.Common.MultiTenancy.ITenantContext.FacilityId"/> and assigns it to the entity.</summary>
+        </member>
+        <member name="M:HMSService.Application.Services.Extended.HmsCrudServiceBase`5.IsEntityInFacilityScope(`0)">
+            <summary>When facility is present on the request, facility-scoped entities must match it.</summary>
+        </member>
+        <member name="T:HMSService.Application.Services.Extended.HmsDocumentNumberHelper">
+            <summary>Generates human-readable document numbers for HMS headers (prescriptions, bills, visits).</summary>
+        </member>
+    </members>
+</doc>

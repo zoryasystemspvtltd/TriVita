@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\HMSService.API.props" />
+</Project>

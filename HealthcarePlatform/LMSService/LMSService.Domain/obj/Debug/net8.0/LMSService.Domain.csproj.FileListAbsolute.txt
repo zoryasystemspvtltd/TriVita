@@ -1,0 +1,15 @@
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Domain\bin\Debug\net8.0\LMSService.Domain.deps.json
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Domain\bin\Debug\net8.0\LMSService.Domain.dll
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Domain\bin\Debug\net8.0\LMSService.Domain.pdb
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Domain\bin\Debug\net8.0\Healthcare.Common.dll
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Domain\bin\Debug\net8.0\Healthcare.Common.pdb
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Domain\obj\Debug\net8.0\LMSService.Domain.csproj.AssemblyReference.cache
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Domain\obj\Debug\net8.0\LMSService.Domain.GeneratedMSBuildEditorConfig.editorconfig
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Domain\obj\Debug\net8.0\LMSService.Domain.AssemblyInfoInputs.cache
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Domain\obj\Debug\net8.0\LMSService.Domain.AssemblyInfo.cs
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Domain\obj\Debug\net8.0\LMSService.Domain.csproj.CoreCompileInputs.cache
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Domain\obj\Debug\net8.0\LMSServi.55DFA888.Up2Date
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Domain\obj\Debug\net8.0\LMSService.Domain.dll
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Domain\obj\Debug\net8.0\refint\LMSService.Domain.dll
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Domain\obj\Debug\net8.0\LMSService.Domain.pdb
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Domain\obj\Debug\net8.0\ref\LMSService.Domain.dll

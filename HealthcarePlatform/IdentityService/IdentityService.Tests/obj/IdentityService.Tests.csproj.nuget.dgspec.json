@@ -1,0 +1,719 @@
+{
+  "format": 1,
+  "restore": {
+    "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Tests\\IdentityService.Tests.csproj": {}
+  },
+  "projects": {
+    "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Common\\Healthcare.Common.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Common\\Healthcare.Common.csproj",
+        "projectName": "Healthcare.Common",
+        "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Common\\Healthcare.Common.csproj",
+        "packagesPath": "C:\\Users\\91983\\.nuget\\packages\\",
+        "outputPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Common\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\91983\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.Extensions.DependencyInjection.Abstractions": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            },
+            "Microsoft.Extensions.Http": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            },
+            "Microsoft.Extensions.Options.ConfigurationExtensions": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Swagger\\Healthcare.Swagger.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Swagger\\Healthcare.Swagger.csproj",
+        "projectName": "Healthcare.Swagger",
+        "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Swagger\\Healthcare.Swagger.csproj",
+        "packagesPath": "C:\\Users\\91983\\.nuget\\packages\\",
+        "outputPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Swagger\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\91983\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.6.2, )"
+            },
+            "Swashbuckle.AspNetCore.Annotations": {
+              "target": "Package",
+              "version": "[6.6.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.API\\IdentityService.API.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.API\\IdentityService.API.csproj",
+        "projectName": "IdentityService.API",
+        "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.API\\IdentityService.API.csproj",
+        "packagesPath": "C:\\Users\\91983\\.nuget\\packages\\",
+        "outputPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.API\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\91983\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Common\\Healthcare.Common.csproj": {
+                "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Common\\Healthcare.Common.csproj"
+              },
+              "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Swagger\\Healthcare.Swagger.csproj": {
+                "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Swagger\\Healthcare.Swagger.csproj"
+              },
+              "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Application\\IdentityService.Application.csproj": {
+                "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Application\\IdentityService.Application.csproj"
+              },
+              "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Infrastructure\\IdentityService.Infrastructure.csproj": {
+                "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Infrastructure\\IdentityService.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Asp.Versioning.Mvc": {
+              "target": "Package",
+              "version": "[8.1.1, )"
+            },
+            "Asp.Versioning.Mvc.ApiExplorer": {
+              "target": "Package",
+              "version": "[8.1.1, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.11, )"
+            },
+            "Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Swashbuckle.AspNetCore.Annotations": {
+              "target": "Package",
+              "version": "[6.6.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Application\\IdentityService.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Application\\IdentityService.Application.csproj",
+        "projectName": "IdentityService.Application",
+        "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Application\\IdentityService.Application.csproj",
+        "packagesPath": "C:\\Users\\91983\\.nuget\\packages\\",
+        "outputPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\91983\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Common\\Healthcare.Common.csproj": {
+                "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Common\\Healthcare.Common.csproj"
+              },
+              "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Contracts\\IdentityService.Contracts.csproj": {
+                "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Contracts\\IdentityService.Contracts.csproj"
+              },
+              "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Domain\\IdentityService.Domain.csproj": {
+                "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Domain\\IdentityService.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "FluentValidation.DependencyInjectionExtensions": {
+              "target": "Package",
+              "version": "[12.1.1, )"
+            },
+            "Microsoft.Extensions.Identity.Core": {
+              "target": "Package",
+              "version": "[8.0.11, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Contracts\\IdentityService.Contracts.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Contracts\\IdentityService.Contracts.csproj",
+        "projectName": "IdentityService.Contracts",
+        "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Contracts\\IdentityService.Contracts.csproj",
+        "packagesPath": "C:\\Users\\91983\\.nuget\\packages\\",
+        "outputPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Contracts\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\91983\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Domain\\IdentityService.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Domain\\IdentityService.Domain.csproj",
+        "projectName": "IdentityService.Domain",
+        "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Domain\\IdentityService.Domain.csproj",
+        "packagesPath": "C:\\Users\\91983\\.nuget\\packages\\",
+        "outputPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Domain\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\91983\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Common\\Healthcare.Common.csproj": {
+                "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Common\\Healthcare.Common.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Infrastructure\\IdentityService.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Infrastructure\\IdentityService.Infrastructure.csproj",
+        "projectName": "IdentityService.Infrastructure",
+        "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Infrastructure\\IdentityService.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\91983\\.nuget\\packages\\",
+        "outputPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\91983\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Common\\Healthcare.Common.csproj": {
+                "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Common\\Healthcare.Common.csproj"
+              },
+              "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Application\\IdentityService.Application.csproj": {
+                "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Application\\IdentityService.Application.csproj"
+              },
+              "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Domain\\IdentityService.Domain.csproj": {
+                "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Domain\\IdentityService.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.11, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.11, )"
+            },
+            "Microsoft.Extensions.Identity.Core": {
+              "target": "Package",
+              "version": "[8.0.11, )"
+            },
+            "System.IdentityModel.Tokens.Jwt": {
+              "target": "Package",
+              "version": "[8.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Tests\\IdentityService.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Tests\\IdentityService.Tests.csproj",
+        "projectName": "IdentityService.Tests",
+        "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Tests\\IdentityService.Tests.csproj",
+        "packagesPath": "C:\\Users\\91983\\.nuget\\packages\\",
+        "outputPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Tests\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\91983\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.API\\IdentityService.API.csproj": {
+                "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.API\\IdentityService.API.csproj"
+              },
+              "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Application\\IdentityService.Application.csproj": {
+                "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Application\\IdentityService.Application.csproj"
+              },
+              "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Infrastructure\\IdentityService.Infrastructure.csproj": {
+                "projectPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\IdentityService\\IdentityService.Infrastructure\\IdentityService.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "FluentAssertions": {
+              "target": "Package",
+              "version": "[8.9.0, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.8.0, )"
+            },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.20.72, )"
+            },
+            "coverlet.collector": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.2, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.5.3, )"
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[2.5.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

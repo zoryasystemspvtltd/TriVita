@@ -1,0 +1,15 @@
+I:\Projects\TriVita\HealthcarePlatform\CommunicationService\CommunicationService.Domain\bin\Debug\net8.0\CommunicationService.Domain.deps.json
+I:\Projects\TriVita\HealthcarePlatform\CommunicationService\CommunicationService.Domain\bin\Debug\net8.0\CommunicationService.Domain.dll
+I:\Projects\TriVita\HealthcarePlatform\CommunicationService\CommunicationService.Domain\bin\Debug\net8.0\CommunicationService.Domain.pdb
+I:\Projects\TriVita\HealthcarePlatform\CommunicationService\CommunicationService.Domain\bin\Debug\net8.0\Healthcare.Common.dll
+I:\Projects\TriVita\HealthcarePlatform\CommunicationService\CommunicationService.Domain\bin\Debug\net8.0\Healthcare.Common.pdb
+I:\Projects\TriVita\HealthcarePlatform\CommunicationService\CommunicationService.Domain\obj\Debug\net8.0\CommunicationService.Domain.csproj.AssemblyReference.cache
+I:\Projects\TriVita\HealthcarePlatform\CommunicationService\CommunicationService.Domain\obj\Debug\net8.0\CommunicationService.Domain.GeneratedMSBuildEditorConfig.editorconfig
+I:\Projects\TriVita\HealthcarePlatform\CommunicationService\CommunicationService.Domain\obj\Debug\net8.0\CommunicationService.Domain.AssemblyInfoInputs.cache
+I:\Projects\TriVita\HealthcarePlatform\CommunicationService\CommunicationService.Domain\obj\Debug\net8.0\CommunicationService.Domain.AssemblyInfo.cs
+I:\Projects\TriVita\HealthcarePlatform\CommunicationService\CommunicationService.Domain\obj\Debug\net8.0\CommunicationService.Domain.csproj.CoreCompileInputs.cache
+I:\Projects\TriVita\HealthcarePlatform\CommunicationService\CommunicationService.Domain\obj\Debug\net8.0\Communic.DDED3582.Up2Date
+I:\Projects\TriVita\HealthcarePlatform\CommunicationService\CommunicationService.Domain\obj\Debug\net8.0\CommunicationService.Domain.dll
+I:\Projects\TriVita\HealthcarePlatform\CommunicationService\CommunicationService.Domain\obj\Debug\net8.0\refint\CommunicationService.Domain.dll
+I:\Projects\TriVita\HealthcarePlatform\CommunicationService\CommunicationService.Domain\obj\Debug\net8.0\CommunicationService.Domain.pdb
+I:\Projects\TriVita\HealthcarePlatform\CommunicationService\CommunicationService.Domain\obj\Debug\net8.0\ref\CommunicationService.Domain.dll

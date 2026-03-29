@@ -1,0 +1,11 @@
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Contracts\bin\Debug\net8.0\LMSService.Contracts.deps.json
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Contracts\bin\Debug\net8.0\LMSService.Contracts.dll
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Contracts\bin\Debug\net8.0\LMSService.Contracts.pdb
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Contracts\obj\Debug\net8.0\LMSService.Contracts.GeneratedMSBuildEditorConfig.editorconfig
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Contracts\obj\Debug\net8.0\LMSService.Contracts.AssemblyInfoInputs.cache
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Contracts\obj\Debug\net8.0\LMSService.Contracts.AssemblyInfo.cs
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Contracts\obj\Debug\net8.0\LMSService.Contracts.csproj.CoreCompileInputs.cache
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Contracts\obj\Debug\net8.0\LMSService.Contracts.dll
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Contracts\obj\Debug\net8.0\refint\LMSService.Contracts.dll
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Contracts\obj\Debug\net8.0\LMSService.Contracts.pdb
+I:\Projects\TriVita\HealthcarePlatform\LMSService\LMSService.Contracts\obj\Debug\net8.0\ref\LMSService.Contracts.dll

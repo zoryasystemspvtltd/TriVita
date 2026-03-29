@@ -1,0 +1,12 @@
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Common\bin\Debug\net8.0\Healthcare.Common.deps.json
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Common\bin\Debug\net8.0\Healthcare.Common.dll
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Common\bin\Debug\net8.0\Healthcare.Common.pdb
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Common\obj\Debug\net8.0\Healthcare.Common.GeneratedMSBuildEditorConfig.editorconfig
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Common\obj\Debug\net8.0\Healthcare.Common.AssemblyInfoInputs.cache
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Common\obj\Debug\net8.0\Healthcare.Common.AssemblyInfo.cs
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Common\obj\Debug\net8.0\Healthcare.Common.csproj.CoreCompileInputs.cache
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Common\obj\Debug\net8.0\Healthcare.Common.dll
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Common\obj\Debug\net8.0\refint\Healthcare.Common.dll
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Common\obj\Debug\net8.0\Healthcare.Common.pdb
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Common\obj\Debug\net8.0\ref\Healthcare.Common.dll
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Common\obj\Debug\net8.0\Healthcare.Common.csproj.AssemblyReference.cache

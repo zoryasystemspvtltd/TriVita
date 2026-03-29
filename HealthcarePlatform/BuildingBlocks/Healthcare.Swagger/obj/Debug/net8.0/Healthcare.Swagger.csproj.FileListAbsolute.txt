@@ -1,0 +1,12 @@
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Swagger\bin\Debug\net8.0\Healthcare.Swagger.deps.json
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Swagger\bin\Debug\net8.0\Healthcare.Swagger.dll
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Swagger\bin\Debug\net8.0\Healthcare.Swagger.pdb
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Swagger\obj\Debug\net8.0\Healthcare.Swagger.csproj.AssemblyReference.cache
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Swagger\obj\Debug\net8.0\Healthcare.Swagger.GeneratedMSBuildEditorConfig.editorconfig
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Swagger\obj\Debug\net8.0\Healthcare.Swagger.AssemblyInfoInputs.cache
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Swagger\obj\Debug\net8.0\Healthcare.Swagger.AssemblyInfo.cs
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Swagger\obj\Debug\net8.0\Healthcare.Swagger.csproj.CoreCompileInputs.cache
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Swagger\obj\Debug\net8.0\Healthcare.Swagger.dll
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Swagger\obj\Debug\net8.0\refint\Healthcare.Swagger.dll
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Swagger\obj\Debug\net8.0\Healthcare.Swagger.pdb
+I:\Projects\TriVita\HealthcarePlatform\BuildingBlocks\Healthcare.Swagger\obj\Debug\net8.0\ref\Healthcare.Swagger.dll

@@ -1,0 +1,15 @@
+I:\Projects\TriVita\HealthcarePlatform\LISService\LISService.Domain\bin\Debug\net8.0\LISService.Domain.deps.json
+I:\Projects\TriVita\HealthcarePlatform\LISService\LISService.Domain\bin\Debug\net8.0\LISService.Domain.dll
+I:\Projects\TriVita\HealthcarePlatform\LISService\LISService.Domain\bin\Debug\net8.0\LISService.Domain.pdb
+I:\Projects\TriVita\HealthcarePlatform\LISService\LISService.Domain\bin\Debug\net8.0\Healthcare.Common.dll
+I:\Projects\TriVita\HealthcarePlatform\LISService\LISService.Domain\bin\Debug\net8.0\Healthcare.Common.pdb
+I:\Projects\TriVita\HealthcarePlatform\LISService\LISService.Domain\obj\Debug\net8.0\LISService.Domain.csproj.AssemblyReference.cache
+I:\Projects\TriVita\HealthcarePlatform\LISService\LISService.Domain\obj\Debug\net8.0\LISService.Domain.GeneratedMSBuildEditorConfig.editorconfig
+I:\Projects\TriVita\HealthcarePlatform\LISService\LISService.Domain\obj\Debug\net8.0\LISService.Domain.AssemblyInfoInputs.cache
+I:\Projects\TriVita\HealthcarePlatform\LISService\LISService.Domain\obj\Debug\net8.0\LISService.Domain.AssemblyInfo.cs
+I:\Projects\TriVita\HealthcarePlatform\LISService\LISService.Domain\obj\Debug\net8.0\LISService.Domain.csproj.CoreCompileInputs.cache
+I:\Projects\TriVita\HealthcarePlatform\LISService\LISService.Domain\obj\Debug\net8.0\LISServi.BA5BB0EC.Up2Date
+I:\Projects\TriVita\HealthcarePlatform\LISService\LISService.Domain\obj\Debug\net8.0\LISService.Domain.dll
+I:\Projects\TriVita\HealthcarePlatform\LISService\LISService.Domain\obj\Debug\net8.0\refint\LISService.Domain.dll
+I:\Projects\TriVita\HealthcarePlatform\LISService\LISService.Domain\obj\Debug\net8.0\LISService.Domain.pdb
+I:\Projects\TriVita\HealthcarePlatform\LISService\LISService.Domain\obj\Debug\net8.0\ref\LISService.Domain.dll

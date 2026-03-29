@@ -1,0 +1,10 @@
+{
+  "CommunicationService.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "i:\\Projects\\TriVita\\HealthcarePlatform\\CommunicationService\\CommunicationService.Contracts",
+  "Healthcare.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "i:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Common",
+  "Healthcare.Swagger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "i:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Swagger",
+  "LMSService.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "i:\\Projects\\TriVita\\HealthcarePlatform\\LMSService\\LMSService.API",
+  "LMSService.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "i:\\Projects\\TriVita\\HealthcarePlatform\\LMSService\\LMSService.Application",
+  "LMSService.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "i:\\Projects\\TriVita\\HealthcarePlatform\\LMSService\\LMSService.Contracts",
+  "LMSService.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "i:\\Projects\\TriVita\\HealthcarePlatform\\LMSService\\LMSService.Domain",
+  "LMSService.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "i:\\Projects\\TriVita\\HealthcarePlatform\\LMSService\\LMSService.Infrastructure"
+}

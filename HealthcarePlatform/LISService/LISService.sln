@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LISService.API", "LISService.API\LISService.API.csproj", "{A8C979DA-0981-4F74-AAB4-E487220C0C90}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LISService.Application", "LISService.Application\LISService.Application.csproj", "{20BCFCFB-321A-4824-BA76-149C4625B432}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LISService.Domain", "LISService.Domain\LISService.Domain.csproj", "{5B91EF1A-FFDA-41F3-9B09-2EE805EB8C41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LISService.Infrastructure", "LISService.Infrastructure\LISService.Infrastructure.csproj", "{9FC948F4-2B8F-4DD4-8E33-E75C5F0F89D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LISService.Contracts", "LISService.Contracts\LISService.Contracts.csproj", "{63E5A2B5-E9F1-499C-AE95-CB137A045699}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LISService.Tests", "LISService.Tests\LISService.Tests.csproj", "{EFA9EF47-A7BB-41FC-8A89-422CB6E571F7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A8C979DA-0981-4F74-AAB4-E487220C0C90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8C979DA-0981-4F74-AAB4-E487220C0C90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8C979DA-0981-4F74-AAB4-E487220C0C90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8C979DA-0981-4F74-AAB4-E487220C0C90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20BCFCFB-321A-4824-BA76-149C4625B432}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20BCFCFB-321A-4824-BA76-149C4625B432}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20BCFCFB-321A-4824-BA76-149C4625B432}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20BCFCFB-321A-4824-BA76-149C4625B432}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B91EF1A-FFDA-41F3-9B09-2EE805EB8C41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B91EF1A-FFDA-41F3-9B09-2EE805EB8C41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B91EF1A-FFDA-41F3-9B09-2EE805EB8C41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B91EF1A-FFDA-41F3-9B09-2EE805EB8C41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FC948F4-2B8F-4DD4-8E33-E75C5F0F89D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FC948F4-2B8F-4DD4-8E33-E75C5F0F89D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FC948F4-2B8F-4DD4-8E33-E75C5F0F89D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FC948F4-2B8F-4DD4-8E33-E75C5F0F89D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63E5A2B5-E9F1-499C-AE95-CB137A045699}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63E5A2B5-E9F1-499C-AE95-CB137A045699}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63E5A2B5-E9F1-499C-AE95-CB137A045699}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63E5A2B5-E9F1-499C-AE95-CB137A045699}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFA9EF47-A7BB-41FC-8A89-422CB6E571F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFA9EF47-A7BB-41FC-8A89-422CB6E571F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFA9EF47-A7BB-41FC-8A89-422CB6E571F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFA9EF47-A7BB-41FC-8A89-422CB6E571F7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

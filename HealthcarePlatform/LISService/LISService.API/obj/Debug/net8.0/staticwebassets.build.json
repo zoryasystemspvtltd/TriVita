@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "7/ZGkSy5NPgB0mIlRsBSjTkPC6du3OUB7OcYwku6v/0=",
+  "Source": "LISService.API",
+  "BasePath": "_content/LISService.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

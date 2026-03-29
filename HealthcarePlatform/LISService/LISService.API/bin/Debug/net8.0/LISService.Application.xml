@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LISService.Application</name>
+    </assembly>
+    <members>
+        <member name="T:LISService.Application.DTOs.InfoResponseDto">
+            <summary>Basic LIS module descriptor for Swagger schemas.</summary>
+        </member>
+        <member name="T:LISService.Application.Options.LisNotificationIntegrationOptions">
+            <summary>Maps LIS flows to CommunicationService reference data (configure per tenant seed).</summary>
+        </member>
+        <member name="T:LISService.Application.Services.Extended.LisCrudServiceBase`5">
+            <summary>
+            Generic CRUD for LIS entities (tenant + optional facility via <see cref="P:LISService.Application.Services.Extended.LisCrudServiceBase`5.RequiresFacilityId"/>).
+            </summary>
+        </member>
+        <member name="T:LISService.Application.Validation.NoOpValidator`1">
+            <summary>
+            Default validator when no rules are defined; allows optional <see cref="T:FluentValidation.IValidator`1"/> injection for generated CRUD services.
+            </summary>
+        </member>
+    </members>
+</doc>

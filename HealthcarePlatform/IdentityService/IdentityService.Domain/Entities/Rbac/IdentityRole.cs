@@ -1,0 +1,32 @@
+namespace IdentityService.Domain.Entities.Rbac;
+
+public sealed class IdentityRole
+{
+    public long Id { get; set; }
+
+    public long TenantId { get; set; }
+
+    public long? FacilityId { get; set; }
+
+    public bool IsActive { get; set; } = true;
+
+    public bool IsDeleted { get; set; }
+
+    public DateTime CreatedOn { get; set; }
+
+    public long CreatedBy { get; set; }
+
+    public DateTime ModifiedOn { get; set; }
+
+    public long ModifiedBy { get; set; }
+
+    public byte[] RowVersion { get; set; } = null!;
+
+    public string RoleCode { get; set; } = null!;
+
+    public string RoleName { get; set; } = null!;
+
+    public string? Description { get; set; }
+
+    public bool IsSystemRole { get; set; }
+}

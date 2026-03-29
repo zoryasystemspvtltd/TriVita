@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LMSService.Application</name>
+    </assembly>
+    <members>
+        <member name="T:LMSService.Application.DTOs.InfoResponseDto">
+            <summary>Basic LMS module descriptor.</summary>
+        </member>
+        <member name="T:LMSService.Application.Mapping.Lms07ExtendedMappingProfile">
+            <summary>AutoMapper maps for LMS schema 07 entities that were previously API-unexposed.</summary>
+        </member>
+    </members>
+</doc>

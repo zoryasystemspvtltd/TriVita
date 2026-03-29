@@ -1,0 +1,15 @@
+I:\Projects\TriVita\HealthcarePlatform\PharmacyService\PharmacyService.Domain\bin\Debug\net8.0\PharmacyService.Domain.deps.json
+I:\Projects\TriVita\HealthcarePlatform\PharmacyService\PharmacyService.Domain\bin\Debug\net8.0\PharmacyService.Domain.dll
+I:\Projects\TriVita\HealthcarePlatform\PharmacyService\PharmacyService.Domain\bin\Debug\net8.0\PharmacyService.Domain.pdb
+I:\Projects\TriVita\HealthcarePlatform\PharmacyService\PharmacyService.Domain\bin\Debug\net8.0\Healthcare.Common.dll
+I:\Projects\TriVita\HealthcarePlatform\PharmacyService\PharmacyService.Domain\bin\Debug\net8.0\Healthcare.Common.pdb
+I:\Projects\TriVita\HealthcarePlatform\PharmacyService\PharmacyService.Domain\obj\Debug\net8.0\PharmacyService.Domain.csproj.AssemblyReference.cache
+I:\Projects\TriVita\HealthcarePlatform\PharmacyService\PharmacyService.Domain\obj\Debug\net8.0\PharmacyService.Domain.GeneratedMSBuildEditorConfig.editorconfig
+I:\Projects\TriVita\HealthcarePlatform\PharmacyService\PharmacyService.Domain\obj\Debug\net8.0\PharmacyService.Domain.AssemblyInfoInputs.cache
+I:\Projects\TriVita\HealthcarePlatform\PharmacyService\PharmacyService.Domain\obj\Debug\net8.0\PharmacyService.Domain.AssemblyInfo.cs
+I:\Projects\TriVita\HealthcarePlatform\PharmacyService\PharmacyService.Domain\obj\Debug\net8.0\PharmacyService.Domain.csproj.CoreCompileInputs.cache
+I:\Projects\TriVita\HealthcarePlatform\PharmacyService\PharmacyService.Domain\obj\Debug\net8.0\Pharmacy.347F1797.Up2Date
+I:\Projects\TriVita\HealthcarePlatform\PharmacyService\PharmacyService.Domain\obj\Debug\net8.0\PharmacyService.Domain.dll
+I:\Projects\TriVita\HealthcarePlatform\PharmacyService\PharmacyService.Domain\obj\Debug\net8.0\refint\PharmacyService.Domain.dll
+I:\Projects\TriVita\HealthcarePlatform\PharmacyService\PharmacyService.Domain\obj\Debug\net8.0\PharmacyService.Domain.pdb
+I:\Projects\TriVita\HealthcarePlatform\PharmacyService\PharmacyService.Domain\obj\Debug\net8.0\ref\PharmacyService.Domain.dll

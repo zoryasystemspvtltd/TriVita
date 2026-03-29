@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SharedService.Application</name>
+    </assembly>
+    <members>
+        <member name="T:SharedService.Application.DTOs.Enterprise.FacilityHierarchyContextDto">
+            <summary>Returned for facility validation and cross-service hierarchy context.</summary>
+        </member>
+        <member name="T:SharedService.Application.DTOs.InfoResponseDto">
+            <summary>Basic Shared module descriptor.</summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,76 @@
+using Asp.Versioning;
+using Healthcare.Common.Authorization;
+using Healthcare.Common.Responses;
+using Healthcare.Common.Security;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SharedService.Application.DTOs.Enterprise;
+using SharedService.Application.Services.Enterprise;
+using Swashbuckle.AspNetCore.Annotations;
+
+namespace SharedService.API.Controllers.v1;
+
+[ApiController]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/enterprises")]
+[Authorize]
+[RequirePermission(TriVitaPermissions.SharedApi)]
+[SwaggerTag("Enterprise hierarchy")]
+public sealed class EnterprisesController : ControllerBase
+{
+    private readonly IEnterpriseService _enterpriseService;
+
+    public EnterprisesController(IEnterpriseService enterpriseService)
+    {
+        _enterpriseService = enterpriseService;
+    }
+
+    [HttpGet]
+    [SwaggerOperation(Summary = "List enterprises for the current tenant", OperationId = "Shared_Enterprises_List")]
+    [ProducesResponseType(typeof(BaseResponse<IReadOnlyList<EnterpriseResponseDto>>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<BaseResponse<IReadOnlyList<EnterpriseResponseDto>>>> List(CancellationToken cancellationToken) =>
+        Ok(await _enterpriseService.ListAsync(cancellationToken));
+
+    [HttpGet("{id:long}")]
+    [SwaggerOperation(Summary = "Get enterprise by id", OperationId = "Shared_Enterprises_GetById")]
+    [ProducesResponseType(typeof(BaseResponse<EnterpriseResponseDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<BaseResponse<EnterpriseResponseDto>>> GetById(long id, CancellationToken cancellationToken)
+    {
+        var result = await _enterpriseService.GetByIdAsync(id, cancellationToken);
+        return result.Success ? Ok(result) : NotFound(result);
+    }
+
+    [HttpPost]
+    [SwaggerOperation(Summary = "Create enterprise", OperationId = "Shared_Enterprises_Create")]
+    [ProducesResponseType(typeof(BaseResponse<EnterpriseResponseDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<BaseResponse<EnterpriseResponseDto>>> Create(
+        [FromBody] CreateEnterpriseDto dto,
+        CancellationToken cancellationToken)
+    {
+        var result = await _enterpriseService.CreateAsync(dto, cancellationToken);
+        return result.Success ? Ok(result) : BadRequest(result);
+    }
+
+    [HttpPut("{id:long}")]
+    [SwaggerOperation(Summary = "Update enterprise", OperationId = "Shared_Enterprises_Update")]
+    [ProducesResponseType(typeof(BaseResponse<EnterpriseResponseDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<BaseResponse<EnterpriseResponseDto>>> Update(
+        long id,
+        [FromBody] UpdateEnterpriseDto dto,
+        CancellationToken cancellationToken)
+    {
+        var result = await _enterpriseService.UpdateAsync(id, dto, cancellationToken);
+        if (!result.Success && result.Message?.Contains("not found", StringComparison.OrdinalIgnoreCase) == true)
+            return NotFound(result);
+        return result.Success ? Ok(result) : BadRequest(result);
+    }
+
+    [HttpDelete("{id:long}")]
+    [SwaggerOperation(Summary = "Soft-delete enterprise", OperationId = "Shared_Enterprises_Delete")]
+    [ProducesResponseType(typeof(BaseResponse<object?>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<BaseResponse<object?>>> Delete(long id, CancellationToken cancellationToken)
+    {
+        var result = await _enterpriseService.DeleteAsync(id, cancellationToken);
+        return result.Success ? Ok(result) : NotFound(result);
+    }
+}

@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HMSService.API", "HMSService.API\HMSService.API.csproj", "{7FF28839-767D-44D8-9C68-9D35BB4EF777}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HMSService.Application", "HMSService.Application\HMSService.Application.csproj", "{21B5852F-4A86-4507-B6C7-2C7C6788C190}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HMSService.Domain", "HMSService.Domain\HMSService.Domain.csproj", "{0060D58D-4AF2-46FB-A1C2-666BEAB57F42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HMSService.Infrastructure", "HMSService.Infrastructure\HMSService.Infrastructure.csproj", "{C778B2E5-2F3C-4445-873F-CA3ADECCCCD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HMSService.Contracts", "HMSService.Contracts\HMSService.Contracts.csproj", "{37292B8B-FF00-465E-AFBD-5742AF0A75E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HMSService.Tests", "HMSService.Tests\HMSService.Tests.csproj", "{940A32DA-EBC8-42EC-89E2-AC24163DB467}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Healthcare.Swagger", "..\BuildingBlocks\Healthcare.Swagger\Healthcare.Swagger.csproj", "{7D4A5FF2-C7CC-4934-89BB-121040FBAC40}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7FF28839-767D-44D8-9C68-9D35BB4EF777}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FF28839-767D-44D8-9C68-9D35BB4EF777}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FF28839-767D-44D8-9C68-9D35BB4EF777}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FF28839-767D-44D8-9C68-9D35BB4EF777}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21B5852F-4A86-4507-B6C7-2C7C6788C190}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21B5852F-4A86-4507-B6C7-2C7C6788C190}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21B5852F-4A86-4507-B6C7-2C7C6788C190}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21B5852F-4A86-4507-B6C7-2C7C6788C190}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0060D58D-4AF2-46FB-A1C2-666BEAB57F42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0060D58D-4AF2-46FB-A1C2-666BEAB57F42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0060D58D-4AF2-46FB-A1C2-666BEAB57F42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0060D58D-4AF2-46FB-A1C2-666BEAB57F42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C778B2E5-2F3C-4445-873F-CA3ADECCCCD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C778B2E5-2F3C-4445-873F-CA3ADECCCCD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C778B2E5-2F3C-4445-873F-CA3ADECCCCD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C778B2E5-2F3C-4445-873F-CA3ADECCCCD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37292B8B-FF00-465E-AFBD-5742AF0A75E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37292B8B-FF00-465E-AFBD-5742AF0A75E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37292B8B-FF00-465E-AFBD-5742AF0A75E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37292B8B-FF00-465E-AFBD-5742AF0A75E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{940A32DA-EBC8-42EC-89E2-AC24163DB467}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{940A32DA-EBC8-42EC-89E2-AC24163DB467}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{940A32DA-EBC8-42EC-89E2-AC24163DB467}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{940A32DA-EBC8-42EC-89E2-AC24163DB467}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D4A5FF2-C7CC-4934-89BB-121040FBAC40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D4A5FF2-C7CC-4934-89BB-121040FBAC40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D4A5FF2-C7CC-4934-89BB-121040FBAC40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D4A5FF2-C7CC-4934-89BB-121040FBAC40}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

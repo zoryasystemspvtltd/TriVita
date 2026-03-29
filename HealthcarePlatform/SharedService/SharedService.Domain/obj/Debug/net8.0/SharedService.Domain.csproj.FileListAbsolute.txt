@@ -1,0 +1,15 @@
+I:\Projects\TriVita\HealthcarePlatform\SharedService\SharedService.Domain\bin\Debug\net8.0\SharedService.Domain.deps.json
+I:\Projects\TriVita\HealthcarePlatform\SharedService\SharedService.Domain\bin\Debug\net8.0\SharedService.Domain.dll
+I:\Projects\TriVita\HealthcarePlatform\SharedService\SharedService.Domain\bin\Debug\net8.0\SharedService.Domain.pdb
+I:\Projects\TriVita\HealthcarePlatform\SharedService\SharedService.Domain\bin\Debug\net8.0\Healthcare.Common.dll
+I:\Projects\TriVita\HealthcarePlatform\SharedService\SharedService.Domain\bin\Debug\net8.0\Healthcare.Common.pdb
+I:\Projects\TriVita\HealthcarePlatform\SharedService\SharedService.Domain\obj\Debug\net8.0\SharedService.Domain.csproj.AssemblyReference.cache
+I:\Projects\TriVita\HealthcarePlatform\SharedService\SharedService.Domain\obj\Debug\net8.0\SharedService.Domain.GeneratedMSBuildEditorConfig.editorconfig
+I:\Projects\TriVita\HealthcarePlatform\SharedService\SharedService.Domain\obj\Debug\net8.0\SharedService.Domain.AssemblyInfoInputs.cache
+I:\Projects\TriVita\HealthcarePlatform\SharedService\SharedService.Domain\obj\Debug\net8.0\SharedService.Domain.AssemblyInfo.cs
+I:\Projects\TriVita\HealthcarePlatform\SharedService\SharedService.Domain\obj\Debug\net8.0\SharedService.Domain.csproj.CoreCompileInputs.cache
+I:\Projects\TriVita\HealthcarePlatform\SharedService\SharedService.Domain\obj\Debug\net8.0\SharedSe.3AA42486.Up2Date
+I:\Projects\TriVita\HealthcarePlatform\SharedService\SharedService.Domain\obj\Debug\net8.0\SharedService.Domain.dll
+I:\Projects\TriVita\HealthcarePlatform\SharedService\SharedService.Domain\obj\Debug\net8.0\refint\SharedService.Domain.dll
+I:\Projects\TriVita\HealthcarePlatform\SharedService\SharedService.Domain\obj\Debug\net8.0\SharedService.Domain.pdb
+I:\Projects\TriVita\HealthcarePlatform\SharedService\SharedService.Domain\obj\Debug\net8.0\ref\SharedService.Domain.dll

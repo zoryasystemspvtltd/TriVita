@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <!--
+    Coverlet (XPlat code coverage): Cobertura only, scoped to Application + API (+ SharedService.Infrastructure for enterprise services).
+    DTO / migration / entrypoint noise excluded via ExcludeByFile. Domain and Contracts are omitted via Include assembly filter.
+  -->
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat code coverage">
+        <Configuration>
+          <Format>cobertura</Format>
+          <Include>[HMSService.Application]*,[HMSService.API]*,[LISService.Application]*,[LISService.API]*,[LMSService.Application]*,[LMSService.API]*,[PharmacyService.Application]*,[PharmacyService.API]*,[SharedService.Application]*,[SharedService.Infrastructure]*,[SharedService.API]*,[IdentityService.Application]*,[IdentityService.API]*,[CommunicationService.Application]*,[CommunicationService.API]*</Include>
+          <Exclude>[*.Tests]*</Exclude>
+          <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute,ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
+          <ExcludeByFile>
+            **/DTOs/**/*.cs,
+            **/Dto/**/*.cs,
+            **/Dtos/**/*.cs,
+            **/Migrations/**/*.cs,
+            **/Program.cs,
+            **/AssemblyInfo.cs,
+            **/*.g.cs,
+            **/*.Designer.cs
+          </ExcludeByFile>
+          <IncludeTestAssembly>false</IncludeTestAssembly>
+          <SkipAutoProps>true</SkipAutoProps>
+          <SingleHit>false</SingleHit>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>

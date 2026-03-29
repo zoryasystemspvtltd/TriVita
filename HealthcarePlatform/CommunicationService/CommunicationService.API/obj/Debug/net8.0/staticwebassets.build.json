@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "FX8sXoMRZnZvssmkwbYZfBJb2SIn35nEw4y4Pjfe2Rs=",
+  "Source": "CommunicationService.API",
+  "BasePath": "_content/CommunicationService.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

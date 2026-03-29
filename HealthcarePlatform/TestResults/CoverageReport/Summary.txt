@@ -1,0 +1,290 @@
+Summary
+  Generated on: 29-03-2026 - 01:14:49
+  Coverage date: 29-03-2026 - 01:12:34 - 29-03-2026 - 01:14:48
+  Parser: MultiReport (14x Cobertura)
+  Assemblies: 14
+  Classes: 242
+  Files: 205
+  Line coverage: 73.5%
+  Covered lines: 2315
+  Uncovered lines: 834
+  Coverable lines: 3149
+  Total lines: 13854
+  Branch coverage: 26.7% (30 of 112)
+  Covered branches: 30
+  Total branches: 112
+  Method coverage: 28.3% (124 of 438)
+  Full method coverage: 22.3% (98 of 438)
+  Covered methods: 124
+  Fully covered methods: 98
+  Total methods: 438
+
+CommunicationService.API                                                                  100%
+  CommunicationService.API.Controllers.v1.NotificationsController                         100%
+
+CommunicationService.Application                                                          100%
+  CommunicationService.Application.DependencyInjection                                    100%
+  CommunicationService.Application.Mapping.CommunicationMappingProfile                    100%
+  CommunicationService.Application.Models.ChannelSendResult                               100%
+  CommunicationService.Application.Services.AuditHelper                                   100%
+  CommunicationService.Application.Services.NotificationService                           100%
+  CommunicationService.Application.Services.TemplateRenderer                              100%
+  CommunicationService.Application.Validation.CreateNotificationRequestValidator          100%
+  CommunicationService.Application.Validation.SendTemplateNotificationRequestValidator    100%
+
+HMSService.API                                                                             25%
+  HMSService.API.Controllers.v1.AppointmentsController                                    100%
+  HMSService.API.Controllers.v1.Extended.AppointmentQueueController                         0%
+  HMSService.API.Controllers.v1.Extended.AppointmentStatusHistoryController                 0%
+  HMSService.API.Controllers.v1.Extended.BillingHeadersController                           0%
+  HMSService.API.Controllers.v1.Extended.BillingItemsController                             0%
+  HMSService.API.Controllers.v1.Extended.ClinicalNotesController                            0%
+  HMSService.API.Controllers.v1.Extended.DiagnosesController                                0%
+  HMSService.API.Controllers.v1.Extended.MedicalProceduresController                        0%
+  HMSService.API.Controllers.v1.Extended.PaymentModesController                             0%
+  HMSService.API.Controllers.v1.Extended.PaymentTransactionsController                      0%
+  HMSService.API.Controllers.v1.Extended.PrescriptionItemsController                        0%
+  HMSService.API.Controllers.v1.Extended.PrescriptionNotesController                        0%
+  HMSService.API.Controllers.v1.Extended.PrescriptionsController                            0%
+  HMSService.API.Controllers.v1.Extended.VitalsController                                   0%
+  HMSService.API.Controllers.v1.LabBillingIntegrationController                           100%
+  HMSService.API.Controllers.v1.VisitsController                                          100%
+  HMSService.API.Controllers.v1.VisitTypesController                                      100%
+
+HMSService.Application                                                                   66.2%
+  HMSService.Application.DependencyInjection                                              100%
+  HMSService.Application.Mapping.HmsMappingProfile                                        100%
+  HMSService.Application.Services.AppointmentService                                     91.6%
+  HMSService.Application.Services.AuditHelper                                            73.3%
+  HMSService.Application.Services.Extended.AppointmentQueueService                          0%
+  HMSService.Application.Services.Extended.AppointmentStatusHistoryService                  0%
+  HMSService.Application.Services.Extended.BillingHeaderService                             0%
+  HMSService.Application.Services.Extended.BillingItemService                               0%
+  HMSService.Application.Services.Extended.ClinicalNoteService                              0%
+  HMSService.Application.Services.Extended.DiagnosisService                                 0%
+  HMSService.Application.Services.Extended.HmsCrudServiceBase<T1, T2, T3, T4, T5>        78.5%
+  HMSService.Application.Services.Extended.HmsDocumentNumberHelper                          0%
+  HMSService.Application.Services.Extended.MedicalProcedureService                          0%
+  HMSService.Application.Services.Extended.PaymentModeService                               0%
+  HMSService.Application.Services.Extended.PaymentTransactionService                        0%
+  HMSService.Application.Services.Extended.PrescriptionItemService                          0%
+  HMSService.Application.Services.Extended.PrescriptionNoteService                          0%
+  HMSService.Application.Services.Extended.PrescriptionService                              0%
+  HMSService.Application.Services.Extended.VisitTypeService                               100%
+  HMSService.Application.Services.Extended.VitalService                                   100%
+  HMSService.Application.Services.NotificationHelper                                        0%
+  HMSService.Application.Services.VisitService                                            100%
+  HMSService.Application.Validation.CreateAppointmentValidator                              0%
+  HMSService.Application.Validation.CreateVisitValidator                                    0%
+  HMSService.Application.Validation.Extended.CreateAppointmentQueueValidator                0%
+  HMSService.Application.Validation.Extended.CreateAppointmentStatusHistoryValidator        0%
+  HMSService.Application.Validation.Extended.CreateBillingHeaderValidator                   0%
+  HMSService.Application.Validation.Extended.CreateBillingItemValidator                     0%
+  HMSService.Application.Validation.Extended.CreateClinicalNoteValidator                    0%
+  HMSService.Application.Validation.Extended.CreateDiagnosisValidator                       0%
+  HMSService.Application.Validation.Extended.CreateMedicalProcedureValidator                0%
+  HMSService.Application.Validation.Extended.CreatePaymentModeValidator                     0%
+  HMSService.Application.Validation.Extended.CreatePaymentTransactionValidator              0%
+  HMSService.Application.Validation.Extended.CreatePrescriptionItemValidator                0%
+  HMSService.Application.Validation.Extended.CreatePrescriptionNoteValidator                0%
+  HMSService.Application.Validation.Extended.CreatePrescriptionValidator                    0%
+  HMSService.Application.Validation.Extended.CreateVitalValidator                           0%
+  HMSService.Application.Validation.Extended.UpdateAppointmentQueueValidator                0%
+  HMSService.Application.Validation.Extended.UpdateAppointmentStatusHistoryValidator        0%
+  HMSService.Application.Validation.Extended.UpdateBillingHeaderValidator                   0%
+  HMSService.Application.Validation.Extended.UpdateBillingItemValidator                     0%
+  HMSService.Application.Validation.Extended.UpdateClinicalNoteValidator                    0%
+  HMSService.Application.Validation.Extended.UpdateDiagnosisValidator                       0%
+  HMSService.Application.Validation.Extended.UpdateMedicalProcedureValidator                0%
+  HMSService.Application.Validation.Extended.UpdatePaymentModeValidator                     0%
+  HMSService.Application.Validation.Extended.UpdatePaymentTransactionValidator              0%
+  HMSService.Application.Validation.Extended.UpdatePrescriptionItemValidator                0%
+  HMSService.Application.Validation.Extended.UpdatePrescriptionNoteValidator                0%
+  HMSService.Application.Validation.Extended.UpdatePrescriptionValidator                    0%
+  HMSService.Application.Validation.Extended.UpdateVitalValidator                           0%
+  HMSService.Application.Validation.UpdateAppointmentValidator                              0%
+  HMSService.Application.Validation.UpdateVisitValidator                                    0%
+  HMSService.Application.Validation.VisitTypes.CreateVisitTypeValidator                   100%
+  HMSService.Application.Validation.VisitTypes.UpdateVisitTypeValidator                   100%
+
+IdentityService.API                                                                      38.4%
+  IdentityService.API.Controllers.v1.AuthController                                      55.5%
+  IdentityService.API.Controllers.v1.IdentityAdminController                                0%
+
+IdentityService.Application                                                              42.8%
+  IdentityService.Application.DependencyInjection                                           0%
+  IdentityService.Application.Services.AuthService                                       53.3%
+  IdentityService.Application.Validation.LoginRequestValidator                              0%
+
+LISService.API                                                                            7.8%
+  LISService.API.Controllers.v1.Entities.AnalyzerResultMapController                        0%
+  LISService.API.Controllers.v1.Entities.LabOrderController                                 0%
+  LISService.API.Controllers.v1.Entities.LabOrderItemController                             0%
+  LISService.API.Controllers.v1.Entities.LabResultController                                0%
+  LISService.API.Controllers.v1.Entities.OrderStatusHistoryController                       0%
+  LISService.API.Controllers.v1.Entities.ReportDeliveryOtpController                        0%
+  LISService.API.Controllers.v1.Entities.ReportDetailController                             0%
+  LISService.API.Controllers.v1.Entities.ReportHeaderController                             0%
+  LISService.API.Controllers.v1.Entities.ReportLockStateController                          0%
+  LISService.API.Controllers.v1.Entities.ResultApprovalController                           0%
+  LISService.API.Controllers.v1.Entities.ResultHistoryController                            0%
+  LISService.API.Controllers.v1.Entities.SampleBarcodeController                            0%
+  LISService.API.Controllers.v1.Entities.SampleCollectionController                         0%
+  LISService.API.Controllers.v1.Entities.SampleLifecycleEventController                     0%
+  LISService.API.Controllers.v1.Entities.SampleTrackingController                           0%
+  LISService.API.Controllers.v1.Entities.SampleTypeController                               0%
+  LISService.API.Controllers.v1.Entities.TestCategoryController                           100%
+  LISService.API.Controllers.v1.Entities.TestMasterController                               0%
+  LISService.API.Controllers.v1.Entities.TestParameterController                            0%
+  LISService.API.Controllers.v1.Entities.TestParameterProfileController                     0%
+  LISService.API.Controllers.v1.Entities.TestReferenceRangeController                       0%
+  LISService.API.Controllers.v1.InfoController                                            100%
+
+LISService.Application                                                                   89.1%
+  LISService.Application.DependencyInjection                                              100%
+  LISService.Application.Mapping.LisGeneratedMappingProfile                               100%
+  LISService.Application.Mapping.LISMappingProfile                                        100%
+  LISService.Application.Services.AuditHelper                                            73.3%
+  LISService.Application.Services.Entities.LisAnalyzerResultMapService                    100%
+  LISService.Application.Services.Entities.LisLabOrderItemService                           0%
+  LISService.Application.Services.Entities.LisLabOrderService                               0%
+  LISService.Application.Services.Entities.LisLabResultService                              0%
+  LISService.Application.Services.Entities.LisOrderStatusHistoryService                     0%
+  LISService.Application.Services.Entities.LisReportDeliveryOtpService                      0%
+  LISService.Application.Services.Entities.LisReportDetailService                           0%
+  LISService.Application.Services.Entities.LisReportHeaderService                           0%
+  LISService.Application.Services.Entities.LisReportLockStateService                       60%
+  LISService.Application.Services.Entities.LisResultApprovalService                         0%
+  LISService.Application.Services.Entities.LisResultHistoryService                          0%
+  LISService.Application.Services.Entities.LisSampleBarcodeService                          0%
+  LISService.Application.Services.Entities.LisSampleCollectionService                       0%
+  LISService.Application.Services.Entities.LisSampleLifecycleEventService                 100%
+  LISService.Application.Services.Entities.LisSampleTrackingService                         0%
+  LISService.Application.Services.Entities.LisSampleTypeService                             0%
+  LISService.Application.Services.Entities.LisTestCategoryService                         100%
+  LISService.Application.Services.Entities.LisTestMasterService                             0%
+  LISService.Application.Services.Entities.LisTestParameterProfileService                  80%
+  LISService.Application.Services.Entities.LisTestParameterService                          0%
+  LISService.Application.Services.Entities.LisTestReferenceRangeService                     0%
+  LISService.Application.Services.Extended.LisCrudServiceBase<T1, T2, T3, T4, T5>        78.5%
+  LISService.Application.Services.InfoService                                             100%
+  LISService.Application.Services.LisNotificationHelper                                     0%
+
+LMSService.API                                                                             10%
+  LMSService.API.Controllers.v1.Entities.EquipmentCalibrationController                     0%
+  LMSService.API.Controllers.v1.Entities.EquipmentController                                0%
+  LMSService.API.Controllers.v1.Entities.EquipmentMaintenanceController                     0%
+  LMSService.API.Controllers.v1.Entities.IamUserAccountsController                          0%
+  LMSService.API.Controllers.v1.Entities.LabInventoryController                             0%
+  LMSService.API.Controllers.v1.Entities.LabInventoryTransactionController                  0%
+  LMSService.API.Controllers.v1.Entities.LabInvoiceHeadersController                        0%
+  LMSService.API.Controllers.v1.Entities.LabOrderContextsController                         0%
+  LMSService.API.Controllers.v1.Entities.ProcessingStageController                        100%
+  LMSService.API.Controllers.v1.Entities.QcRecordController                                 0%
+  LMSService.API.Controllers.v1.Entities.QcResultController                                 0%
+  LMSService.API.Controllers.v1.Entities.ReagentConsumptionLogsController                   0%
+  LMSService.API.Controllers.v1.Entities.TechnicianAssignmentController                     0%
+  LMSService.API.Controllers.v1.Entities.TestPackages07Controller                           0%
+  LMSService.API.Controllers.v1.Entities.WorkQueueController                                0%
+  LMSService.API.Controllers.v1.InfoController                                            100%
+
+LMSService.Application                                                                   86.2%
+  LMSService.Application.DependencyInjection                                              100%
+  LMSService.Application.Mapping.LmsGeneratedMappingProfile                               100%
+  LMSService.Application.Mapping.LMSMappingProfile                                        100%
+  LMSService.Application.Services.AuditHelper                                            73.3%
+  LMSService.Application.Services.Entities.IamUserAccountService                           80%
+  LMSService.Application.Services.Entities.LmsEquipmentCalibrationService                   0%
+  LMSService.Application.Services.Entities.LmsEquipmentMaintenanceService                   0%
+  LMSService.Application.Services.Entities.LmsEquipmentService                              0%
+  LMSService.Application.Services.Entities.LmsLabInventoryService                           0%
+  LMSService.Application.Services.Entities.LmsLabInventoryTransactionService                0%
+  LMSService.Application.Services.Entities.LmsLabInvoiceHeaderService                     100%
+  LMSService.Application.Services.Entities.LmsLabOrderContextService                        0%
+  LMSService.Application.Services.Entities.LmsProcessingStageService                      100%
+  LMSService.Application.Services.Entities.LmsQcRecordService                               0%
+  LMSService.Application.Services.Entities.LmsQcResultService                               0%
+  LMSService.Application.Services.Entities.LmsReagentConsumptionLogService                  0%
+  LMSService.Application.Services.Entities.LmsTechnicianAssignmentService                   0%
+  LMSService.Application.Services.Entities.LmsTestPackageService                            0%
+  LMSService.Application.Services.Entities.LmsWorkQueueService                              0%
+  LMSService.Application.Services.Extended.LmsCrudServiceBase<T1, T2, T3, T4, T5>        39.2%
+  LMSService.Application.Services.InfoService                                             100%
+  LMSService.Application.Services.LmsNotificationHelper                                     0%
+
+PharmacyService.API                                                                      12.9%
+  PharmacyService.API.Controllers.v1.Entities.BatchStockController                          0%
+  PharmacyService.API.Controllers.v1.Entities.CompositionController                         0%
+  PharmacyService.API.Controllers.v1.Entities.ExpiryTrackingController                      0%
+  PharmacyService.API.Controllers.v1.Entities.GoodsReceiptController                        0%
+  PharmacyService.API.Controllers.v1.Entities.GoodsReceiptItemController                    0%
+  PharmacyService.API.Controllers.v1.Entities.ManufacturerController                        0%
+  PharmacyService.API.Controllers.v1.Entities.MedicineBatchController                       0%
+  PharmacyService.API.Controllers.v1.Entities.MedicineCategoryController                  100%
+  PharmacyService.API.Controllers.v1.Entities.MedicineCompositionController                 0%
+  PharmacyService.API.Controllers.v1.Entities.MedicineController                            0%
+  PharmacyService.API.Controllers.v1.Entities.PharmacySaleController                        0%
+  PharmacyService.API.Controllers.v1.Entities.PharmacySalesItemController                   0%
+  PharmacyService.API.Controllers.v1.Entities.PrescriptionMappingController                 0%
+  PharmacyService.API.Controllers.v1.Entities.PurchaseOrderController                       0%
+  PharmacyService.API.Controllers.v1.Entities.PurchaseOrderItemController                   0%
+  PharmacyService.API.Controllers.v1.Entities.StockAdjustmentController                     0%
+  PharmacyService.API.Controllers.v1.Entities.StockAdjustmentItemController                 0%
+  PharmacyService.API.Controllers.v1.Entities.StockLedgerController                         0%
+  PharmacyService.API.Controllers.v1.Entities.StockTransferController                       0%
+  PharmacyService.API.Controllers.v1.Entities.StockTransferItemController                   0%
+  PharmacyService.API.Controllers.v1.InfoController                                       100%
+  PharmacyService.API.Controllers.v1.LmsInventoryIntegrationController                      0%
+
+PharmacyService.Application                                                              84.4%
+  PharmacyService.Application.DependencyInjection                                         100%
+  PharmacyService.Application.Mapping.PharmacyMappingProfile                              100%
+  PharmacyService.Application.Mapping.PhrGeneratedMappingProfile                          100%
+  PharmacyService.Application.Services.AuditHelper                                          0%
+  PharmacyService.Application.Services.Entities.PhrBatchStockService                        0%
+  PharmacyService.Application.Services.Entities.PhrCompositionService                       0%
+  PharmacyService.Application.Services.Entities.PhrExpiryTrackingService                    0%
+  PharmacyService.Application.Services.Entities.PhrGoodsReceiptItemService                  0%
+  PharmacyService.Application.Services.Entities.PhrGoodsReceiptService                      0%
+  PharmacyService.Application.Services.Entities.PhrManufacturerService                      0%
+  PharmacyService.Application.Services.Entities.PhrMedicineBatchService                     0%
+  PharmacyService.Application.Services.Entities.PhrMedicineCategoryService                100%
+  PharmacyService.Application.Services.Entities.PhrMedicineCompositionService               0%
+  PharmacyService.Application.Services.Entities.PhrMedicineService                          0%
+  PharmacyService.Application.Services.Entities.PhrPharmacySaleService                      0%
+  PharmacyService.Application.Services.Entities.PhrPharmacySalesItemService                 0%
+  PharmacyService.Application.Services.Entities.PhrPrescriptionMappingService               0%
+  PharmacyService.Application.Services.Entities.PhrPurchaseOrderItemService                 0%
+  PharmacyService.Application.Services.Entities.PhrPurchaseOrderService                     0%
+  PharmacyService.Application.Services.Entities.PhrStockAdjustmentItemService               0%
+  PharmacyService.Application.Services.Entities.PhrStockAdjustmentService                   0%
+  PharmacyService.Application.Services.Entities.PhrStockLedgerService                       0%
+  PharmacyService.Application.Services.Entities.PhrStockTransferItemService                 0%
+  PharmacyService.Application.Services.Entities.PhrStockTransferService                     0%
+  PharmacyService.Application.Services.Extended.PhrCrudServiceBase<T1, T2, T3, T4, T5>   32.1%
+  PharmacyService.Application.Services.InfoService                                        100%
+  PharmacyService.Application.Services.LmsInventoryIntegrationService                     100%
+  PharmacyService.Application.Services.PharmacyNotificationHelper                           0%
+
+SharedService.Application                                                                  40%
+  SharedService.Application.DependencyInjection                                             0%
+  SharedService.Application.Mapping.SharedMappingProfile                                    0%
+  SharedService.Application.Services.InfoService                                          100%
+
+SharedService.Infrastructure                                                             78.9%
+  SharedService.Infrastructure.DependencyInjection                                          0%
+  SharedService.Infrastructure.Persistence.Configurations.AddressConfiguration            100%
+  SharedService.Infrastructure.Persistence.Configurations.BusinessUnitConfiguration       100%
+  SharedService.Infrastructure.Persistence.Configurations.CompanyConfiguration            100%
+  SharedService.Infrastructure.Persistence.Configurations.ContactDetailsConfiguration     100%
+  SharedService.Infrastructure.Persistence.Configurations.DepartmentConfiguration         100%
+  SharedService.Infrastructure.Persistence.Configurations.EnterpriseRootConfiguration     100%
+  SharedService.Infrastructure.Persistence.Configurations.FacilityConfiguration           100%
+  SharedService.Infrastructure.Persistence.SharedDbContext                               84.6%
+  SharedService.Infrastructure.Services.Enterprise.BusinessUnitService                      0%
+  SharedService.Infrastructure.Services.Enterprise.CompanyService                           0%
+  SharedService.Infrastructure.Services.Enterprise.DepartmentService                     85.7%
+  SharedService.Infrastructure.Services.Enterprise.EnterpriseEntityMappings               100%
+  SharedService.Infrastructure.Services.Enterprise.EnterpriseReferenceGuard              16.6%
+  SharedService.Infrastructure.Services.Enterprise.EnterpriseService                      100%
+  SharedService.Infrastructure.Services.Enterprise.FacilityService                          0%

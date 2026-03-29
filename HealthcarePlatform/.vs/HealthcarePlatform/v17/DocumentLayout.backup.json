@@ -1,0 +1,700 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "I:\\Projects\\TriVita\\HealthcarePlatform\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.application\\dtos\\entities\\updatestocktransferitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|solutionrelative:pharmacyservice\\pharmacyservice.application\\dtos\\entities\\updatestocktransferitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.application\\dtos\\entities\\updatestockadjustmentitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|solutionrelative:pharmacyservice\\pharmacyservice.application\\dtos\\entities\\updatestockadjustmentitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ED8AF318-2395-42C5-B98B-60BB0F5D2372}|LISService\\LISService.Application\\LISService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\lisservice\\lisservice.application\\dtos\\entities\\updatereportdetaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ED8AF318-2395-42C5-B98B-60BB0F5D2372}|LISService\\LISService.Application\\LISService.Application.csproj|solutionrelative:lisservice\\lisservice.application\\dtos\\entities\\updatereportdetaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.application\\dtos\\entities\\updatepurchaseorderitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|solutionrelative:pharmacyservice\\pharmacyservice.application\\dtos\\entities\\updatepurchaseorderitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{450876CD-0E3A-4C42-A1B6-2425AE0E4D57}|HMSService\\HMSService.Application\\HMSService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\hmsservice\\hmsservice.application\\dtos\\extended\\updateprescriptionitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{450876CD-0E3A-4C42-A1B6-2425AE0E4D57}|HMSService\\HMSService.Application\\HMSService.Application.csproj|solutionrelative:hmsservice\\hmsservice.application\\dtos\\extended\\updateprescriptionitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.application\\dtos\\entities\\updatepharmacysalesitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|solutionrelative:pharmacyservice\\pharmacyservice.application\\dtos\\entities\\updatepharmacysalesitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ED8AF318-2395-42C5-B98B-60BB0F5D2372}|LISService\\LISService.Application\\LISService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\lisservice\\lisservice.application\\dtos\\entities\\updatelaborderitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ED8AF318-2395-42C5-B98B-60BB0F5D2372}|LISService\\LISService.Application\\LISService.Application.csproj|solutionrelative:lisservice\\lisservice.application\\dtos\\entities\\updatelaborderitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.application\\dtos\\entities\\updategoodsreceiptitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|solutionrelative:pharmacyservice\\pharmacyservice.application\\dtos\\entities\\updategoodsreceiptitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{450876CD-0E3A-4C42-A1B6-2425AE0E4D57}|HMSService\\HMSService.Application\\HMSService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\hmsservice\\hmsservice.application\\dtos\\extended\\updatebillingitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{450876CD-0E3A-4C42-A1B6-2425AE0E4D57}|HMSService\\HMSService.Application\\HMSService.Application.csproj|solutionrelative:hmsservice\\hmsservice.application\\dtos\\extended\\updatebillingitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.application\\dtos\\entities\\stocktransferitemresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|solutionrelative:pharmacyservice\\pharmacyservice.application\\dtos\\entities\\stocktransferitemresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.application\\dtos\\entities\\stockadjustmentitemresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|solutionrelative:pharmacyservice\\pharmacyservice.application\\dtos\\entities\\stockadjustmentitemresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ED8AF318-2395-42C5-B98B-60BB0F5D2372}|LISService\\LISService.Application\\LISService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\lisservice\\lisservice.application\\dtos\\entities\\reportdetailresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ED8AF318-2395-42C5-B98B-60BB0F5D2372}|LISService\\LISService.Application\\LISService.Application.csproj|solutionrelative:lisservice\\lisservice.application\\dtos\\entities\\reportdetailresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.application\\dtos\\entities\\purchaseorderitemresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|solutionrelative:pharmacyservice\\pharmacyservice.application\\dtos\\entities\\purchaseorderitemresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{450876CD-0E3A-4C42-A1B6-2425AE0E4D57}|HMSService\\HMSService.Application\\HMSService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\hmsservice\\hmsservice.application\\dtos\\extended\\prescriptionitemresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{450876CD-0E3A-4C42-A1B6-2425AE0E4D57}|HMSService\\HMSService.Application\\HMSService.Application.csproj|solutionrelative:hmsservice\\hmsservice.application\\dtos\\extended\\prescriptionitemresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5882EB58-4E69-416C-AC39-1C5D1D3992AC}|PharmacyService\\PharmacyService.Domain\\PharmacyService.Domain.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.domain\\entities\\phrstocktransferitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5882EB58-4E69-416C-AC39-1C5D1D3992AC}|PharmacyService\\PharmacyService.Domain\\PharmacyService.Domain.csproj|solutionrelative:pharmacyservice\\pharmacyservice.domain\\entities\\phrstocktransferitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5882EB58-4E69-416C-AC39-1C5D1D3992AC}|PharmacyService\\PharmacyService.Domain\\PharmacyService.Domain.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.domain\\entities\\phrstockadjustmentitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5882EB58-4E69-416C-AC39-1C5D1D3992AC}|PharmacyService\\PharmacyService.Domain\\PharmacyService.Domain.csproj|solutionrelative:pharmacyservice\\pharmacyservice.domain\\entities\\phrstockadjustmentitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5882EB58-4E69-416C-AC39-1C5D1D3992AC}|PharmacyService\\PharmacyService.Domain\\PharmacyService.Domain.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.domain\\entities\\phrpurchaseorderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5882EB58-4E69-416C-AC39-1C5D1D3992AC}|PharmacyService\\PharmacyService.Domain\\PharmacyService.Domain.csproj|solutionrelative:pharmacyservice\\pharmacyservice.domain\\entities\\phrpurchaseorderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5882EB58-4E69-416C-AC39-1C5D1D3992AC}|PharmacyService\\PharmacyService.Domain\\PharmacyService.Domain.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.domain\\entities\\phrpharmacysalesitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5882EB58-4E69-416C-AC39-1C5D1D3992AC}|PharmacyService\\PharmacyService.Domain\\PharmacyService.Domain.csproj|solutionrelative:pharmacyservice\\pharmacyservice.domain\\entities\\phrpharmacysalesitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5882EB58-4E69-416C-AC39-1C5D1D3992AC}|PharmacyService\\PharmacyService.Domain\\PharmacyService.Domain.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.domain\\entities\\phrgoodsreceiptitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5882EB58-4E69-416C-AC39-1C5D1D3992AC}|PharmacyService\\PharmacyService.Domain\\PharmacyService.Domain.csproj|solutionrelative:pharmacyservice\\pharmacyservice.domain\\entities\\phrgoodsreceiptitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.application\\dtos\\entities\\pharmacysalesitemresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|solutionrelative:pharmacyservice\\pharmacyservice.application\\dtos\\entities\\pharmacysalesitemresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B0864BB4-4D2E-4107-B744-317DC8499BE7}|LMSService\\LMSService.Domain\\LMSService.Domain.csproj|i:\\projects\\trivita\\healthcareplatform\\lmsservice\\lmsservice.domain\\entities\\lms07referralb2bentities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B0864BB4-4D2E-4107-B744-317DC8499BE7}|LMSService\\LMSService.Domain\\LMSService.Domain.csproj|solutionrelative:lmsservice\\lmsservice.domain\\entities\\lms07referralb2bentities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B0864BB4-4D2E-4107-B744-317DC8499BE7}|LMSService\\LMSService.Domain\\LMSService.Domain.csproj|i:\\projects\\trivita\\healthcareplatform\\lmsservice\\lmsservice.domain\\entities\\lms07catalogworkflowentities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B0864BB4-4D2E-4107-B744-317DC8499BE7}|LMSService\\LMSService.Domain\\LMSService.Domain.csproj|solutionrelative:lmsservice\\lmsservice.domain\\entities\\lms07catalogworkflowentities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B0864BB4-4D2E-4107-B744-317DC8499BE7}|LMSService\\LMSService.Domain\\LMSService.Domain.csproj|i:\\projects\\trivita\\healthcareplatform\\lmsservice\\lmsservice.domain\\entities\\lms07billingwalletentities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B0864BB4-4D2E-4107-B744-317DC8499BE7}|LMSService\\LMSService.Domain\\LMSService.Domain.csproj|solutionrelative:lmsservice\\lmsservice.domain\\entities\\lms07billingwalletentities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BE999EB-7E13-412E-AF64-C6C1A2363C23}|LISService\\LISService.Domain\\LISService.Domain.csproj|i:\\projects\\trivita\\healthcareplatform\\lisservice\\lisservice.domain\\entities\\lisreportdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6BE999EB-7E13-412E-AF64-C6C1A2363C23}|LISService\\LISService.Domain\\LISService.Domain.csproj|solutionrelative:lisservice\\lisservice.domain\\entities\\lisreportdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6BE999EB-7E13-412E-AF64-C6C1A2363C23}|LISService\\LISService.Domain\\LISService.Domain.csproj|i:\\projects\\trivita\\healthcareplatform\\lisservice\\lisservice.domain\\entities\\lislaborderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6BE999EB-7E13-412E-AF64-C6C1A2363C23}|LISService\\LISService.Domain\\LISService.Domain.csproj|solutionrelative:lisservice\\lisservice.domain\\entities\\lislaborderitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ED8AF318-2395-42C5-B98B-60BB0F5D2372}|LISService\\LISService.Application\\LISService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\lisservice\\lisservice.application\\dtos\\entities\\laborderitemresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ED8AF318-2395-42C5-B98B-60BB0F5D2372}|LISService\\LISService.Application\\LISService.Application.csproj|solutionrelative:lisservice\\lisservice.application\\dtos\\entities\\laborderitemresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E657F8C5-08FD-404F-9B19-CD8CEC72F232}|HMSService\\HMSService.Domain\\HMSService.Domain.csproj|i:\\projects\\trivita\\healthcareplatform\\hmsservice\\hmsservice.domain\\entities\\hmsprescriptionitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E657F8C5-08FD-404F-9B19-CD8CEC72F232}|HMSService\\HMSService.Domain\\HMSService.Domain.csproj|solutionrelative:hmsservice\\hmsservice.domain\\entities\\hmsprescriptionitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E657F8C5-08FD-404F-9B19-CD8CEC72F232}|HMSService\\HMSService.Domain\\HMSService.Domain.csproj|i:\\projects\\trivita\\healthcareplatform\\hmsservice\\hmsservice.domain\\entities\\hmsbillingitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E657F8C5-08FD-404F-9B19-CD8CEC72F232}|HMSService\\HMSService.Domain\\HMSService.Domain.csproj|solutionrelative:hmsservice\\hmsservice.domain\\entities\\hmsbillingitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.application\\dtos\\entities\\goodsreceiptitemresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|solutionrelative:pharmacyservice\\pharmacyservice.application\\dtos\\entities\\goodsreceiptitemresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.application\\dtos\\entities\\createstocktransferitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|solutionrelative:pharmacyservice\\pharmacyservice.application\\dtos\\entities\\createstocktransferitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.application\\dtos\\entities\\createstockadjustmentitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|solutionrelative:pharmacyservice\\pharmacyservice.application\\dtos\\entities\\createstockadjustmentitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ED8AF318-2395-42C5-B98B-60BB0F5D2372}|LISService\\LISService.Application\\LISService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\lisservice\\lisservice.application\\dtos\\entities\\createreportdetaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ED8AF318-2395-42C5-B98B-60BB0F5D2372}|LISService\\LISService.Application\\LISService.Application.csproj|solutionrelative:lisservice\\lisservice.application\\dtos\\entities\\createreportdetaildto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.application\\dtos\\entities\\createpurchaseorderitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|solutionrelative:pharmacyservice\\pharmacyservice.application\\dtos\\entities\\createpurchaseorderitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{450876CD-0E3A-4C42-A1B6-2425AE0E4D57}|HMSService\\HMSService.Application\\HMSService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\hmsservice\\hmsservice.application\\dtos\\extended\\createprescriptionitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{450876CD-0E3A-4C42-A1B6-2425AE0E4D57}|HMSService\\HMSService.Application\\HMSService.Application.csproj|solutionrelative:hmsservice\\hmsservice.application\\dtos\\extended\\createprescriptionitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.application\\dtos\\entities\\createpharmacysalesitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|solutionrelative:pharmacyservice\\pharmacyservice.application\\dtos\\entities\\createpharmacysalesitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ED8AF318-2395-42C5-B98B-60BB0F5D2372}|LISService\\LISService.Application\\LISService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\lisservice\\lisservice.application\\dtos\\entities\\createlaborderitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{ED8AF318-2395-42C5-B98B-60BB0F5D2372}|LISService\\LISService.Application\\LISService.Application.csproj|solutionrelative:lisservice\\lisservice.application\\dtos\\entities\\createlaborderitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\pharmacyservice\\pharmacyservice.application\\dtos\\entities\\creategoodsreceiptitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4F34EBFE-9E12-4B56-B996-F0127FB74881}|PharmacyService\\PharmacyService.Application\\PharmacyService.Application.csproj|solutionrelative:pharmacyservice\\pharmacyservice.application\\dtos\\entities\\creategoodsreceiptitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{450876CD-0E3A-4C42-A1B6-2425AE0E4D57}|HMSService\\HMSService.Application\\HMSService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\hmsservice\\hmsservice.application\\dtos\\extended\\createbillingitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{450876CD-0E3A-4C42-A1B6-2425AE0E4D57}|HMSService\\HMSService.Application\\HMSService.Application.csproj|solutionrelative:hmsservice\\hmsservice.application\\dtos\\extended\\createbillingitemdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{450876CD-0E3A-4C42-A1B6-2425AE0E4D57}|HMSService\\HMSService.Application\\HMSService.Application.csproj|i:\\projects\\trivita\\healthcareplatform\\hmsservice\\hmsservice.application\\dtos\\extended\\billingitemresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{450876CD-0E3A-4C42-A1B6-2425AE0E4D57}|HMSService\\HMSService.Application\\HMSService.Application.csproj|solutionrelative:hmsservice\\hmsservice.application\\dtos\\extended\\billingitemresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{20C4613C-452D-488D-8170-64E81402B14B}|BuildingBlocks\\Healthcare.Common\\Healthcare.Common.csproj|i:\\projects\\trivita\\healthcareplatform\\buildingblocks\\healthcare.common\\healthcare.common.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{20C4613C-452D-488D-8170-64E81402B14B}|BuildingBlocks\\Healthcare.Common\\Healthcare.Common.csproj|solutionrelative:buildingblocks\\healthcare.common\\healthcare.common.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UpdateStockTransferItemDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdateStockTransferItemDto.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdateStockTransferItemDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdateStockTransferItemDto.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdateStockTransferItemDto.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAqwAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:39:07.685Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UpdateStockAdjustmentItemDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdateStockAdjustmentItemDto.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdateStockAdjustmentItemDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdateStockAdjustmentItemDto.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdateStockAdjustmentItemDto.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAqwAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:39:06.775Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UpdateReportDetailDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Application\\DTOs\\Entities\\UpdateReportDetailDto.cs",
+              "RelativeDocumentMoniker": "LISService\\LISService.Application\\DTOs\\Entities\\UpdateReportDetailDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Application\\DTOs\\Entities\\UpdateReportDetailDto.cs",
+              "RelativeToolTip": "LISService\\LISService.Application\\DTOs\\Entities\\UpdateReportDetailDto.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAqwAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:39:05.363Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UpdatePurchaseOrderItemDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdatePurchaseOrderItemDto.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdatePurchaseOrderItemDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdatePurchaseOrderItemDto.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdatePurchaseOrderItemDto.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAqwAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:39:04.201Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UpdatePrescriptionItemDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\HMSService\\HMSService.Application\\DTOs\\Extended\\UpdatePrescriptionItemDto.cs",
+              "RelativeDocumentMoniker": "HMSService\\HMSService.Application\\DTOs\\Extended\\UpdatePrescriptionItemDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\HMSService\\HMSService.Application\\DTOs\\Extended\\UpdatePrescriptionItemDto.cs",
+              "RelativeToolTip": "HMSService\\HMSService.Application\\DTOs\\Extended\\UpdatePrescriptionItemDto.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAqwAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:39:03.035Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "UpdatePharmacySalesItemDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdatePharmacySalesItemDto.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdatePharmacySalesItemDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdatePharmacySalesItemDto.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdatePharmacySalesItemDto.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAqwAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:39:01.367Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "UpdateLabOrderItemDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Application\\DTOs\\Entities\\UpdateLabOrderItemDto.cs",
+              "RelativeDocumentMoniker": "LISService\\LISService.Application\\DTOs\\Entities\\UpdateLabOrderItemDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Application\\DTOs\\Entities\\UpdateLabOrderItemDto.cs",
+              "RelativeToolTip": "LISService\\LISService.Application\\DTOs\\Entities\\UpdateLabOrderItemDto.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAqwAcAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:39:00.007Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "UpdateGoodsReceiptItemDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdateGoodsReceiptItemDto.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdateGoodsReceiptItemDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdateGoodsReceiptItemDto.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\UpdateGoodsReceiptItemDto.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAqwAYAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:58.663Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "UpdateBillingItemDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\HMSService\\HMSService.Application\\DTOs\\Extended\\UpdateBillingItemDto.cs",
+              "RelativeDocumentMoniker": "HMSService\\HMSService.Application\\DTOs\\Extended\\UpdateBillingItemDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\HMSService\\HMSService.Application\\DTOs\\Extended\\UpdateBillingItemDto.cs",
+              "RelativeToolTip": "HMSService\\HMSService.Application\\DTOs\\Extended\\UpdateBillingItemDto.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAqwAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:57.479Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "StockTransferItemResponseDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\StockTransferItemResponseDto.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\StockTransferItemResponseDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\StockTransferItemResponseDto.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\StockTransferItemResponseDto.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAqwAgAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:56.194Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "StockAdjustmentItemResponseDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\StockAdjustmentItemResponseDto.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\StockAdjustmentItemResponseDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\StockAdjustmentItemResponseDto.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\StockAdjustmentItemResponseDto.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAqwAgAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:54.617Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ReportDetailResponseDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Application\\DTOs\\Entities\\ReportDetailResponseDto.cs",
+              "RelativeDocumentMoniker": "LISService\\LISService.Application\\DTOs\\Entities\\ReportDetailResponseDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Application\\DTOs\\Entities\\ReportDetailResponseDto.cs",
+              "RelativeToolTip": "LISService\\LISService.Application\\DTOs\\Entities\\ReportDetailResponseDto.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAqwAgAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:51.995Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "PurchaseOrderItemResponseDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\PurchaseOrderItemResponseDto.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\PurchaseOrderItemResponseDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\PurchaseOrderItemResponseDto.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\PurchaseOrderItemResponseDto.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAqwAgAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:50.491Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "PrescriptionItemResponseDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\HMSService\\HMSService.Application\\DTOs\\Extended\\PrescriptionItemResponseDto.cs",
+              "RelativeDocumentMoniker": "HMSService\\HMSService.Application\\DTOs\\Extended\\PrescriptionItemResponseDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\HMSService\\HMSService.Application\\DTOs\\Extended\\PrescriptionItemResponseDto.cs",
+              "RelativeToolTip": "HMSService\\HMSService.Application\\DTOs\\Extended\\PrescriptionItemResponseDto.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAqwAgAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:49.304Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "PhrStockTransferItem.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Domain\\Entities\\PhrStockTransferItem.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Domain\\Entities\\PhrStockTransferItem.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Domain\\Entities\\PhrStockTransferItem.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Domain\\Entities\\PhrStockTransferItem.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAqwAcAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:47.983Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "PhrStockAdjustmentItem.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Domain\\Entities\\PhrStockAdjustmentItem.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Domain\\Entities\\PhrStockAdjustmentItem.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Domain\\Entities\\PhrStockAdjustmentItem.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Domain\\Entities\\PhrStockAdjustmentItem.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAqwAcAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:46.781Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "PhrPurchaseOrderItem.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Domain\\Entities\\PhrPurchaseOrderItem.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Domain\\Entities\\PhrPurchaseOrderItem.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Domain\\Entities\\PhrPurchaseOrderItem.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Domain\\Entities\\PhrPurchaseOrderItem.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAqwAcAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:44.802Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "PhrPharmacySalesItem.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Domain\\Entities\\PhrPharmacySalesItem.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Domain\\Entities\\PhrPharmacySalesItem.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Domain\\Entities\\PhrPharmacySalesItem.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Domain\\Entities\\PhrPharmacySalesItem.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAqwAcAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:43.447Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "PhrGoodsReceiptItem.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Domain\\Entities\\PhrGoodsReceiptItem.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Domain\\Entities\\PhrGoodsReceiptItem.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Domain\\Entities\\PhrGoodsReceiptItem.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Domain\\Entities\\PhrGoodsReceiptItem.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAqwAgAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:42.093Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "PharmacySalesItemResponseDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\PharmacySalesItemResponseDto.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\PharmacySalesItemResponseDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\PharmacySalesItemResponseDto.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\PharmacySalesItemResponseDto.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAqwAgAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:37.278Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Lms07ReferralB2bEntities.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\LMSService\\LMSService.Domain\\Entities\\Lms07ReferralB2bEntities.cs",
+              "RelativeDocumentMoniker": "LMSService\\LMSService.Domain\\Entities\\Lms07ReferralB2bEntities.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\LMSService\\LMSService.Domain\\Entities\\Lms07ReferralB2bEntities.cs",
+              "RelativeToolTip": "LMSService\\LMSService.Domain\\Entities\\Lms07ReferralB2bEntities.cs",
+              "ViewState": "AgIAAHAAAAAAAAAAAAAqwHAAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:35.919Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Lms07CatalogWorkflowEntities.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\LMSService\\LMSService.Domain\\Entities\\Lms07CatalogWorkflowEntities.cs",
+              "RelativeDocumentMoniker": "LMSService\\LMSService.Domain\\Entities\\Lms07CatalogWorkflowEntities.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\LMSService\\LMSService.Domain\\Entities\\Lms07CatalogWorkflowEntities.cs",
+              "RelativeToolTip": "LMSService\\LMSService.Domain\\Entities\\Lms07CatalogWorkflowEntities.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAqwBEAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:34.709Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Lms07BillingWalletEntities.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\LMSService\\LMSService.Domain\\Entities\\Lms07BillingWalletEntities.cs",
+              "RelativeDocumentMoniker": "LMSService\\LMSService.Domain\\Entities\\Lms07BillingWalletEntities.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\LMSService\\LMSService.Domain\\Entities\\Lms07BillingWalletEntities.cs",
+              "RelativeToolTip": "LMSService\\LMSService.Domain\\Entities\\Lms07BillingWalletEntities.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAqwBgAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:33.036Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "LisReportDetail.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Domain\\Entities\\LisReportDetail.cs",
+              "RelativeDocumentMoniker": "LISService\\LISService.Domain\\Entities\\LisReportDetail.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Domain\\Entities\\LisReportDetail.cs",
+              "RelativeToolTip": "LISService\\LISService.Domain\\Entities\\LisReportDetail.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAqwAcAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:29.534Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "LisLabOrderItem.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Domain\\Entities\\LisLabOrderItem.cs",
+              "RelativeDocumentMoniker": "LISService\\LISService.Domain\\Entities\\LisLabOrderItem.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Domain\\Entities\\LisLabOrderItem.cs",
+              "RelativeToolTip": "LISService\\LISService.Domain\\Entities\\LisLabOrderItem.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAqwAkAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:28.401Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "LabOrderItemResponseDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Application\\DTOs\\Entities\\LabOrderItemResponseDto.cs",
+              "RelativeDocumentMoniker": "LISService\\LISService.Application\\DTOs\\Entities\\LabOrderItemResponseDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Application\\DTOs\\Entities\\LabOrderItemResponseDto.cs",
+              "RelativeToolTip": "LISService\\LISService.Application\\DTOs\\Entities\\LabOrderItemResponseDto.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAqwAoAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:27.27Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "HmsPrescriptionItem.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\HMSService\\HMSService.Domain\\Entities\\HmsPrescriptionItem.cs",
+              "RelativeDocumentMoniker": "HMSService\\HMSService.Domain\\Entities\\HmsPrescriptionItem.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\HMSService\\HMSService.Domain\\Entities\\HmsPrescriptionItem.cs",
+              "RelativeToolTip": "HMSService\\HMSService.Domain\\Entities\\HmsPrescriptionItem.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAqwAcAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:25.786Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "HmsBillingItem.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\HMSService\\HMSService.Domain\\Entities\\HmsBillingItem.cs",
+              "RelativeDocumentMoniker": "HMSService\\HMSService.Domain\\Entities\\HmsBillingItem.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\HMSService\\HMSService.Domain\\Entities\\HmsBillingItem.cs",
+              "RelativeToolTip": "HMSService\\HMSService.Domain\\Entities\\HmsBillingItem.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAqwAcAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:24.641Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "GoodsReceiptItemResponseDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\GoodsReceiptItemResponseDto.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\GoodsReceiptItemResponseDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\GoodsReceiptItemResponseDto.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\GoodsReceiptItemResponseDto.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAqwAkAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:23.083Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "CreateStockTransferItemDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreateStockTransferItemDto.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreateStockTransferItemDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreateStockTransferItemDto.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreateStockTransferItemDto.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAqwAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:20.375Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "CreateStockAdjustmentItemDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreateStockAdjustmentItemDto.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreateStockAdjustmentItemDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreateStockAdjustmentItemDto.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreateStockAdjustmentItemDto.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAqwAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:18.721Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "CreateReportDetailDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Application\\DTOs\\Entities\\CreateReportDetailDto.cs",
+              "RelativeDocumentMoniker": "LISService\\LISService.Application\\DTOs\\Entities\\CreateReportDetailDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Application\\DTOs\\Entities\\CreateReportDetailDto.cs",
+              "RelativeToolTip": "LISService\\LISService.Application\\DTOs\\Entities\\CreateReportDetailDto.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAqwAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:17.415Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "CreatePurchaseOrderItemDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreatePurchaseOrderItemDto.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreatePurchaseOrderItemDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreatePurchaseOrderItemDto.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreatePurchaseOrderItemDto.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAqwAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:15.725Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "CreatePrescriptionItemDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\HMSService\\HMSService.Application\\DTOs\\Extended\\CreatePrescriptionItemDto.cs",
+              "RelativeDocumentMoniker": "HMSService\\HMSService.Application\\DTOs\\Extended\\CreatePrescriptionItemDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\HMSService\\HMSService.Application\\DTOs\\Extended\\CreatePrescriptionItemDto.cs",
+              "RelativeToolTip": "HMSService\\HMSService.Application\\DTOs\\Extended\\CreatePrescriptionItemDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:12.711Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "CreatePharmacySalesItemDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreatePharmacySalesItemDto.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreatePharmacySalesItemDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreatePharmacySalesItemDto.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreatePharmacySalesItemDto.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAqwAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:11.182Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "CreateLabOrderItemDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Application\\DTOs\\Entities\\CreateLabOrderItemDto.cs",
+              "RelativeDocumentMoniker": "LISService\\LISService.Application\\DTOs\\Entities\\CreateLabOrderItemDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Application\\DTOs\\Entities\\CreateLabOrderItemDto.cs",
+              "RelativeToolTip": "LISService\\LISService.Application\\DTOs\\Entities\\CreateLabOrderItemDto.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAqwAcAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:09.431Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "CreateGoodsReceiptItemDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreateGoodsReceiptItemDto.cs",
+              "RelativeDocumentMoniker": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreateGoodsReceiptItemDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreateGoodsReceiptItemDto.cs",
+              "RelativeToolTip": "PharmacyService\\PharmacyService.Application\\DTOs\\Entities\\CreateGoodsReceiptItemDto.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAqwAYAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:07.912Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "CreateBillingItemDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\HMSService\\HMSService.Application\\DTOs\\Extended\\CreateBillingItemDto.cs",
+              "RelativeDocumentMoniker": "HMSService\\HMSService.Application\\DTOs\\Extended\\CreateBillingItemDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\HMSService\\HMSService.Application\\DTOs\\Extended\\CreateBillingItemDto.cs",
+              "RelativeToolTip": "HMSService\\HMSService.Application\\DTOs\\Extended\\CreateBillingItemDto.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAqwAUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:38:06.082Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "BillingItemResponseDto.cs",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\HMSService\\HMSService.Application\\DTOs\\Extended\\BillingItemResponseDto.cs",
+              "RelativeDocumentMoniker": "HMSService\\HMSService.Application\\DTOs\\Extended\\BillingItemResponseDto.cs",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\HMSService\\HMSService.Application\\DTOs\\Extended\\BillingItemResponseDto.cs",
+              "RelativeToolTip": "HMSService\\HMSService.Application\\DTOs\\Extended\\BillingItemResponseDto.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAqwAgAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-28T18:37:36.838Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "Healthcare.Common",
+              "DocumentMoniker": "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Common\\Healthcare.Common.csproj",
+              "RelativeDocumentMoniker": "BuildingBlocks\\Healthcare.Common\\Healthcare.Common.csproj",
+              "ToolTip": "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Common\\Healthcare.Common.csproj",
+              "RelativeToolTip": "BuildingBlocks\\Healthcare.Common\\Healthcare.Common.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-03-28T18:36:30.769Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

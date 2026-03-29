@@ -1,0 +1,10 @@
+{
+  "CommunicationService.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "I:\\Projects\\TriVita\\HealthcarePlatform\\CommunicationService\\CommunicationService.Contracts",
+  "Healthcare.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Common",
+  "Healthcare.Swagger, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "I:\\Projects\\TriVita\\HealthcarePlatform\\BuildingBlocks\\Healthcare.Swagger",
+  "LISService.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.API",
+  "LISService.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Application",
+  "LISService.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Contracts",
+  "LISService.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Domain",
+  "LISService.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "I:\\Projects\\TriVita\\HealthcarePlatform\\LISService\\LISService.Infrastructure"
+}
