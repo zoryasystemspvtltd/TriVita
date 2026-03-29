@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SharedService.Domain.Enterprise;
+using SharedService.Domain.FeatureExtensions;
 
 namespace SharedService.Infrastructure.Persistence;
 
@@ -24,6 +25,20 @@ public sealed class SharedDbContext : DbContext
     public DbSet<Facility> Facilities => Set<Facility>();
 
     public DbSet<Department> Departments => Set<Department>();
+
+    public DbSet<EnterpriseB2BContract> EnterpriseB2BContracts => Set<EnterpriseB2BContract>();
+
+    public DbSet<FacilityServicePriceList> FacilityServicePriceLists => Set<FacilityServicePriceList>();
+
+    public DbSet<FacilityServicePriceListLine> FacilityServicePriceListLines => Set<FacilityServicePriceListLine>();
+
+    public DbSet<CrossFacilityReportAudit> CrossFacilityReportAudits => Set<CrossFacilityReportAudit>();
+
+    public DbSet<ModuleIntegrationHandoff> ModuleIntegrationHandoffs => Set<ModuleIntegrationHandoff>();
+
+    public DbSet<TenantOnboardingStage> TenantOnboardingStages => Set<TenantOnboardingStage>();
+
+    public DbSet<LabCriticalValueEscalation> LabCriticalValueEscalations => Set<LabCriticalValueEscalation>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

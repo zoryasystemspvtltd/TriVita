@@ -73,6 +73,21 @@ internal static class EnterpriseEntityMappings
             IsActive = e.IsActive
         };
 
+    public static EnterpriseB2BContractResponseDto ToDto(this EnterpriseB2BContract e) =>
+        new()
+        {
+            Id = e.Id,
+            EnterpriseId = e.EnterpriseId,
+            FacilityId = e.FacilityId,
+            PartnerType = e.PartnerType,
+            PartnerName = e.PartnerName,
+            ContractCode = e.ContractCode,
+            TermsJson = e.TermsJson,
+            EffectiveFrom = e.EffectiveFrom,
+            EffectiveTo = e.EffectiveTo,
+            IsActive = e.IsActive
+        };
+
     public static DepartmentResponseDto ToDto(this Department e) =>
         new()
         {
