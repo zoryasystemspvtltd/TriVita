@@ -65,6 +65,27 @@ public sealed class LmsDbContext : DbContext
     public DbSet<LmsAnalyticsDailyFacilityRollup> LmsAnalyticsDailyFacilityRollups => Set<LmsAnalyticsDailyFacilityRollup>();
     public DbSet<SecDataChangeAuditLog> SecDataChangeAuditLogs => Set<SecDataChangeAuditLog>();
 
+    public DbSet<LmsEquipmentType> LmsEquipmentTypes => Set<LmsEquipmentType>();
+    public DbSet<LmsEquipmentFacilityMapping> LmsEquipmentFacilityMappings => Set<LmsEquipmentFacilityMapping>();
+    public DbSet<LmsCatalogTest> LmsCatalogTests => Set<LmsCatalogTest>();
+    public DbSet<LmsCatalogParameter> LmsCatalogParameters => Set<LmsCatalogParameter>();
+    public DbSet<LmsCatalogReferenceRange> LmsCatalogReferenceRanges => Set<LmsCatalogReferenceRange>();
+    public DbSet<LmsCatalogTestParameterMap> LmsCatalogTestParameterMaps => Set<LmsCatalogTestParameterMap>();
+    public DbSet<LmsCatalogPackageParameterMap> LmsCatalogPackageParameterMaps => Set<LmsCatalogPackageParameterMap>();
+    public DbSet<LmsEquipmentTestMaster> LmsEquipmentTestMasters => Set<LmsEquipmentTestMaster>();
+    public DbSet<LmsCatalogTestEquipmentMap> LmsCatalogTestEquipmentMaps => Set<LmsCatalogTestEquipmentMap>();
+    public DbSet<LmsCatalogPackageTestLineMap> LmsCatalogPackageTestLineMaps => Set<LmsCatalogPackageTestLineMap>();
+    public DbSet<LmsLabTestBooking> LmsLabTestBookings => Set<LmsLabTestBooking>();
+    public DbSet<LmsLabTestBookingItem> LmsLabTestBookingItems => Set<LmsLabTestBookingItem>();
+    public DbSet<LmsLabSampleBarcode> LmsLabSampleBarcodes => Set<LmsLabSampleBarcode>();
+
+    public DbSet<LmsCollectionRequest> LmsCollectionRequests => Set<LmsCollectionRequest>();
+    public DbSet<LmsRiderTracking> LmsRiderTrackings => Set<LmsRiderTracking>();
+    public DbSet<LmsSampleTransport> LmsSampleTransports => Set<LmsSampleTransport>();
+    public DbSet<LmsReportValidationStep> LmsReportValidationSteps => Set<LmsReportValidationStep>();
+    public DbSet<LmsResultDeltaCheck> LmsResultDeltaChecks => Set<LmsResultDeltaCheck>();
+    public DbSet<LmsReportDigitalSign> LmsReportDigitalSigns => Set<LmsReportDigitalSign>();
+
     public long TenantFilter => _tenantContext.TenantId;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -111,5 +132,6 @@ public sealed class LmsDbContext : DbContext
     private static bool PreservesOptionalNullFacility(BaseEntity entity) =>
         entity is IamUserAccount or IamRole or IamPermission or IamRolePermission or IamUserRoleAssignment
             or IamUserFacilityScope or IamUserMfaFactor or IamPasswordResetToken or IamUserSessionActivity
-            or SecDataChangeAuditLog or LmsB2BPartner or LmsReferralDoctorProfile;
+            or SecDataChangeAuditLog or LmsB2BPartner or LmsReferralDoctorProfile
+            or LmsEquipmentType or LmsCatalogParameter;
 }

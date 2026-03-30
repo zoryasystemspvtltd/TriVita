@@ -39,6 +39,9 @@ public sealed class LisDbContext : DbContext
     public DbSet<LisReportDeliveryOtp> LisReportDeliveryOtps => Set<LisReportDeliveryOtp>();
     public DbSet<LisReportLockState> LisReportLockStates => Set<LisReportLockState>();
 
+    public DbSet<LisAnalyzerResultHeader> LisAnalyzerResultHeaders => Set<LisAnalyzerResultHeader>();
+    public DbSet<LisAnalyzerResultLine> LisAnalyzerResultLines => Set<LisAnalyzerResultLine>();
+
     public long TenantFilter => _tenantContext.TenantId;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

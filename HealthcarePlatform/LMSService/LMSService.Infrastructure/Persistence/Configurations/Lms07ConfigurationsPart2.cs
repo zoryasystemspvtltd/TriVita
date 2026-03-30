@@ -10,6 +10,7 @@ public sealed class LmsTestPackageConfiguration : IEntityTypeConfiguration<LmsTe
     {
         builder.ToTable("LMS_TestPackage");
         builder.HasKey(e => e.Id);
+        builder.HasAlternateKey(e => new { e.TenantId, e.FacilityId, e.Id });
         builder.Property(e => e.RowVersion).IsRowVersion();
         builder.Property(e => e.PackageCode).HasMaxLength(80);
         builder.Property(e => e.PackageName).HasMaxLength(250);

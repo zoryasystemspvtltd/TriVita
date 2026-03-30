@@ -10,6 +10,8 @@ public sealed class HmsBillingHeaderConfiguration : IEntityTypeConfiguration<Hms
     {
         builder.ToTable("HMS_BillingHeader");
         builder.HasKey(e => e.Id);
+        builder.HasAlternateKey(e => new { e.TenantId, e.FacilityId, e.Id });
+        builder.Property(e => e.FacilityId).IsRequired();
         builder.Property(e => e.RowVersion).IsRowVersion();
         builder.Property(e => e.BillNo).HasMaxLength(60);
         builder.Property(e => e.SubTotal).HasPrecision(18, 4);

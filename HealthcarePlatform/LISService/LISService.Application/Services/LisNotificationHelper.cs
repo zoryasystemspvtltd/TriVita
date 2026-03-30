@@ -77,4 +77,64 @@ public sealed class LisNotificationHelper : ILisNotificationHelper
             _logger.LogError(ex, "Failed to queue lab report notification for order {LabOrderId}.", labOrderId);
         }
     }
+
+    public async Task NotifyAnalyzerResultReadyAsync(
+        long lmsTestBookingItemId,
+        long patientId,
+        string? patientEmail,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(patientEmail))
+        {
+            _logger.LogInformation("Skipping analyzer notification (no email) for booking item {Id}.", lmsTestBookingItemId);
+            return;
+        }
+
+        if (_options.PatientRecipientTypeReferenceValueId == 0
+            || _options.EmailChannelReferenceValueId == 0
+            || _options.PriorityNormalReferenceValueId == 0)
+        {
+            _logger.LogWarning("LisNotifications reference ids are not configured; skipping Communication call.");
+            return;
+        }
+
+        var request = new CreateNotificationRequestDto
+        {
+            EventType = "LIS.Analyzer.ResultReady",
+            ReferenceId = lmsTestBookingItemId,
+            Context = new Dictionary<string, string>
+            {
+                ["patientId"] = patientId.ToString(),
+                ["lmsTestBookingItemId"] = lmsTestBookingItemId.ToString()
+            },
+            PriorityReferenceValueId = _options.PriorityNormalReferenceValueId,
+            Recipients = new[]
+            {
+                new RecipientInputDto
+                {
+                    RecipientTypeReferenceValueId = _options.PatientRecipientTypeReferenceValueId,
+                    RecipientId = patientId,
+                    Email = patientEmail.Trim(),
+                    IsPrimary = true
+                }
+            },
+            Channels = new[]
+            {
+                new ChannelRequestDto
+                {
+                    ChannelTypeReferenceValueId = _options.EmailChannelReferenceValueId,
+                    TemplateCode = _options.LabReportReadyTemplateCode
+                }
+            }
+        };
+
+        try
+        {
+            await _client.CreateNotificationAsync(request, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to queue analyzer result notification for item {ItemId}.", lmsTestBookingItemId);
+        }
+    }
 }

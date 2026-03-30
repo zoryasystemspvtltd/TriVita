@@ -10,6 +10,7 @@ public sealed class LmsEquipmentConfiguration : IEntityTypeConfiguration<LmsEqui
     {
         builder.ToTable("Equipment");
         builder.HasKey(e => e.Id);
+        builder.HasAlternateKey(e => new { e.TenantId, e.FacilityId, e.Id });
         builder.Property(e => e.RowVersion).IsRowVersion();
         builder.Property(e => e.EquipmentCode).HasMaxLength(80);
         builder.Property(e => e.EquipmentName).HasMaxLength(250);

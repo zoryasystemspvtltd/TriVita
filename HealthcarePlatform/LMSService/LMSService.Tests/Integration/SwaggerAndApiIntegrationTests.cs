@@ -51,4 +51,14 @@ public sealed class SwaggerAndApiIntegrationTests : IClassFixture<LmsWebApplicat
         var json = await response.Content.ReadAsStringAsync();
         json.Should().Contain("\"success\"");
     }
+
+    [Fact]
+    public async Task LmsCollectionRequests_GetPaged_ReturnsOk()
+    {
+        var client = _factory.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
+        var response = await client.GetAsync("/api/v1/lms/collection-requests?page=1&pageSize=10");
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var json = await response.Content.ReadAsStringAsync();
+        json.Should().Contain("\"success\"");
+    }
 }

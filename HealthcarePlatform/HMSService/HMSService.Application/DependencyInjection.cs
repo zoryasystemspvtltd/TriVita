@@ -3,6 +3,7 @@ using FluentValidation;
 using HMSService.Application.Mapping;
 using HMSService.Application.Services;
 using HMSService.Application.Services.Extended;
+using HMSService.Application.Services.Gap;
 using HMSService.Application.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -33,6 +34,27 @@ public static class DependencyInjection
         services.AddScoped<IBillingItemService, BillingItemService>();
         services.AddScoped<IPaymentTransactionService, PaymentTransactionService>();
         services.AddScoped<IVisitTypeService, VisitTypeService>();
+
+        services.AddScoped<IPatientMasterService, PatientMasterService>();
+        services.AddScoped<IAdmissionWorkflowService, AdmissionWorkflowService>();
+        services.AddScoped<IWardService, WardService>();
+        services.AddScoped<IBedService, BedService>();
+        services.AddScoped<IHousekeepingStatusService, HousekeepingStatusService>();
+        services.AddScoped<IEmarEntryService, EmarEntryService>();
+        services.AddScoped<IDoctorOrderAlertService, DoctorOrderAlertService>();
+
+        services.AddScoped<IOperationTheatreService, OperationTheatreService>();
+        services.AddScoped<ISurgeryScheduleService, SurgeryScheduleService>();
+        services.AddScoped<IAnesthesiaRecordService, AnesthesiaRecordService>();
+        services.AddScoped<IPostOpRecordService, PostOpRecordService>();
+        services.AddScoped<IOtConsumableService, OtConsumableService>();
+        services.AddScoped<IPricingRuleService, PricingRuleService>();
+        services.AddScoped<IPackageDefinitionService, PackageDefinitionService>();
+        services.AddScoped<IPackageDefinitionLineService, PackageDefinitionLineService>();
+        services.AddScoped<IProformaInvoiceService, ProformaInvoiceService>();
+        services.AddScoped<IInsuranceProviderService, InsuranceProviderService>();
+        services.AddScoped<IPreAuthorizationService, PreAuthorizationService>();
+        services.AddScoped<IClaimService, ClaimService>();
 
         return services;
     }

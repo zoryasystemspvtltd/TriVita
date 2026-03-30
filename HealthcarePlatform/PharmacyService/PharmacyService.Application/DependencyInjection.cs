@@ -12,7 +12,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddPharmacyApplication(this IServiceCollection services)
     {
-        services.AddAutoMapper(typeof(PharmacyMappingProfile), typeof(PhrGeneratedMappingProfile));
+        services.AddAutoMapper(typeof(PharmacyMappingProfile), typeof(PhrGeneratedMappingProfile), typeof(PhrScript10MappingProfile));
         services.AddTransient(typeof(IValidator<>), typeof(NoOpValidator<>));
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 

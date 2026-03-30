@@ -1,6 +1,7 @@
 using AutoMapper;
 using HMSService.Application.DTOs.Appointments;
 using HMSService.Application.DTOs.Extended;
+using HMSService.Application.DTOs.Gap;
 using HMSService.Application.DTOs.VisitTypes;
 using HMSService.Application.DTOs.Visits;
 using HMSService.Domain.Entities;
@@ -379,5 +380,253 @@ public sealed class HmsMappingProfile : Profile
             .ForMember(d => d.ModifiedOn, o => o.Ignore())
             .ForMember(d => d.ModifiedBy, o => o.Ignore())
             .ForMember(d => d.RowVersion, o => o.Ignore());
+
+        // --- HMS enterprise gap (patient master / IPD / nursing) ---
+        CreateMap<HmsPatientMaster, PatientMasterResponseDto>();
+        CreateMap<CreatePatientMasterDto, HmsPatientMaster>()
+            .ForMember(d => d.Id, o => o.Ignore())
+            .ForMember(d => d.TenantId, o => o.Ignore())
+            .ForMember(d => d.FacilityId, o => o.Ignore())
+            .ForMember(d => d.Upid, o => o.Ignore())
+            .ForMember(d => d.IsDeleted, o => o.Ignore())
+            .ForMember(d => d.IsActive, o => o.Ignore())
+            .ForMember(d => d.CreatedOn, o => o.Ignore())
+            .ForMember(d => d.CreatedBy, o => o.Ignore())
+            .ForMember(d => d.ModifiedOn, o => o.Ignore())
+            .ForMember(d => d.ModifiedBy, o => o.Ignore())
+            .ForMember(d => d.RowVersion, o => o.Ignore());
+        CreateMap<UpdatePatientMasterDto, HmsPatientMaster>()
+            .ForMember(d => d.Id, o => o.Ignore())
+            .ForMember(d => d.TenantId, o => o.Ignore())
+            .ForMember(d => d.FacilityId, o => o.Ignore())
+            .ForMember(d => d.Upid, o => o.Ignore())
+            .ForMember(d => d.SharedPatientId, o => o.Ignore())
+            .ForMember(d => d.IsDeleted, o => o.Ignore())
+            .ForMember(d => d.CreatedOn, o => o.Ignore())
+            .ForMember(d => d.CreatedBy, o => o.Ignore())
+            .ForMember(d => d.ModifiedOn, o => o.Ignore())
+            .ForMember(d => d.ModifiedBy, o => o.Ignore())
+            .ForMember(d => d.RowVersion, o => o.Ignore());
+
+        CreateMap<HmsWard, WardResponseDto>()
+            .ForMember(d => d.FacilityId, o => o.MapFrom(s => s.FacilityId ?? 0));
+        CreateMap<CreateWardDto, HmsWard>()
+            .ForMember(d => d.Id, o => o.Ignore())
+            .ForMember(d => d.TenantId, o => o.Ignore())
+            .ForMember(d => d.FacilityId, o => o.Ignore())
+            .ForMember(d => d.IsDeleted, o => o.Ignore())
+            .ForMember(d => d.IsActive, o => o.Ignore())
+            .ForMember(d => d.CreatedOn, o => o.Ignore())
+            .ForMember(d => d.CreatedBy, o => o.Ignore())
+            .ForMember(d => d.ModifiedOn, o => o.Ignore())
+            .ForMember(d => d.ModifiedBy, o => o.Ignore())
+            .ForMember(d => d.RowVersion, o => o.Ignore());
+        CreateMap<UpdateWardDto, HmsWard>()
+            .ForMember(d => d.Id, o => o.Ignore())
+            .ForMember(d => d.TenantId, o => o.Ignore())
+            .ForMember(d => d.FacilityId, o => o.Ignore())
+            .ForMember(d => d.WardCode, o => o.Ignore())
+            .ForMember(d => d.IsDeleted, o => o.Ignore())
+            .ForMember(d => d.CreatedOn, o => o.Ignore())
+            .ForMember(d => d.CreatedBy, o => o.Ignore())
+            .ForMember(d => d.ModifiedOn, o => o.Ignore())
+            .ForMember(d => d.ModifiedBy, o => o.Ignore())
+            .ForMember(d => d.RowVersion, o => o.Ignore());
+
+        CreateMap<HmsBed, BedResponseDto>()
+            .ForMember(d => d.FacilityId, o => o.MapFrom(s => s.FacilityId ?? 0));
+        CreateMap<CreateBedDto, HmsBed>()
+            .ForMember(d => d.Id, o => o.Ignore())
+            .ForMember(d => d.TenantId, o => o.Ignore())
+            .ForMember(d => d.FacilityId, o => o.Ignore())
+            .ForMember(d => d.CurrentAdmissionId, o => o.Ignore())
+            .ForMember(d => d.IsDeleted, o => o.Ignore())
+            .ForMember(d => d.IsActive, o => o.Ignore())
+            .ForMember(d => d.CreatedOn, o => o.Ignore())
+            .ForMember(d => d.CreatedBy, o => o.Ignore())
+            .ForMember(d => d.ModifiedOn, o => o.Ignore())
+            .ForMember(d => d.ModifiedBy, o => o.Ignore())
+            .ForMember(d => d.RowVersion, o => o.Ignore());
+        CreateMap<UpdateBedDto, HmsBed>()
+            .ForMember(d => d.Id, o => o.Ignore())
+            .ForMember(d => d.TenantId, o => o.Ignore())
+            .ForMember(d => d.FacilityId, o => o.Ignore())
+            .ForMember(d => d.WardId, o => o.Ignore())
+            .ForMember(d => d.BedCode, o => o.Ignore())
+            .ForMember(d => d.BedCategoryReferenceValueId, o => o.Ignore())
+            .ForMember(d => d.CurrentAdmissionId, o => o.Ignore())
+            .ForMember(d => d.IsDeleted, o => o.Ignore())
+            .ForMember(d => d.CreatedOn, o => o.Ignore())
+            .ForMember(d => d.CreatedBy, o => o.Ignore())
+            .ForMember(d => d.ModifiedOn, o => o.Ignore())
+            .ForMember(d => d.ModifiedBy, o => o.Ignore())
+            .ForMember(d => d.RowVersion, o => o.Ignore());
+
+        CreateMap<HmsAdmission, AdmissionResponseDto>()
+            .ForMember(d => d.FacilityId, o => o.MapFrom(s => s.FacilityId ?? 0));
+
+        CreateMap<HmsHousekeepingStatus, HousekeepingStatusResponseDto>();
+        CreateMap<CreateHousekeepingStatusDto, HmsHousekeepingStatus>()
+            .ForMember(d => d.Id, o => o.Ignore())
+            .ForMember(d => d.TenantId, o => o.Ignore())
+            .ForMember(d => d.FacilityId, o => o.Ignore())
+            .ForMember(d => d.IsDeleted, o => o.Ignore())
+            .ForMember(d => d.IsActive, o => o.Ignore())
+            .ForMember(d => d.CreatedOn, o => o.Ignore())
+            .ForMember(d => d.CreatedBy, o => o.Ignore())
+            .ForMember(d => d.ModifiedOn, o => o.Ignore())
+            .ForMember(d => d.ModifiedBy, o => o.Ignore())
+            .ForMember(d => d.RowVersion, o => o.Ignore());
+        CreateMap<UpdateHousekeepingStatusDto, HmsHousekeepingStatus>()
+            .ForMember(d => d.Id, o => o.Ignore())
+            .ForMember(d => d.TenantId, o => o.Ignore())
+            .ForMember(d => d.FacilityId, o => o.Ignore())
+            .ForMember(d => d.BedId, o => o.Ignore())
+            .ForMember(d => d.RecordedOn, o => o.Ignore())
+            .ForMember(d => d.IsDeleted, o => o.Ignore())
+            .ForMember(d => d.CreatedOn, o => o.Ignore())
+            .ForMember(d => d.CreatedBy, o => o.Ignore())
+            .ForMember(d => d.ModifiedOn, o => o.Ignore())
+            .ForMember(d => d.ModifiedBy, o => o.Ignore())
+            .ForMember(d => d.RowVersion, o => o.Ignore());
+
+        CreateMap<HmsEmarEntry, EmarEntryResponseDto>();
+        CreateMap<CreateEmarEntryDto, HmsEmarEntry>()
+            .ForMember(d => d.Id, o => o.Ignore())
+            .ForMember(d => d.TenantId, o => o.Ignore())
+            .ForMember(d => d.FacilityId, o => o.Ignore())
+            .ForMember(d => d.AdministeredOn, o => o.Ignore())
+            .ForMember(d => d.NurseUserId, o => o.Ignore())
+            .ForMember(d => d.IsDeleted, o => o.Ignore())
+            .ForMember(d => d.IsActive, o => o.Ignore())
+            .ForMember(d => d.CreatedOn, o => o.Ignore())
+            .ForMember(d => d.CreatedBy, o => o.Ignore())
+            .ForMember(d => d.ModifiedOn, o => o.Ignore())
+            .ForMember(d => d.ModifiedBy, o => o.Ignore())
+            .ForMember(d => d.RowVersion, o => o.Ignore());
+        CreateMap<UpdateEmarEntryDto, HmsEmarEntry>()
+            .ForMember(d => d.Id, o => o.Ignore())
+            .ForMember(d => d.TenantId, o => o.Ignore())
+            .ForMember(d => d.FacilityId, o => o.Ignore())
+            .ForMember(d => d.AdmissionId, o => o.Ignore())
+            .ForMember(d => d.MedicationCode, o => o.Ignore())
+            .ForMember(d => d.ScheduledOn, o => o.Ignore())
+            .ForMember(d => d.IsDeleted, o => o.Ignore())
+            .ForMember(d => d.CreatedOn, o => o.Ignore())
+            .ForMember(d => d.CreatedBy, o => o.Ignore())
+            .ForMember(d => d.ModifiedOn, o => o.Ignore())
+            .ForMember(d => d.ModifiedBy, o => o.Ignore())
+            .ForMember(d => d.RowVersion, o => o.Ignore());
+
+        CreateMap<HmsDoctorOrderAlert, DoctorOrderAlertResponseDto>();
+        CreateMap<CreateDoctorOrderAlertDto, HmsDoctorOrderAlert>()
+            .ForMember(d => d.Id, o => o.Ignore())
+            .ForMember(d => d.TenantId, o => o.Ignore())
+            .ForMember(d => d.FacilityId, o => o.Ignore())
+            .ForMember(d => d.AcknowledgedOn, o => o.Ignore())
+            .ForMember(d => d.IsDeleted, o => o.Ignore())
+            .ForMember(d => d.IsActive, o => o.Ignore())
+            .ForMember(d => d.CreatedOn, o => o.Ignore())
+            .ForMember(d => d.CreatedBy, o => o.Ignore())
+            .ForMember(d => d.ModifiedOn, o => o.Ignore())
+            .ForMember(d => d.ModifiedBy, o => o.Ignore())
+            .ForMember(d => d.RowVersion, o => o.Ignore());
+
+        // --- HMS script 10: OT / billing / insurance ---
+        CreateMap<HmsOperationTheatre, OperationTheatreResponseDto>()
+            .ForMember(d => d.FacilityId, o => o.MapFrom(s => s.FacilityId ?? 0));
+        CreateMap<CreateOperationTheatreDto, HmsOperationTheatre>().ApplyStandardHmsGapIgnores();
+        CreateMap<UpdateOperationTheatreDto, HmsOperationTheatre>()
+            .ApplyStandardHmsGapUpdateIgnores()
+            .ForMember(d => d.TheatreCode, o => o.Ignore());
+
+        CreateMap<HmsSurgerySchedule, SurgeryScheduleResponseDto>()
+            .ForMember(d => d.FacilityId, o => o.MapFrom(s => s.FacilityId ?? 0));
+        CreateMap<CreateSurgeryScheduleDto, HmsSurgerySchedule>().ApplyStandardHmsGapIgnores();
+        CreateMap<UpdateSurgeryScheduleDto, HmsSurgerySchedule>()
+            .ApplyStandardHmsGapUpdateIgnores()
+            .ForMember(d => d.OperationTheatreId, o => o.Ignore())
+            .ForMember(d => d.PatientMasterId, o => o.Ignore())
+            .ForMember(d => d.SurgeonDoctorId, o => o.Ignore());
+
+        CreateMap<HmsAnesthesiaRecord, AnesthesiaRecordResponseDto>();
+        CreateMap<CreateAnesthesiaRecordDto, HmsAnesthesiaRecord>().ApplyStandardHmsGapIgnores();
+        CreateMap<UpdateAnesthesiaRecordDto, HmsAnesthesiaRecord>()
+            .ApplyStandardHmsGapUpdateIgnores()
+            .ForMember(d => d.SurgeryScheduleId, o => o.Ignore());
+
+        CreateMap<HmsPostOpRecord, PostOpRecordResponseDto>();
+        CreateMap<CreatePostOpRecordDto, HmsPostOpRecord>().ApplyStandardHmsGapIgnores();
+        CreateMap<UpdatePostOpRecordDto, HmsPostOpRecord>()
+            .ApplyStandardHmsGapUpdateIgnores()
+            .ForMember(d => d.SurgeryScheduleId, o => o.Ignore());
+
+        CreateMap<HmsOtConsumable, OtConsumableResponseDto>();
+        CreateMap<CreateOtConsumableDto, HmsOtConsumable>().ApplyStandardHmsGapIgnores();
+        CreateMap<UpdateOtConsumableDto, HmsOtConsumable>()
+            .ApplyStandardHmsGapUpdateIgnores()
+            .ForMember(d => d.SurgeryScheduleId, o => o.Ignore())
+            .ForMember(d => d.ItemCode, o => o.Ignore());
+
+        CreateMap<HmsPricingRule, PricingRuleResponseDto>()
+            .ForMember(d => d.FacilityId, o => o.MapFrom(s => s.FacilityId ?? 0));
+        CreateMap<CreatePricingRuleDto, HmsPricingRule>().ApplyStandardHmsGapIgnores();
+        CreateMap<UpdatePricingRuleDto, HmsPricingRule>()
+            .ApplyStandardHmsGapUpdateIgnores()
+            .ForMember(d => d.RuleCode, o => o.Ignore());
+
+        CreateMap<HmsPackageDefinition, PackageDefinitionResponseDto>()
+            .ForMember(d => d.FacilityId, o => o.MapFrom(s => s.FacilityId ?? 0));
+        CreateMap<CreatePackageDefinitionDto, HmsPackageDefinition>().ApplyStandardHmsGapIgnores();
+        CreateMap<UpdatePackageDefinitionDto, HmsPackageDefinition>()
+            .ApplyStandardHmsGapUpdateIgnores()
+            .ForMember(d => d.PackageCode, o => o.Ignore());
+
+        CreateMap<HmsPackageDefinitionLine, PackageDefinitionLineResponseDto>();
+        CreateMap<CreatePackageDefinitionLineDto, HmsPackageDefinitionLine>().ApplyStandardHmsGapIgnores();
+        CreateMap<UpdatePackageDefinitionLineDto, HmsPackageDefinitionLine>()
+            .ApplyStandardHmsGapUpdateIgnores()
+            .ForMember(d => d.PackageDefinitionId, o => o.Ignore())
+            .ForMember(d => d.LineNo, o => o.Ignore());
+
+        CreateMap<HmsProformaInvoice, ProformaInvoiceResponseDto>()
+            .ForMember(d => d.FacilityId, o => o.MapFrom(s => s.FacilityId ?? 0));
+        CreateMap<CreateProformaInvoiceDto, HmsProformaInvoice>()
+            .ApplyStandardHmsGapIgnores()
+            .ForMember(d => d.ProformaNo, o => o.Ignore());
+        CreateMap<UpdateProformaInvoiceDto, HmsProformaInvoice>()
+            .ApplyStandardHmsGapUpdateIgnores()
+            .ForMember(d => d.ProformaNo, o => o.Ignore())
+            .ForMember(d => d.PatientMasterId, o => o.Ignore())
+            .ForMember(d => d.VisitId, o => o.Ignore());
+
+        CreateMap<HmsInsuranceProvider, InsuranceProviderResponseDto>();
+        CreateMap<CreateInsuranceProviderDto, HmsInsuranceProvider>().ApplyStandardHmsGapIgnores();
+        CreateMap<UpdateInsuranceProviderDto, HmsInsuranceProvider>()
+            .ApplyStandardHmsGapUpdateIgnores()
+            .ForMember(d => d.ProviderCode, o => o.Ignore());
+
+        CreateMap<HmsPreAuthorization, PreAuthorizationResponseDto>()
+            .ForMember(d => d.FacilityId, o => o.MapFrom(s => s.FacilityId ?? 0));
+        CreateMap<CreatePreAuthorizationDto, HmsPreAuthorization>()
+            .ApplyStandardHmsGapIgnores()
+            .ForMember(d => d.PreAuthNo, o => o.Ignore());
+        CreateMap<UpdatePreAuthorizationDto, HmsPreAuthorization>()
+            .ApplyStandardHmsGapUpdateIgnores()
+            .ForMember(d => d.PreAuthNo, o => o.Ignore())
+            .ForMember(d => d.InsuranceProviderId, o => o.Ignore())
+            .ForMember(d => d.PatientMasterId, o => o.Ignore())
+            .ForMember(d => d.RequestedOn, o => o.Ignore());
+
+        CreateMap<HmsClaim, ClaimResponseDto>()
+            .ForMember(d => d.FacilityId, o => o.MapFrom(s => s.FacilityId ?? 0));
+        CreateMap<CreateClaimDto, HmsClaim>()
+            .ApplyStandardHmsGapIgnores()
+            .ForMember(d => d.ClaimNo, o => o.Ignore());
+        CreateMap<UpdateClaimDto, HmsClaim>()
+            .ApplyStandardHmsGapUpdateIgnores()
+            .ForMember(d => d.ClaimNo, o => o.Ignore())
+            .ForMember(d => d.InsuranceProviderId, o => o.Ignore())
+            .ForMember(d => d.PatientMasterId, o => o.Ignore());
     }
 }

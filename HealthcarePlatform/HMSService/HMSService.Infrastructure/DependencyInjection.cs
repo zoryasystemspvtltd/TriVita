@@ -41,6 +41,12 @@ public static class DependencyInjection
             client.BaseAddress = new Uri(opt.BaseUrl.TrimEnd('/') + "/");
         });
 
+        services.AddHttpClient<ILmsTestBookingClient, LmsTestBookingClient>((sp, client) =>
+        {
+            var opt = sp.GetRequiredService<IOptions<LmsIntegrationOptions>>().Value;
+            client.BaseAddress = new Uri(opt.BaseUrl.TrimEnd('/') + "/");
+        });
+
         services.AddDbContext<HmsDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("HmsDatabase")));
 

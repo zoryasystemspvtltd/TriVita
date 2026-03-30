@@ -37,6 +37,13 @@ public sealed class PharmacyDbContext : DbContext
     public DbSet<PhrStockTransferItem> PhrStockTransferItems => Set<PhrStockTransferItem>();
     public DbSet<PhrExpiryTracking> PhrExpiryTrackings => Set<PhrExpiryTracking>();
 
+    public DbSet<PhrInventoryLocation> PhrInventoryLocations => Set<PhrInventoryLocation>();
+    public DbSet<PhrSalesReturn> PhrSalesReturns => Set<PhrSalesReturn>();
+    public DbSet<PhrSalesReturnItem> PhrSalesReturnItems => Set<PhrSalesReturnItem>();
+    public DbSet<PhrControlledDrugRegister> PhrControlledDrugRegisters => Set<PhrControlledDrugRegister>();
+    public DbSet<PhrBatchStockLocation> PhrBatchStockLocations => Set<PhrBatchStockLocation>();
+    public DbSet<PhrReorderPolicy> PhrReorderPolicies => Set<PhrReorderPolicy>();
+
     public long TenantFilter => _tenantContext.TenantId;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

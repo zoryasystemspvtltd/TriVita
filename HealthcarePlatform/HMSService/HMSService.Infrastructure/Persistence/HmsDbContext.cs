@@ -48,6 +48,48 @@ public sealed class HmsDbContext : DbContext
 
     public DbSet<HmsPaymentTransaction> PaymentTransactions => Set<HmsPaymentTransaction>();
 
+    public DbSet<HmsPatientMaster> PatientMasters => Set<HmsPatientMaster>();
+
+    public DbSet<HmsPatientFacilityLink> PatientFacilityLinks => Set<HmsPatientFacilityLink>();
+
+    public DbSet<HmsWard> Wards => Set<HmsWard>();
+
+    public DbSet<HmsBed> Beds => Set<HmsBed>();
+
+    public DbSet<HmsAdmission> Admissions => Set<HmsAdmission>();
+
+    public DbSet<HmsAdmissionTransfer> AdmissionTransfers => Set<HmsAdmissionTransfer>();
+
+    public DbSet<HmsHousekeepingStatus> HousekeepingStatuses => Set<HmsHousekeepingStatus>();
+
+    public DbSet<HmsEmarEntry> EmarEntries => Set<HmsEmarEntry>();
+
+    public DbSet<HmsDoctorOrderAlert> DoctorOrderAlerts => Set<HmsDoctorOrderAlert>();
+
+    public DbSet<HmsOperationTheatre> OperationTheatres => Set<HmsOperationTheatre>();
+
+    public DbSet<HmsSurgerySchedule> SurgerySchedules => Set<HmsSurgerySchedule>();
+
+    public DbSet<HmsAnesthesiaRecord> AnesthesiaRecords => Set<HmsAnesthesiaRecord>();
+
+    public DbSet<HmsPostOpRecord> PostOpRecords => Set<HmsPostOpRecord>();
+
+    public DbSet<HmsOtConsumable> OtConsumables => Set<HmsOtConsumable>();
+
+    public DbSet<HmsPricingRule> PricingRules => Set<HmsPricingRule>();
+
+    public DbSet<HmsPackageDefinition> PackageDefinitions => Set<HmsPackageDefinition>();
+
+    public DbSet<HmsPackageDefinitionLine> PackageDefinitionLines => Set<HmsPackageDefinitionLine>();
+
+    public DbSet<HmsProformaInvoice> ProformaInvoices => Set<HmsProformaInvoice>();
+
+    public DbSet<HmsInsuranceProvider> InsuranceProviders => Set<HmsInsuranceProvider>();
+
+    public DbSet<HmsPreAuthorization> PreAuthorizations => Set<HmsPreAuthorization>();
+
+    public DbSet<HmsClaim> Claims => Set<HmsClaim>();
+
     /// <summary>Used by global query filters (evaluated per query).</summary>
     public long TenantFilter => _tenantContext.TenantId;
 
@@ -83,7 +125,7 @@ public sealed class HmsDbContext : DbContext
             {
                 entry.Entity.TenantId = _tenantContext.TenantId;
                 // Tenant-level catalogs allow NULL FacilityId (see schema); do not force facility from context.
-                if (entry.Entity is not HmsPaymentMode and not HmsVisitType &&
+                if (entry.Entity is not HmsPaymentMode and not HmsVisitType and not HmsPatientMaster and not HmsInsuranceProvider &&
                     entry.Entity.FacilityId is null && _tenantContext.FacilityId is not null)
                 {
                     entry.Entity.FacilityId = _tenantContext.FacilityId;

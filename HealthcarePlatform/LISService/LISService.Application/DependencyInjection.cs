@@ -3,6 +3,7 @@ using FluentValidation;
 using LISService.Application.Abstractions;
 using LISService.Application.Mapping;
 using LISService.Application.Services;
+using LISService.Application.Services.Analyzer;
 using LISService.Application.Validation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,6 +21,8 @@ public static class DependencyInjection
         services.AddScoped<ILisNotificationHelper, LisNotificationHelper>();
 
         RegisterEntityCrudServices(services);
+
+        services.AddScoped<ILisAnalyzerIntegrationService, LisAnalyzerIntegrationService>();
 
         return services;
     }

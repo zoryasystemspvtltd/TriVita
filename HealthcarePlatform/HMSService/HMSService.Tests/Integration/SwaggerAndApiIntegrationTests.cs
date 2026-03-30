@@ -34,4 +34,14 @@ public sealed class SwaggerAndApiIntegrationTests : IClassFixture<HmsWebApplicat
         var json = await response.Content.ReadAsStringAsync();
         json.Should().Contain("\"success\"");
     }
+
+    [Fact]
+    public async Task HmsPricingRules_GetPaged_ReturnsOkWithBaseResponse()
+    {
+        var client = _factory.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
+        var response = await client.GetAsync("/api/v1/hms/billing/pricing-rules?page=1&pageSize=10");
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var json = await response.Content.ReadAsStringAsync();
+        json.Should().Contain("\"success\"");
+    }
 }
