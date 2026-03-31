@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>TriVita.UnifiedDatabase</RootNamespace>
+    <AssemblyName>TriVita.UnifiedDatabase</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BuildingBlocks\Healthcare.Common\Healthcare.Common.csproj" />
+    <ProjectReference Include="..\HMSService\HMSService.Infrastructure\HMSService.Infrastructure.csproj" />
+    <ProjectReference Include="..\LMSService\LMSService.Infrastructure\LMSService.Infrastructure.csproj" />
+    <ProjectReference Include="..\LISService\LISService.Infrastructure\LISService.Infrastructure.csproj" />
+    <ProjectReference Include="..\PharmacyService\PharmacyService.Infrastructure\PharmacyService.Infrastructure.csproj" />
+    <ProjectReference Include="..\SharedService\SharedService.Infrastructure\SharedService.Infrastructure.csproj" />
+    <ProjectReference Include="..\IdentityService\IdentityService.Infrastructure\IdentityService.Infrastructure.csproj" />
+    <ProjectReference Include="..\CommunicationService\CommunicationService.Infrastructure\CommunicationService.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
