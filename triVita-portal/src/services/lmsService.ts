@@ -39,3 +39,19 @@ export async function resolveBarcode(barcodeValue: string) {
   );
   return data;
 }
+
+export async function getEquipmentFacilityMappingsPaged(params: PagedQueryParams) {
+  const { data } = await lmsClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/workflow/equipment-facility-mappings',
+    { params }
+  );
+  return data;
+}
+
+export async function getWorkQueuePaged(params: PagedQueryParams) {
+  const { data } = await lmsClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/work-queue',
+    { params }
+  );
+  return data;
+}

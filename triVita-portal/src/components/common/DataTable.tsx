@@ -30,6 +30,8 @@ export interface DataTableProps<T> {
   onPageChange?: (page: number, pageSize: number) => void;
   loading?: boolean;
   emptyTitle?: string;
+  /** Accessible name for the table (screen readers). */
+  tableAriaLabel?: string;
 }
 
 /** Enterprise-style data grid using MUI Table + server-friendly pagination. */
@@ -43,6 +45,7 @@ export function DataTable<T extends object>({
   onPageChange,
   loading,
   emptyTitle = 'No records',
+  tableAriaLabel = 'Data table',
 }: DataTableProps<T>) {
   const [localPage, setLocalPage] = useState(0);
   const [localSize, setLocalSize] = useState(controlledPageSize);
@@ -60,7 +63,7 @@ export function DataTable<T extends object>({
   return (
     <Paper elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 560 }}>
-        <Table stickyHeader size="small">
+        <Table stickyHeader size="small" aria-label={tableAriaLabel}>
           <TableHead>
             <TableRow>
               {columns.map((c) => (
@@ -101,6 +104,9 @@ export function DataTable<T extends object>({
         component="div"
         count={count}
         page={page}
+        slotProps={{
+          select: { 'aria-label': 'Rows per page' } as object,
+        }}
         onPageChange={(_, p) => {
           if (serverMode) onPageChange?.(p, pageSize);
           else setLocalPage(p);

@@ -1,4 +1,5 @@
-import { Alert, Button, Stack, TextField, Typography } from '@mui/material';
+import { Alert, Button, Chip, Stack, TextField, Typography } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Form, Formik } from 'formik';
 import { useState } from 'react';
@@ -209,7 +210,12 @@ export function LmsWorkflowDashboardView() {
         title="Sample workflow dashboard"
         subtitle="Snapshot counts from test bookings and catalog tests."
       />
-      <Stack direction="row" gap={4}>
+      <Alert severity="info">
+        Workflow: booking →{' '}
+        <Chip component={RouterLink} to="/lms/barcodes" size="small" label="Barcode" clickable /> → LIS results →{' '}
+        <Chip component={RouterLink} to="/journeys" size="small" label="Journeys map" clickable />
+      </Alert>
+      <Stack direction="row" gap={4} flexWrap="wrap">
         <Typography>Test bookings (total): {b.isLoading ? '…' : bc}</Typography>
         <Typography>Catalog tests (total): {t.isLoading ? '…' : tc}</Typography>
       </Stack>

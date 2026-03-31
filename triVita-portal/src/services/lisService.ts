@@ -24,3 +24,27 @@ export async function getResultApprovalsPaged(params: PagedQueryParams) {
   );
   return data;
 }
+
+export async function getLabOrdersPaged(params: PagedQueryParams) {
+  const { data } = await lisClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/lab-order',
+    { params }
+  );
+  return data;
+}
+
+export async function getSampleTrackingPaged(params: PagedQueryParams) {
+  const { data } = await lisClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/sample-tracking',
+    { params }
+  );
+  return data;
+}
+
+export async function getResultHistoryPaged(params: PagedQueryParams) {
+  const { data } = await lisClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/result-history',
+    { params }
+  );
+  return data;
+}

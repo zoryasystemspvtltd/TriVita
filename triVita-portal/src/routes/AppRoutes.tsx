@@ -8,29 +8,7 @@ import { useAppSelector } from '@/store/hooks';
 import { STORAGE_KEYS } from '@/utils/storageKeys';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { TriVitaPermissions } from '@/utils/permissions';
-import {
-  HmsAppointmentsView,
-  HmsBillingView,
-  HmsOpdDashboardView,
-  HmsPatientRegistrationView,
-} from '@/modules/hms/views';
-import {
-  LmsBarcodeView,
-  LmsEquipmentMasterView,
-  LmsTestBookingView,
-  LmsTestMasterView,
-  LmsWorkflowDashboardView,
-} from '@/modules/lms/views';
-import { LisAnalyzerView, LisResultsView, LisVerificationView } from '@/modules/lis/views';
-import {
-  PharmacyBillingView,
-  PharmacyInventoryView,
-  PharmacyMedicineView,
-  PharmacyPurchaseOrdersView,
-} from '@/modules/pharmacy/views';
-import { SharedFacilitiesView, SharedHierarchyView } from '@/modules/shared/views';
-import { IdentityRolesView, IdentityUsersView } from '@/modules/identity/views';
-import { CommunicationNotificationsView } from '@/modules/communication/views';
+import * as Lazy from '@/routes/lazyScreens';
 
 function LoginRoute() {
   const { user, hydrated } = useAppSelector((s) => s.auth);
@@ -54,11 +32,12 @@ export function AppRoutes() {
       >
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<DashboardPage />} />
+        <Route path="journeys" element={<Lazy.ClinicalJourneysPage />} />
         <Route
           path="hms/patients"
           element={
             <RequirePermission permission={TriVitaPermissions.HmsApi}>
-              <HmsPatientRegistrationView />
+              <Lazy.HmsPatientRegistrationView />
             </RequirePermission>
           }
         />
@@ -66,7 +45,15 @@ export function AppRoutes() {
           path="hms/appointments"
           element={
             <RequirePermission permission={TriVitaPermissions.HmsApi}>
-              <HmsAppointmentsView />
+              <Lazy.HmsAppointmentsView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="hms/visits"
+          element={
+            <RequirePermission permission={TriVitaPermissions.HmsApi}>
+              <Lazy.HmsVisitsView />
             </RequirePermission>
           }
         />
@@ -74,7 +61,23 @@ export function AppRoutes() {
           path="hms/opd"
           element={
             <RequirePermission permission={TriVitaPermissions.HmsApi}>
-              <HmsOpdDashboardView />
+              <Lazy.HmsOpdDashboardView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="hms/prescriptions"
+          element={
+            <RequirePermission permission={TriVitaPermissions.HmsApi}>
+              <Lazy.HmsPrescriptionsView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="hms/ipd"
+          element={
+            <RequirePermission permission={TriVitaPermissions.HmsApi}>
+              <Lazy.HmsIpdHubView />
             </RequirePermission>
           }
         />
@@ -82,7 +85,15 @@ export function AppRoutes() {
           path="hms/billing"
           element={
             <RequirePermission permission={TriVitaPermissions.HmsApi}>
-              <HmsBillingView />
+              <Lazy.HmsBillingView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="hms/billing-hub"
+          element={
+            <RequirePermission permission={TriVitaPermissions.HmsApi}>
+              <Lazy.HmsBillingHubView />
             </RequirePermission>
           }
         />
@@ -90,7 +101,7 @@ export function AppRoutes() {
           path="lms/test-master"
           element={
             <RequirePermission permission={TriVitaPermissions.LmsApi}>
-              <LmsTestMasterView />
+              <Lazy.LmsTestMasterView />
             </RequirePermission>
           }
         />
@@ -98,7 +109,15 @@ export function AppRoutes() {
           path="lms/equipment"
           element={
             <RequirePermission permission={TriVitaPermissions.LmsApi}>
-              <LmsEquipmentMasterView />
+              <Lazy.LmsEquipmentMasterView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="lms/equipment-mappings"
+          element={
+            <RequirePermission permission={TriVitaPermissions.LmsApi}>
+              <Lazy.LmsEquipmentMappingsView />
             </RequirePermission>
           }
         />
@@ -106,7 +125,7 @@ export function AppRoutes() {
           path="lms/bookings"
           element={
             <RequirePermission permission={TriVitaPermissions.LmsApi}>
-              <LmsTestBookingView />
+              <Lazy.LmsTestBookingView />
             </RequirePermission>
           }
         />
@@ -114,7 +133,15 @@ export function AppRoutes() {
           path="lms/barcodes"
           element={
             <RequirePermission permission={TriVitaPermissions.LmsApi}>
-              <LmsBarcodeView />
+              <Lazy.LmsBarcodeView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="lms/work-queue"
+          element={
+            <RequirePermission permission={TriVitaPermissions.LmsApi}>
+              <Lazy.LmsWorkQueueView />
             </RequirePermission>
           }
         />
@@ -122,7 +149,7 @@ export function AppRoutes() {
           path="lms/workflow"
           element={
             <RequirePermission permission={TriVitaPermissions.LmsApi}>
-              <LmsWorkflowDashboardView />
+              <Lazy.LmsWorkflowDashboardView />
             </RequirePermission>
           }
         />
@@ -130,7 +157,23 @@ export function AppRoutes() {
           path="lis/analyzer"
           element={
             <RequirePermission permission={TriVitaPermissions.LisApi}>
-              <LisAnalyzerView />
+              <Lazy.LisAnalyzerView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="lis/lab-orders"
+          element={
+            <RequirePermission permission={TriVitaPermissions.LisApi}>
+              <Lazy.LisLabOrdersView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="lis/sample-tracking"
+          element={
+            <RequirePermission permission={TriVitaPermissions.LisApi}>
+              <Lazy.LisSampleTrackingView />
             </RequirePermission>
           }
         />
@@ -138,7 +181,15 @@ export function AppRoutes() {
           path="lis/results"
           element={
             <RequirePermission permission={TriVitaPermissions.LisApi}>
-              <LisResultsView />
+              <Lazy.LisResultsView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="lis/result-history"
+          element={
+            <RequirePermission permission={TriVitaPermissions.LisApi}>
+              <Lazy.LisResultHistoryView />
             </RequirePermission>
           }
         />
@@ -146,7 +197,7 @@ export function AppRoutes() {
           path="lis/verification"
           element={
             <RequirePermission permission={TriVitaPermissions.LisApi}>
-              <LisVerificationView />
+              <Lazy.LisVerificationView />
             </RequirePermission>
           }
         />
@@ -154,7 +205,15 @@ export function AppRoutes() {
           path="pharmacy/medicines"
           element={
             <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
-              <PharmacyMedicineView />
+              <Lazy.PharmacyMedicineView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="pharmacy/batches"
+          element={
+            <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
+              <Lazy.PharmacyBatchesView />
             </RequirePermission>
           }
         />
@@ -162,7 +221,15 @@ export function AppRoutes() {
           path="pharmacy/inventory"
           element={
             <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
-              <PharmacyInventoryView />
+              <Lazy.PharmacyInventoryView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="pharmacy/stock-ledger"
+          element={
+            <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
+              <Lazy.PharmacyStockLedgerView />
             </RequirePermission>
           }
         />
@@ -170,7 +237,15 @@ export function AppRoutes() {
           path="pharmacy/billing"
           element={
             <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
-              <PharmacyBillingView />
+              <Lazy.PharmacyBillingView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="pharmacy/goods-receipt"
+          element={
+            <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
+              <Lazy.PharmacyGoodsReceiptView />
             </RequirePermission>
           }
         />
@@ -178,7 +253,7 @@ export function AppRoutes() {
           path="pharmacy/purchase-orders"
           element={
             <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
-              <PharmacyPurchaseOrdersView />
+              <Lazy.PharmacyPurchaseOrdersView />
             </RequirePermission>
           }
         />
@@ -186,7 +261,7 @@ export function AppRoutes() {
           path="shared/hierarchy"
           element={
             <RequirePermission permission={TriVitaPermissions.SharedApi}>
-              <SharedHierarchyView />
+              <Lazy.SharedHierarchyView />
             </RequirePermission>
           }
         />
@@ -194,7 +269,7 @@ export function AppRoutes() {
           path="shared/facilities"
           element={
             <RequirePermission permission={TriVitaPermissions.SharedApi}>
-              <SharedFacilitiesView />
+              <Lazy.SharedFacilitiesView />
             </RequirePermission>
           }
         />
@@ -202,7 +277,7 @@ export function AppRoutes() {
           path="identity/users"
           element={
             <RequirePermission permission={TriVitaPermissions.IdentityAdmin}>
-              <IdentityUsersView />
+              <Lazy.IdentityUsersView />
             </RequirePermission>
           }
         />
@@ -210,7 +285,7 @@ export function AppRoutes() {
           path="identity/roles"
           element={
             <RequirePermission permission={TriVitaPermissions.IdentityAdmin}>
-              <IdentityRolesView />
+              <Lazy.IdentityRolesView />
             </RequirePermission>
           }
         />
@@ -218,7 +293,7 @@ export function AppRoutes() {
           path="communication/notifications"
           element={
             <RequirePermission permission={TriVitaPermissions.CommunicationApi}>
-              <CommunicationNotificationsView />
+              <Lazy.CommunicationNotificationsView />
             </RequirePermission>
           }
         />

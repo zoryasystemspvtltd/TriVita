@@ -24,13 +24,14 @@ import {
   Menu as MenuIcon,
   NotificationsNone,
 } from '@mui/icons-material';
-import { useMemo, useState } from 'react';
+import { Suspense, useMemo, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { PageLoader } from '@/components/common/PageLoader';
 import { TriVitaLogo } from '@/components/common/TriVitaLogo';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { clearSession, setFacilityId } from '@/store/slices/authSlice';
 import { hasPermission } from '@/utils/permissions';
-import { mainNavigation } from './navigation';
+import { mainNavigation, utilityNavigation } from './navigation';
 import { useQuery } from '@tanstack/react-query';
 import { listFacilities } from '@/services/sharedService';
 import { postLogout } from '@/services/authApi';
@@ -87,6 +88,19 @@ export function MainLayout() {
             <ListItemText primary="Home" primaryTypographyProps={{ fontWeight: 600 }} />
           </ListItemButton>
         </MuiLink>
+        {utilityNavigation.map((u) => {
+          const UIcon = u.icon;
+          return (
+            <MuiLink key={u.path} component={Link} to={u.path} underline="none" color="inherit">
+              <ListItemButton selected={location.pathname === u.path} sx={{ borderRadius: 1, mx: 0.5 }}>
+                <ListItemIcon sx={{ minWidth: 36 }}>
+                  <UIcon fontSize="small" color="secondary" />
+                </ListItemIcon>
+                <ListItemText primary={u.label} />
+              </ListItemButton>
+            </MuiLink>
+          );
+        })}
         {visibleNav.map((mod) => (
           <Box key={mod.path}>
             <Typography variant="caption" color="text.secondary" sx={{ px: 2, pt: 2, pb: 0.5, display: 'block' }}>
@@ -268,7 +282,9 @@ export function MainLayout() {
           minHeight: '100vh',
         }}
       >
-        <Outlet />
+        <Suspense fallback={<PageLoader message="Loading module…" />}>
+          <Outlet />
+        </Suspense>
       </Box>
     </Box>
   );

@@ -19,7 +19,24 @@ export function DashboardPage() {
   }, [user?.permissions]);
 
   if (!cards.length) {
-    return <EmptyState title="No modules assigned" subtitle="Your account has no module permissions yet." />;
+    return (
+      <Box>
+        <Typography variant="h5" gutterBottom>
+          Welcome{user?.email ? `, ${user.email.split('@')[0]}` : ''}
+        </Typography>
+        <Card elevation={2} sx={{ borderRadius: 2, maxWidth: 420, mb: 3, borderColor: 'primary.light', borderWidth: 1, borderStyle: 'solid' }}>
+          <CardActionArea component={Link} to="/journeys">
+            <CardContent>
+              <Typography variant="h6">Clinical journeys</Typography>
+              <Typography variant="body2" color="text.secondary">
+                Step maps for patient → lab → pharmacy flows (no extra permissions required).
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+        <EmptyState title="No modules assigned" subtitle="Your account has no module permissions yet." />
+      </Box>
+    );
   }
 
   return (
@@ -31,6 +48,18 @@ export function DashboardPage() {
         Choose a module to continue. Use the sidebar for full navigation.
       </Typography>
       <Stack direction="row" flexWrap="wrap" gap={2} sx={{ mt: 1 }}>
+        <Box sx={{ width: { xs: '100%', sm: 'calc(50% - 8px)', md: 'calc(33.33% - 11px)' } }}>
+          <Card elevation={2} sx={{ borderRadius: 2, height: '100%', borderColor: 'primary.light', borderWidth: 1, borderStyle: 'solid' }}>
+            <CardActionArea component={Link} to="/journeys" sx={{ height: '100%' }}>
+              <CardContent>
+                <Typography variant="h6">Clinical journeys</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  End-to-end workflow steps across HMS, LMS, LIS, Pharmacy
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </Box>
         {cards.map((c) => (
           <Box key={c.title} sx={{ width: { xs: '100%', sm: 'calc(50% - 8px)', md: 'calc(33.33% - 11px)' } }}>
             <Card elevation={1} sx={{ borderRadius: 2, height: '100%' }}>

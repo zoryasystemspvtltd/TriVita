@@ -69,3 +69,68 @@ export async function getBillingItemsPaged(params: PagedQueryParams) {
   );
   return data;
 }
+
+export async function getIpdWardsPaged(params: PagedQueryParams) {
+  const { data } = await hmsClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/ipd/wards',
+    { params }
+  );
+  return data;
+}
+
+export async function getIpdBedsPaged(params: PagedQueryParams) {
+  const { data } = await hmsClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/ipd/beds',
+    { params }
+  );
+  return data;
+}
+
+export async function getAdmissionsPaged(params: PagedQueryParams) {
+  const { data } = await hmsClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/admissions',
+    { params }
+  );
+  return data;
+}
+
+export async function getPrescriptionsPaged(params: PagedQueryParams) {
+  const { data } = await hmsClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/prescriptions',
+    { params }
+  );
+  return data;
+}
+
+export async function getVisitsPaged(params: PagedQueryParams) {
+  const { data } = await hmsClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/visits',
+    { params }
+  );
+  return data;
+}
+
+export async function getBillingHeadersPaged(params: PagedQueryParams) {
+  const { data } = await hmsClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/billing-headers',
+    { params }
+  );
+  return data;
+}
+
+export async function getPaymentTransactionsPaged(params: PagedQueryParams) {
+  const { data } = await hmsClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/payment-transactions',
+    { params }
+  );
+  return data;
+}
+
+/** HMS view of LMS lab invoices (integration). */
+export async function getLabBillingInvoicesPaged(params: PagedQueryParams) {
+  const { data } = await hmsClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/integration/lab-billing/invoices',
+    { params }
+  );
+  return data;
+}

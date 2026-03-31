@@ -37,3 +37,27 @@ export async function getPharmacySalesPaged(params: PagedQueryParams) {
   );
   return data;
 }
+
+export async function getMedicineBatchPaged(params: PagedQueryParams) {
+  const { data } = await pharmacyClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/medicine-batch',
+    { params }
+  );
+  return data;
+}
+
+export async function getGoodsReceiptPaged(params: PagedQueryParams) {
+  const { data } = await pharmacyClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/goods-receipt',
+    { params }
+  );
+  return data;
+}
+
+export async function getStockLedgerPaged(params: PagedQueryParams) {
+  const { data } = await pharmacyClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/stock-ledger',
+    { params }
+  );
+  return data;
+}
