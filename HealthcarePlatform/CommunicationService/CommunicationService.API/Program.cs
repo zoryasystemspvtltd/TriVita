@@ -6,6 +6,7 @@ using CommunicationService.Contracts.Notifications;
 using CommunicationService.Infrastructure;
 using CommunicationService.Infrastructure.Persistence;
 using Healthcare.Common.Authorization;
+using Healthcare.Common.Hosting;
 using Healthcare.Common.Middleware;
 using Healthcare.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -64,7 +65,11 @@ builder.Services.AddHealthChecks()
 builder.Services.AddCommunicationApplication();
 builder.Services.AddCommunicationInfrastructure(builder.Configuration);
 
+builder.AddTriVitaPortalCorsIfConfigured();
+
 var app = builder.Build();
+
+app.UseTriVitaIisPathBase();
 
 if (app.Environment.IsDevelopment())
 {
@@ -73,7 +78,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseGlobalExceptionHandler();
 
-app.UseHttpsRedirection();
+app.UseTriVitaCorsAndHttpsRedirection();
 
 app.UseAuthentication();
 app.UseTriVitaSecurityContextAlignment();

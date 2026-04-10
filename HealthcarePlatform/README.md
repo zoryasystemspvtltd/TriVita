@@ -64,7 +64,7 @@ Use the **same** values across services for interop:
 - `POST /api/v1/auth/token` — body `{ "email": "...", "password": "..." }` — **[AllowAnonymous]**
 - `GET /api/v1/auth/me` — **[Authorize]**
 
-After first run, **demo user** is seeded (dev): email **`admin@demo.local`**, password **`ChangeMe!123`**, `tenant_id=1`, `facility_id=1`, role **Admin** (table `Identity_Users`).
+After **IdentityService** starts once against the database, a **demo user** is seeded: email **`admin@demo.local`**, password **`ChangeMe!123`**, **Tenant ID `1`** (required on the portal login form), `facility_id=1`, role **Admin**. Tables are under the **`identity`** schema when using the unified multi-schema database (`identity.Identity_Users`, etc.).
 
 **Other services** (data APIs):
 

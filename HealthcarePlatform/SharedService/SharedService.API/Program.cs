@@ -2,6 +2,7 @@ using System.Text;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Healthcare.Common.Authorization;
+using Healthcare.Common.Hosting;
 using Healthcare.Common.Middleware;
 using Healthcare.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -64,13 +65,17 @@ builder.Services.AddHealthChecks()
 builder.Services.AddSharedApplication();
 builder.Services.AddSharedInfrastructure(builder.Configuration);
 
+builder.AddTriVitaPortalCorsIfConfigured();
+
 var app = builder.Build();
+
+app.UseTriVitaIisPathBase();
 
 app.UseTriVitaSwaggerUi("v1", "SharedService v1");
 
 app.UseGlobalExceptionHandler();
 
-app.UseHttpsRedirection();
+app.UseTriVitaCorsAndHttpsRedirection();
 
 app.UseAuthentication();
 app.UseTriVitaSecurityContextAlignment();

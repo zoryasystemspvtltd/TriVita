@@ -91,7 +91,8 @@ public static class IdentityDataSeeder
             var hasher = new Microsoft.AspNetCore.Identity.PasswordHasher<AppUser>();
             adminUser = new AppUser
             {
-                Email = adminEmail,
+                // Must match AuthService / UserRepository normalization (ToLowerInvariant).
+                Email = adminEmail.ToLowerInvariant(),
                 TenantId = tenantId,
                 FacilityId = 1,
                 Role = "Admin",

@@ -2,6 +2,7 @@ using System.Text;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Healthcare.Common.Authorization;
+using Healthcare.Common.Hosting;
 using Healthcare.Common.Middleware;
 using Healthcare.Swagger;
 using IdentityService.Application;
@@ -64,7 +65,11 @@ builder.Services.AddHealthChecks()
 builder.Services.AddIdentityApplication();
 builder.Services.AddIdentityInfrastructure(builder.Configuration);
 
+builder.AddTriVitaPortalCorsIfConfigured();
+
 var app = builder.Build();
+
+app.UseTriVitaIisPathBase();
 
 IdentityDataSeeder.Seed(app.Services);
 
@@ -73,7 +78,7 @@ app.UseTriVitaSwaggerUi("v1", "IdentityService v1");
 
 app.UseGlobalExceptionHandler();
 
-app.UseHttpsRedirection();
+app.UseTriVitaCorsAndHttpsRedirection();
 
 app.UseAuthentication();
 app.UseTriVitaSecurityContextAlignment();

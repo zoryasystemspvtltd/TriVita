@@ -14,7 +14,7 @@ public sealed class HealthcareDbContextFactory : IDesignTimeDbContextFactory<Hea
     public HealthcareDbContext CreateDbContext(string[] args)
     {
         var cs = Environment.GetEnvironmentVariable("TRIVITA_UNIFIED_SQL")
-                 ?? "Server=(localdb)\\mssqllocaldb;Database=TriVitaHealthcare;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true";
+                 ?? "Server=.\\SQLEXPRESS;Database=TriVitaHealthcare;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true";
 
         var useModuleSchemas = !string.Equals(
             Environment.GetEnvironmentVariable("TRIVITA_USE_MODULE_SCHEMAS"),

@@ -35,6 +35,8 @@ public sealed class IdentityDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Align with TriVita unified EF migrations (single DB, module schemas). Without this, queries hit dbo.* while tables live in identity.*.
+        modelBuilder.HasDefaultSchema("identity");
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(IdentityDbContext).Assembly);
     }
 }

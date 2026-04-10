@@ -3,6 +3,7 @@ using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Healthcare.Common.Authentication;
 using Healthcare.Common.Authorization;
+using Healthcare.Common.Hosting;
 using Healthcare.Common.Middleware;
 using Healthcare.Swagger;
 using LISService.Application;
@@ -75,7 +76,11 @@ builder.Services.AddHealthChecks()
 builder.Services.AddLisApplication();
 builder.Services.AddLisInfrastructure(builder.Configuration);
 
+builder.AddTriVitaPortalCorsIfConfigured();
+
 var app = builder.Build();
+
+app.UseTriVitaIisPathBase();
 
 if (app.Environment.IsDevelopment())
 {
@@ -84,7 +89,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseGlobalExceptionHandler();
 
-app.UseHttpsRedirection();
+app.UseTriVitaCorsAndHttpsRedirection();
 
 app.UseAuthentication();
 app.UseTriVitaSecurityContextAlignment();
