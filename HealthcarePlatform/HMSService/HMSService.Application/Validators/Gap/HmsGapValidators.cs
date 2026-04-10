@@ -262,7 +262,7 @@ public sealed class CreatePackageDefinitionLineDtoValidator : AbstractValidator<
     public CreatePackageDefinitionLineDtoValidator()
     {
         RuleFor(x => x.PackageDefinitionId).GreaterThan(0);
-        RuleFor(x => x.LineNo).GreaterThan(0);
+        RuleFor(x => x.LineNumber).GreaterThan(0);
         RuleFor(x => x.ServiceCode).NotEmpty().MaximumLength(80);
     }
 }

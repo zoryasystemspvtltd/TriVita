@@ -68,7 +68,7 @@ public sealed class HmsPackageDefinition : BaseEntity
 public sealed class HmsPackageDefinitionLine : BaseEntity
 {
     public long PackageDefinitionId { get; set; }
-    public int LineNo { get; set; }
+    public int LineNumber { get; set; }
     public string ServiceCode { get; set; } = null!;
     public decimal Quantity { get; set; } = 1;
 }

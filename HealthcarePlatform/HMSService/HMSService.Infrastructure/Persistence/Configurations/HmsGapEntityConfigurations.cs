@@ -252,7 +252,7 @@ public sealed class HmsPackageDefinitionLineConfiguration : IEntityTypeConfigura
         builder.Property(e => e.ServiceCode).HasMaxLength(80).IsRequired();
         builder.Property(e => e.Quantity).HasPrecision(18, 4);
         builder.HasAlternateKey(e => new { e.TenantId, e.FacilityId, e.Id });
-        builder.HasIndex(e => new { e.TenantId, e.FacilityId, e.PackageDefinitionId, e.LineNo }).IsUnique();
+        builder.HasIndex(e => new { e.TenantId, e.FacilityId, e.PackageDefinitionId, e.LineNumber }).IsUnique();
         builder.HasOne<HmsPackageDefinition>().WithMany().HasForeignKey(e => new { e.TenantId, e.FacilityId, e.PackageDefinitionId })
             .HasPrincipalKey(p => new { p.TenantId, p.FacilityId, p.Id });
     }

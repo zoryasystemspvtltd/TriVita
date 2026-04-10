@@ -423,7 +423,7 @@ public sealed class PackageDefinitionLineResponseDto
 {
     public long Id { get; init; }
     public long PackageDefinitionId { get; init; }
-    public int LineNo { get; init; }
+    public int LineNumber { get; init; }
     public string ServiceCode { get; init; } = null!;
     public decimal Quantity { get; init; }
 }
@@ -431,7 +431,7 @@ public sealed class PackageDefinitionLineResponseDto
 public sealed class CreatePackageDefinitionLineDto
 {
     public long PackageDefinitionId { get; init; }
-    public int LineNo { get; init; }
+    public int LineNumber { get; init; }
     public string ServiceCode { get; init; } = null!;
     public decimal Quantity { get; init; }
 }

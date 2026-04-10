@@ -587,7 +587,7 @@ public sealed class HmsMappingProfile : Profile
         CreateMap<UpdatePackageDefinitionLineDto, HmsPackageDefinitionLine>()
             .ApplyStandardHmsGapUpdateIgnores()
             .ForMember(d => d.PackageDefinitionId, o => o.Ignore())
-            .ForMember(d => d.LineNo, o => o.Ignore());
+            .ForMember(d => d.LineNumber, o => o.Ignore());
 
         CreateMap<HmsProformaInvoice, ProformaInvoiceResponseDto>()
             .ForMember(d => d.FacilityId, o => o.MapFrom(s => s.FacilityId ?? 0));

@@ -3928,7 +3928,7 @@ namespace TriVita.UnifiedDatabase.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PackageDefinitionId = table.Column<long>(type: "bigint", nullable: false),
-                    LineNo = table.Column<int>(type: "int", nullable: false),
+                    LineNumber = table.Column<int>(type: "int", nullable: false),
                     ServiceCode = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
                     Quantity = table.Column<decimal>(type: "decimal(18,4)", precision: 18, scale: 4, nullable: false),
                     TenantId = table.Column<long>(type: "bigint", nullable: false),
@@ -6143,7 +6143,7 @@ namespace TriVita.UnifiedDatabase.Migrations
                 name: "IX_HMS_PackageDefinitionLine_TenantId_FacilityId_PackageDefinitionId_LineNo",
                 schema: "hms",
                 table: "HMS_PackageDefinitionLine",
-                columns: new[] { "TenantId", "FacilityId", "PackageDefinitionId", "LineNo" },
+                columns: new[] { "TenantId", "FacilityId", "PackageDefinitionId", "LineNumber" },
                 unique: true);
 
             migrationBuilder.CreateIndex(

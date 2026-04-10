@@ -1805,7 +1805,7 @@ namespace TriVita.UnifiedDatabase.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LineNo")
+                    b.Property<int>("LineNumber")
                         .HasColumnType("int");
 
                     b.Property<long>("ModifiedBy")
@@ -1839,7 +1839,7 @@ namespace TriVita.UnifiedDatabase.Migrations
 
                     b.HasAlternateKey("TenantId", "FacilityId", "Id");
 
-                    b.HasIndex("TenantId", "FacilityId", "PackageDefinitionId", "LineNo")
+                    b.HasIndex("TenantId", "FacilityId", "PackageDefinitionId", "LineNumber")
                         .IsUnique();
 
                     b.ToTable("HMS_PackageDefinitionLine", "hms");

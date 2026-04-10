@@ -442,7 +442,7 @@ CREATE TABLE dbo.HMS_PackageDefinitionLine (
     RowVersion ROWVERSION NOT NULL,
 
     PackageDefinitionId BIGINT NOT NULL,
-    LineNo INT NOT NULL,
+    LineNumber INT NOT NULL,
     ServiceCode NVARCHAR(80) NOT NULL,
     Quantity DECIMAL(18,4) NOT NULL CONSTRAINT DF_HMS_PkgL_Qty DEFAULT (1),
 
