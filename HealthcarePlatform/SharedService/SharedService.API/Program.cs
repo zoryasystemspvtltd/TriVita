@@ -69,11 +69,9 @@ builder.AddTriVitaPortalCorsIfConfigured();
 
 var app = builder.Build();
 
-app.UseTriVitaIisPathBase();
+app.UseGlobalExceptionHandler();
 
 app.UseTriVitaSwaggerUi("v1", "SharedService v1");
-
-app.UseGlobalExceptionHandler();
 
 app.UseTriVitaCorsAndHttpsRedirection();
 

@@ -274,6 +274,14 @@ export function AppRoutes() {
           }
         />
         <Route
+          path="shared/enterprise-admin"
+          element={
+            <RequirePermission permission={TriVitaPermissions.SharedApi}>
+              <Lazy.SharedEnterpriseAdminView />
+            </RequirePermission>
+          }
+        />
+        <Route
           path="identity/users"
           element={
             <RequirePermission permission={TriVitaPermissions.IdentityAdmin}>

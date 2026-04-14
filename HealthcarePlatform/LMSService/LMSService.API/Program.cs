@@ -80,14 +80,9 @@ builder.AddTriVitaPortalCorsIfConfigured();
 
 var app = builder.Build();
 
-app.UseTriVitaIisPathBase();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseTriVitaSwaggerUi("v1", "LMSService v1");
-}
-
 app.UseGlobalExceptionHandler();
+
+app.UseTriVitaSwaggerUi("v1", "LMSService v1");
 
 app.UseTriVitaCorsAndHttpsRedirection();
 

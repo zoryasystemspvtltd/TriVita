@@ -9,12 +9,14 @@ namespace IdentityService.Infrastructure;
 
 public static class IdentityDataSeeder
 {
-    /// <summary>Creates database (dev) and seeds demo RBAC + admin user.</summary>
+    /// <summary>
+    /// Idempotent dev seed: assumes the TriVita database and schema already exist (migrations / scripts).
+    /// Must not run in Production; callers should guard with <c>IsDevelopment()</c>.
+    /// </summary>
     public static void Seed(IServiceProvider services)
     {
         using var scope = services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<IdentityDbContext>();
-        db.Database.EnsureCreated();
 
         const long tenantId = 1;
         const string adminEmail = "admin@demo.local";

@@ -46,7 +46,7 @@ Set-ExecutionPolicy -Scope Process Bypass -Force
 & '...\Redeploy-TriVita.ps1' -SkipIisReset
 ```
 
-**Swagger in Production:** HMS, LIS, LMS, Pharmacy, and Communication only mount Swagger UI when `ASPNETCORE_ENVIRONMENT` is **Development**, so **`/swagger`** may return **404** under Production. **Identity** and **Shared** still expose Swagger UI in Production. Validate APIs with **`/health`** for every service.
+**Swagger:** Each API exposes Swagger UI at **`/<app-alias>/swagger`** (for example **`/identity/swagger`**, **`/hms/swagger`**) when the site is running. OpenAPI JSON is served under the same `swagger` path segment.
 
 The **Publish-TriVita.ps1** script (first-time / full copy):
 
@@ -120,7 +120,6 @@ Rebuild the portal after changing these values.
 
 Each API includes `appsettings.Production.json` with:
 
-- **`IIS:PathBase`** — `/hms`, `/lms`, etc., so routes work under IIS applications.
 - **`Cors:AllowedOrigins`** — `http://localhost:3000` (portal).
 - **`DisableHttpsRedirection`** — `true` for typical HTTP-only local IIS.
 - **Cross-service `BaseUrl`** values — `http://localhost/shared`, `http://localhost/lms`, `http://localhost/communication` where applicable.
@@ -135,6 +134,7 @@ Override **connection strings** and **JWT** secrets via environment variables or
 |-------|----------------|
 | HMS health | `GET http://localhost/hms/health` |
 | Identity health | `GET http://localhost/identity/health` |
+| Swagger (each API) | `GET http://localhost/<alias>/swagger` (e.g. `/identity/swagger`, `/hms/swagger`) |
 | Portal | Open `http://localhost:3000` |
 | Login | Use seeded identity user (see Identity service docs / seeder) |
 | CORS | Browser dev tools: no blocked preflight from `:3000` to `:80` |
@@ -144,7 +144,7 @@ Override **connection strings** and **JWT** secrets via environment variables or
 | Issue | Mitigation |
 |--------|------------|
 | 502.5 / ANCM error | Install/repair **Hosting Bundle**; check Windows Event Log → *IIS AspNetCore Module*. |
-| 404 on `/hms/api/...` | Confirm **PathBase** in Production config matches IIS app alias (leading `/`, no trailing slash). |
+| 404 on `/hms/api/...` | Confirm the IIS **application** path and **physical path** match the publish output; the app listens at the application root (no duplicate path base in configuration). |
 | 404 on React deep links | Confirm `web.config` rewrite exists in `portal` and **URL Rewrite** is installed. |
 | CORS errors | Confirm portal origin is listed in `Cors:AllowedOrigins`; rebuild portal with correct `VITE_*` bases. |
 | SQL connection failures | Fix connection strings / SQL access; ensure same DB as Identity seed. |

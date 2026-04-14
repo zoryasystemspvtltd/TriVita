@@ -92,6 +92,7 @@ export const mainNavigation: NavItem[] = [
     children: [
       { label: 'Enterprise hierarchy', path: '/shared/hierarchy' },
       { label: 'Facilities', path: '/shared/facilities' },
+      { label: 'Enterprise admin (CRUD)', path: '/shared/enterprise-admin' },
     ],
   },
   {

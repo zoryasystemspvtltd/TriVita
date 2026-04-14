@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Healthcare.Common.Hosting;
 
 /// <summary>
-/// Optional IIS / reverse-proxy deployment: path base, CORS for the SPA origin, and HTTPS redirection toggle (configuration only).
+/// Optional IIS / reverse-proxy deployment: CORS for the SPA origin and HTTPS redirection toggle (configuration only).
 /// </summary>
 public static class TriVitaIisHostingExtensions
 {
@@ -30,19 +29,6 @@ public static class TriVitaIisHostingExtensions
         });
 
         return builder;
-    }
-
-    /// <summary>Apply first in the pipeline when <c>IIS:PathBase</c> is set (e.g. <c>/hms</c>).</summary>
-    public static WebApplication UseTriVitaIisPathBase(this WebApplication app)
-    {
-        var raw = app.Configuration["IIS:PathBase"];
-        if (string.IsNullOrWhiteSpace(raw)) return app;
-
-        var path = raw.Trim();
-        if (!path.StartsWith('/')) path = "/" + path;
-
-        app.UsePathBase(new PathString(path));
-        return app;
     }
 
     /// <summary>CORS (if configured) then optional HTTPS redirection. Call before <c>UseAuthentication</c>.</summary>

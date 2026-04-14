@@ -95,6 +95,9 @@ export const SharedHierarchyView = lazy(() =>
 export const SharedFacilitiesView = lazy(() =>
   import('@/modules/shared/views').then((m) => ({ default: m.SharedFacilitiesView }))
 );
+export const SharedEnterpriseAdminView = lazy(() =>
+  import('@/modules/shared/extendedViews').then((m) => ({ default: m.SharedEnterpriseAdminView }))
+);
 export const IdentityUsersView = lazy(() =>
   import('@/modules/identity/views').then((m) => ({ default: m.IdentityUsersView }))
 );

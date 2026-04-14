@@ -69,14 +69,14 @@ builder.AddTriVitaPortalCorsIfConfigured();
 
 var app = builder.Build();
 
-app.UseTriVitaIisPathBase();
-
-IdentityDataSeeder.Seed(app.Services);
-
-app.UseSwagger();
-app.UseTriVitaSwaggerUi("v1", "IdentityService v1");
+if (app.Environment.IsDevelopment())
+{
+    IdentityDataSeeder.Seed(app.Services);
+}
 
 app.UseGlobalExceptionHandler();
+
+app.UseTriVitaSwaggerUi("v1", "IdentityService v1");
 
 app.UseTriVitaCorsAndHttpsRedirection();
 

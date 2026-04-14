@@ -17,6 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="logs\.gitkeep" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\BuildingBlocks\Healthcare.Common\Healthcare.Common.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\Healthcare.Swagger\Healthcare.Swagger.csproj" />
     <ProjectReference Include="..\LISService.Application\LISService.Application.csproj" />

@@ -76,7 +76,8 @@ public static class TriVitaSwaggerExtensions
         app.UseSwagger();
         app.UseSwaggerUI(options =>
         {
-            options.SwaggerEndpoint($"/swagger/{documentName}/swagger.json", title ?? $"API {documentName}");
+            // Relative URL so Swagger UI works when the site is hosted as an IIS application (/hms/swagger, /identity/swagger, …).
+            options.SwaggerEndpoint($"{documentName}/swagger.json", title ?? $"API {documentName}");
             options.DocumentTitle = $"{title ?? "TriVita"} — Swagger";
             options.DisplayRequestDuration();
         });
