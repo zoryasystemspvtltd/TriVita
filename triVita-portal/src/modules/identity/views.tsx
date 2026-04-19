@@ -1,4 +1,7 @@
-import { Alert, Button, Stack, Typography } from '@mui/material';
+import { Alert, Button, Stack } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import { SectionContainer } from '@/components/ds/SectionContainer';
+import { TriVitaButton } from '@/components/ds/TriVitaButton';
 import { useMutation } from '@tanstack/react-query';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
@@ -28,9 +31,14 @@ export function IdentityUsersView() {
       <PageHeader
         title="User management"
         subtitle="Identity admin APIs are action-oriented (create user, assign roles & facilities). No list endpoint in current API."
+        action={
+          <TriVitaButton component={RouterLink} to="/identity/data-registry" variant="outlined" size="small">
+            API registry
+          </TriVitaButton>
+        }
       />
       {msg ? <Alert severity="info">{msg}</Alert> : null}
-      <Typography variant="subtitle1">Create user</Typography>
+      <SectionContainer title="Create user" subtitle="Provision credentials and default role label for the tenant.">
       <Formik
         initialValues={{
           tenantId: 1,
@@ -76,7 +84,8 @@ export function IdentityUsersView() {
           </Form>
         )}
       </Formik>
-      <Typography variant="subtitle1">Assign roles (user id + comma-separated role ids)</Typography>
+      </SectionContainer>
+      <SectionContainer title="Assign roles" subtitle="Provide numeric user id and comma-separated role ids.">
       <Formik
         initialValues={{ userId: 1, roleIds: '1' }}
         onSubmit={async (v, { resetForm }) => {
@@ -103,7 +112,8 @@ export function IdentityUsersView() {
           </Form>
         )}
       </Formik>
-      <Typography variant="subtitle1">Assign facilities (user id + comma-separated facility ids)</Typography>
+      </SectionContainer>
+      <SectionContainer title="Assign facilities" subtitle="Grant facility scopes to an existing user account.">
       <Formik
         initialValues={{ userId: 1, facilityIds: '1' }}
         onSubmit={async (v, { resetForm }) => {
@@ -130,6 +140,7 @@ export function IdentityUsersView() {
           </Form>
         )}
       </Formik>
+      </SectionContainer>
     </Stack>
   );
 }
@@ -145,9 +156,17 @@ export function IdentityRolesView() {
 
   return (
     <Stack spacing={3}>
-      <PageHeader title="Role management" subtitle="Create roles, permissions, and assign permissions to roles." />
+      <PageHeader
+        title="Role management"
+        subtitle="Create roles, permissions, and assign permissions to roles."
+        action={
+          <TriVitaButton component={RouterLink} to="/identity/data-registry" variant="outlined" size="small">
+            API registry
+          </TriVitaButton>
+        }
+      />
       {msg ? <Alert severity="info">{msg}</Alert> : null}
-      <Typography variant="subtitle1">Create permission</Typography>
+      <SectionContainer title="Create permission" subtitle="Permission codes should align with TriVita policy constants (e.g. hms.api).">
       <Formik
         initialValues={{
           tenantId: 1,
@@ -185,7 +204,8 @@ export function IdentityRolesView() {
           </Form>
         )}
       </Formik>
-      <Typography variant="subtitle1">Create role</Typography>
+      </SectionContainer>
+      <SectionContainer title="Create role">
       <Formik
         initialValues={{ tenantId: 1, roleCode: '', roleName: '', description: '' }}
         onSubmit={async (v, { resetForm }) => {
@@ -218,7 +238,8 @@ export function IdentityRolesView() {
           </Form>
         )}
       </Formik>
-      <Typography variant="subtitle1">Assign permissions to role</Typography>
+      </SectionContainer>
+      <SectionContainer title="Assign permissions to role" subtitle="Role id plus comma-separated permission ids.">
       <Formik
         initialValues={{ roleId: 1, permissionIds: '1' }}
         onSubmit={async (v, { resetForm }) => {
@@ -245,6 +266,7 @@ export function IdentityRolesView() {
           </Form>
         )}
       </Formik>
+      </SectionContainer>
     </Stack>
   );
 }

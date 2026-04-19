@@ -34,6 +34,11 @@ export async function createPatientMaster(body: CreatePatientMasterPayload) {
   return data;
 }
 
+export async function getPatientMasterById(id: number) {
+  const { data } = await hmsClient.get<BaseResponse<PatientMasterRow>>(`/api/v1/patient-masters/${id}`);
+  return data;
+}
+
 export async function getAppointmentsPaged(
   params: PagedQueryParams & {
     patientId?: number;

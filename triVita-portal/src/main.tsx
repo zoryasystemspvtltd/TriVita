@@ -7,6 +7,7 @@ import { store } from '@/store';
 import { hydrateFromStorage } from '@/store/slices/authSlice';
 import { trivitaTheme } from '@/app/theme';
 import { App } from '@/app/App';
+import { ToastProvider } from '@/components/toast/ToastProvider';
 
 store.dispatch(hydrateFromStorage());
 
@@ -22,7 +23,9 @@ createRoot(document.getElementById('root')!).render(
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={trivitaTheme}>
           <CssBaseline />
-          <App />
+          <ToastProvider>
+            <App />
+          </ToastProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </Provider>

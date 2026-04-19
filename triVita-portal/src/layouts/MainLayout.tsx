@@ -19,10 +19,13 @@ import {
   useTheme,
 } from '@mui/material';
 import {
+  ChevronLeft,
   ChevronRight,
+  Home,
   Logout,
   Menu as MenuIcon,
   NotificationsNone,
+  ViewSidebar,
 } from '@mui/icons-material';
 import { Suspense, useMemo, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
@@ -37,7 +40,8 @@ import { listFacilities } from '@/services/sharedService';
 import { postLogout } from '@/services/authApi';
 import { STORAGE_KEYS } from '@/utils/storageKeys';
 
-const drawerWidth = 268;
+const drawerWidthExpanded = 268;
+const drawerWidthCollapsed = 88;
 
 function pathToBreadcrumbs(pathname: string) {
   const segments = pathname.split('/').filter(Boolean);
@@ -53,7 +57,9 @@ function pathToBreadcrumbs(pathname: string) {
 export function MainLayout() {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [desktopCollapsed, setDesktopCollapsed] = useState(false);
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
+  const drawerWidth = desktopCollapsed ? drawerWidthCollapsed : drawerWidthExpanded;
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -78,44 +84,71 @@ export function MainLayout() {
 
   const drawer = (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Toolbar sx={{ gap: 1, py: 1.5 }}>
-        <TriVitaLogo size="sm" showText />
+      <Toolbar sx={{ gap: 1, py: 1.5, justifyContent: 'space-between' }}>
+        <TriVitaLogo size="sm" showText={!desktopCollapsed} />
+        <Tooltip title={desktopCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}>
+          <IconButton
+            size="small"
+            onClick={() => setDesktopCollapsed((c) => !c)}
+            sx={{ display: { xs: 'none', md: 'inline-flex' } }}
+            aria-label="toggle sidebar width"
+          >
+            {desktopCollapsed ? <ViewSidebar fontSize="small" /> : <ChevronLeft fontSize="small" />}
+          </IconButton>
+        </Tooltip>
       </Toolbar>
       <Divider />
       <List sx={{ flex: 1, px: 1, py: 2 }}>
         <MuiLink component={Link} to="/dashboard" underline="none" color="inherit">
-          <ListItemButton selected={location.pathname === '/dashboard'}>
-            <ListItemText primary="Home" primaryTypographyProps={{ fontWeight: 600 }} />
-          </ListItemButton>
+          <Tooltip title={desktopCollapsed ? 'Home' : ''} placement="right">
+            <ListItemButton selected={location.pathname === '/dashboard'} sx={{ borderRadius: 1, mx: 0.5 }}>
+              <ListItemIcon sx={{ minWidth: 36, display: desktopCollapsed ? 'block' : 'none' }}>
+                <Home fontSize="small" color="primary" />
+              </ListItemIcon>
+              <ListItemText
+                primary="Home"
+                primaryTypographyProps={{ fontWeight: 600 }}
+                sx={{ display: desktopCollapsed ? 'none' : 'block' }}
+              />
+            </ListItemButton>
+          </Tooltip>
         </MuiLink>
         {utilityNavigation.map((u) => {
           const UIcon = u.icon;
           return (
             <MuiLink key={u.path} component={Link} to={u.path} underline="none" color="inherit">
-              <ListItemButton selected={location.pathname === u.path} sx={{ borderRadius: 1, mx: 0.5 }}>
-                <ListItemIcon sx={{ minWidth: 36 }}>
-                  <UIcon fontSize="small" color="secondary" />
-                </ListItemIcon>
-                <ListItemText primary={u.label} />
-              </ListItemButton>
+              <Tooltip title={desktopCollapsed ? u.label : ''} placement="right">
+                <ListItemButton selected={location.pathname === u.path} sx={{ borderRadius: 1, mx: 0.5 }}>
+                  <ListItemIcon sx={{ minWidth: 36 }}>
+                    <UIcon fontSize="small" color="secondary" />
+                  </ListItemIcon>
+                  <ListItemText primary={u.label} sx={{ display: desktopCollapsed ? 'none' : 'block' }} />
+                </ListItemButton>
+              </Tooltip>
             </MuiLink>
           );
         })}
         {visibleNav.map((mod) => (
           <Box key={mod.path}>
-            <Typography variant="caption" color="text.secondary" sx={{ px: 2, pt: 2, pb: 0.5, display: 'block' }}>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{ px: 2, pt: 2, pb: 0.5, display: desktopCollapsed ? 'none' : 'block' }}
+            >
               {mod.label}
             </Typography>
             {(mod.children ?? []).map((c) => {
               const ModIcon = mod.icon;
               return (
                 <MuiLink key={c.path} component={Link} to={c.path} underline="none" color="inherit">
-                  <ListItemButton selected={location.pathname === c.path} sx={{ borderRadius: 1, mx: 0.5 }}>
-                    <ListItemIcon sx={{ minWidth: 36 }}>
-                      <ModIcon fontSize="small" color="primary" />
-                    </ListItemIcon>
-                    <ListItemText primary={c.label} />
-                  </ListItemButton>
+                  <Tooltip title={desktopCollapsed ? c.label : ''} placement="right">
+                    <ListItemButton selected={location.pathname === c.path} sx={{ borderRadius: 1, mx: 0.5 }}>
+                      <ListItemIcon sx={{ minWidth: 36 }}>
+                        <ModIcon fontSize="small" color="primary" />
+                      </ListItemIcon>
+                      <ListItemText primary={c.label} sx={{ display: desktopCollapsed ? 'none' : 'block' }} />
+                    </ListItemButton>
+                  </Tooltip>
                 </MuiLink>
               );
             })}

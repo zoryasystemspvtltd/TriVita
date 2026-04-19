@@ -38,6 +38,7 @@ export const mainNavigation: NavItem[] = [
       { label: 'IPD (wards / beds / admissions)', path: '/hms/ipd' },
       { label: 'Billing (line items)', path: '/hms/billing' },
       { label: 'Billing & payments (hub)', path: '/hms/billing-hub' },
+      { label: 'API registry (admin)', path: '/hms/data-registry' },
     ],
   },
   {
@@ -53,6 +54,7 @@ export const mainNavigation: NavItem[] = [
       { label: 'Barcode management', path: '/lms/barcodes' },
       { label: 'Work queue', path: '/lms/work-queue' },
       { label: 'Sample workflow', path: '/lms/workflow' },
+      { label: 'API registry (admin)', path: '/lms/data-registry' },
     ],
   },
   {
@@ -67,6 +69,7 @@ export const mainNavigation: NavItem[] = [
       { label: 'Result viewer', path: '/lis/results' },
       { label: 'Result history', path: '/lis/result-history' },
       { label: 'Result verification', path: '/lis/verification' },
+      { label: 'API registry (admin)', path: '/lis/data-registry' },
     ],
   },
   {
@@ -82,6 +85,7 @@ export const mainNavigation: NavItem[] = [
       { label: 'Billing (sales)', path: '/pharmacy/billing' },
       { label: 'Goods receipt', path: '/pharmacy/goods-receipt' },
       { label: 'Purchase orders', path: '/pharmacy/purchase-orders' },
+      { label: 'API registry (admin)', path: '/pharmacy/data-registry' },
     ],
   },
   {
@@ -93,6 +97,7 @@ export const mainNavigation: NavItem[] = [
       { label: 'Enterprise hierarchy', path: '/shared/hierarchy' },
       { label: 'Facilities', path: '/shared/facilities' },
       { label: 'Enterprise admin (CRUD)', path: '/shared/enterprise-admin' },
+      { label: 'API registry (admin)', path: '/shared/data-registry' },
     ],
   },
   {
@@ -103,6 +108,7 @@ export const mainNavigation: NavItem[] = [
     children: [
       { label: 'User management', path: '/identity/users' },
       { label: 'Role management', path: '/identity/roles' },
+      { label: 'API registry (admin)', path: '/identity/data-registry' },
     ],
   },
   {
@@ -110,6 +116,9 @@ export const mainNavigation: NavItem[] = [
     path: '/communication',
     icon: ChatBubbleOutline,
     permission: TriVitaPermissions.CommunicationApi,
-    children: [{ label: 'Templates & delivery logs', path: '/communication/notifications' }],
+    children: [
+      { label: 'Templates & delivery logs', path: '/communication/notifications' },
+      { label: 'API registry (admin)', path: '/communication/data-registry' },
+    ],
   },
 ];

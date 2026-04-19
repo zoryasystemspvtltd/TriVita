@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "generate:api-registry": "node scripts/generate-api-registry.mjs",
+    "prebuild": "npm run generate:api-registry",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",

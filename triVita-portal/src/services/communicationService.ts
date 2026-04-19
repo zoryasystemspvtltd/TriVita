@@ -24,3 +24,11 @@ export async function createNotification(body: Record<string, unknown>) {
   );
   return data;
 }
+
+export async function sendTemplateNotification(body: Record<string, unknown>) {
+  const { data } = await communicationClient.post<BaseResponse<Record<string, unknown>>>(
+    '/api/v1/notifications/send-template',
+    body
+  );
+  return data;
+}

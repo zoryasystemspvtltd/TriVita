@@ -33,6 +33,7 @@ export function AppRoutes() {
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="journeys" element={<Lazy.ClinicalJourneysPage />} />
+        <Route path=":module/data-registry" element={<Lazy.DataRegistryRoute />} />
         <Route
           path="hms/patients"
           element={

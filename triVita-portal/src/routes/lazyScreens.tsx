@@ -109,3 +109,6 @@ export const CommunicationNotificationsView = lazy(() =>
 );
 
 export const ClinicalJourneysPage = lazy(() => import('@/pages/ClinicalJourneysPage'));
+export const DataRegistryRoute = lazy(() =>
+  import('@/routes/DataRegistryRoute').then((m) => ({ default: m.DataRegistryRoute }))
+);
