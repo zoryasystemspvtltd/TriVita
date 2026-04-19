@@ -9,6 +9,14 @@ export async function getMedicinePaged(params: PagedQueryParams) {
   return data;
 }
 
+export async function getMedicineCategoryPaged(params: PagedQueryParams) {
+  const { data } = await pharmacyClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/medicine-category',
+    { params }
+  );
+  return data;
+}
+
 export async function getMedicineById(id: number) {
   const { data } = await pharmacyClient.get<BaseResponse<Record<string, unknown>>>(`/api/v1/medicine/${id}`);
   return data;

@@ -32,6 +32,8 @@ export interface DataTableProps<T> {
   emptyTitle?: string;
   /** Accessible name for the table (screen readers). */
   tableAriaLabel?: string;
+  /** When set, clicking a row (outside interactive cell content) invokes this handler. */
+  onRowClick?: (row: T) => void;
 }
 
 /** Enterprise-style data grid using MUI Table + server-friendly pagination. */
@@ -46,6 +48,7 @@ export function DataTable<T extends object>({
   loading,
   emptyTitle = 'No records',
   tableAriaLabel = 'Data table',
+  onRowClick,
 }: DataTableProps<T>) {
   const [localPage, setLocalPage] = useState(0);
   const [localSize, setLocalSize] = useState(controlledPageSize);
@@ -88,9 +91,22 @@ export function DataTable<T extends object>({
               </TableRow>
             ) : (
               slice.map((row, idx) => (
-                <TableRow hover key={`${rowKey(row)}-${idx}`}>
+                <TableRow
+                  hover
+                  key={`${rowKey(row)}-${idx}`}
+                  onClick={onRowClick ? () => onRowClick(row) : undefined}
+                  sx={onRowClick ? { cursor: 'pointer' } : undefined}
+                >
                   {columns.map((c) => (
-                    <TableCell key={c.id} align={c.align}>
+                    <TableCell
+                      key={c.id}
+                      align={c.align}
+                      onClick={(e) => {
+                        if (!onRowClick) return;
+                        const t = e.target as HTMLElement;
+                        if (t.closest('button, a, [role="button"]')) e.stopPropagation();
+                      }}
+                    >
                       {c.format ? c.format(row) : String((row as Record<string, unknown>)[c.id] ?? '—')}
                     </TableCell>
                   ))}
