@@ -129,6 +129,9 @@ export function CategoryMasterPage() {
   const [modal, setModal] = useState<null | { mode: 'create' } | { mode: 'edit'; id: number }>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
+  const searchQ = searchApplied.trim();
+  const hasSearch = searchQ.length > 0;
+
   useEffect(() => {
     const t = window.setTimeout(() => setSearchApplied(search), 400);
     return () => window.clearTimeout(t);
@@ -139,9 +142,28 @@ export function CategoryMasterPage() {
   }, [searchApplied]);
 
   const list = useQuery({
-    queryKey: ['pharmacy', 'category-master', page, pageSize, searchApplied],
-    queryFn: () =>
-      getMedicineCategoryPaged({ page: page + 1, pageSize, search: searchApplied || undefined }),
+    queryKey: ['pharmacy', 'category-master', 'paged', page, pageSize],
+    queryFn: () => getMedicineCategoryPaged({ page: page + 1, pageSize }),
+    enabled: !hasSearch,
+  });
+
+  const allForFilter = useQuery({
+    queryKey: ['pharmacy', 'category-master', 'all-for-search'],
+    queryFn: async () => {
+      const acc: CategoryRow[] = [];
+      const ps = 200;
+      let p = 1;
+      for (;;) {
+        const res = await getMedicineCategoryPaged({ page: p, pageSize: ps });
+        if (!res.success || !res.data) break;
+        const { items, totalCount } = res.data;
+        for (const r of items) acc.push(toRow(r as Record<string, unknown>));
+        if (acc.length >= totalCount || items.length === 0) break;
+        p += 1;
+      }
+      return acc;
+    },
+    enabled: hasSearch,
   });
 
   const detail = useQuery({
@@ -165,10 +187,25 @@ export function CategoryMasterPage() {
   });
 
   const rows = useMemo(() => {
+    if (hasSearch) {
+      const all = allForFilter.data;
+      if (!all) return [] as CategoryRow[];
+      const q = searchQ.toLowerCase();
+      return all.filter(
+        (r) =>
+          (r.categoryName && r.categoryName.toLowerCase().includes(q)) ||
+          (r.categoryCode && r.categoryCode.toLowerCase().includes(q))
+      );
+    }
     if (!list.data?.success || !list.data.data) return [] as CategoryRow[];
     return list.data.data.items.map((r) => toRow(r as Record<string, unknown>));
-  }, [list.data]);
-  const total = list.data?.success && list.data.data ? list.data.data.totalCount : 0;
+  }, [hasSearch, allForFilter.data, searchQ, list.data]);
+  const total = hasSearch
+    ? undefined
+    : list.data?.success && list.data.data
+      ? list.data.data.totalCount
+      : 0;
+  const listLoading = hasSearch ? allForFilter.isLoading : list.isLoading;
 
   const {
     control,
@@ -261,6 +298,7 @@ export function CategoryMasterPage() {
           </Stack>
 
           <DataTable<CategoryRow>
+            key={hasSearch ? 'category-search' : 'category-paged'}
             tableAriaLabel="Category master"
             columns={[
               {
@@ -350,14 +388,18 @@ export function CategoryMasterPage() {
             ]}
             rows={rows}
             rowKey={(r) => r.id}
-            totalCount={total}
-            page={page}
-            pageSize={pageSize}
-            onPageChange={(p, ps) => {
-              setPage(p);
-              setPageSize(ps);
-            }}
-            loading={list.isLoading}
+            {...(hasSearch
+              ? {}
+              : {
+                  totalCount: total as number,
+                  page,
+                  pageSize,
+                  onPageChange: (p: number, ps: number) => {
+                    setPage(p);
+                    setPageSize(ps);
+                  },
+                })}
+            loading={listLoading}
             emptyTitle="No categories found"
             onRowClick={(row) => {
               if (Number.isFinite(row.id)) setDrawerId(row.id);

@@ -1,0 +1,42 @@
+/* Minimal global visuals only — layout/structure unchanged; may use !important to layer over MUI runtime styles. */
+
+html {
+  background: #f4f7fb;
+}
+
+body {
+  background: #f4f7fb !important;
+}
+
+.MuiCard-root,
+.MuiPaper-outlined {
+  border: 1px solid #e5e7eb !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05) !important;
+  border-radius: 10px !important;
+}
+
+thead,
+thead th {
+  background: #eef2f7 !important;
+}
+
+.MuiTableHead-root .MuiTableCell-head,
+.MuiTableHead-root th {
+  background: #eef2f7 !important;
+}
+
+tbody tr:hover,
+.MuiTableBody-root tr:hover {
+  background: #f9fafb !important;
+}
+
+.MuiButton-root.MuiButton-contained.MuiButton-colorPrimary,
+.MuiButton-root.MuiButton-containedPrimary {
+  background-color: #1f7a5a !important;
+  color: #fff !important;
+}
+
+.MuiButton-root.MuiButton-contained.MuiButton-colorPrimary:hover,
+.MuiButton-root.MuiButton-containedPrimary:hover {
+  background-color: #166a4d !important;
+}
