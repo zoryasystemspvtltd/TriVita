@@ -152,7 +152,7 @@ export const mainNavigation: NavItem[] = [
           { label: 'Category master', path: '/pharmacy/masters/medicine-category' },
           { label: 'Manufacturer master', path: '/pharmacy/masters/manufacturer' },
           { label: 'Composition master', path: '/pharmacy/masters/composition' },
-          { label: 'Unit master', path: '/pharmacy/masters/unit' },
+          { label: 'Unit Master', path: '/pharmacy/masters/unit' },
           { label: 'Form master', path: '/pharmacy/masters/form' },
           { label: 'Medicine batches', path: '/pharmacy/masters/medicine-batches' },
         ],

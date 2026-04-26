@@ -34,6 +34,7 @@ CREATE TABLE dbo.Unit (
     UnitCode NVARCHAR(80) NOT NULL,
     UnitName NVARCHAR(200) NOT NULL,
     UnitType NVARCHAR(100) NULL,
+    Description NVARCHAR(500) NULL,
 
     CONSTRAINT PK_Unit PRIMARY KEY (Id),
     CONSTRAINT UQ_Unit_Tenant_Code UNIQUE (TenantId, UnitCode),

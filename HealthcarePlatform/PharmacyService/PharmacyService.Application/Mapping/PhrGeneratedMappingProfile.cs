@@ -55,6 +55,31 @@ public sealed class PhrGeneratedMappingProfile : Profile
             .ForMember(d => d.ModifiedBy, o => o.Ignore())
             .ForMember(d => d.RowVersion, o => o.Ignore());
 
+        CreateMap<PhrUnit, UnitResponseDto>()
+            .ForMember(d => d.UnitSymbol, o => o.MapFrom(s => s.UnitSymbol ?? string.Empty));
+        CreateMap<CreateUnitDto, PhrUnit>()
+            .ForMember(d => d.Id, o => o.Ignore())
+            .ForMember(d => d.TenantId, o => o.Ignore())
+            .ForMember(d => d.FacilityId, o => o.Ignore())
+            .ForMember(d => d.IsDeleted, o => o.Ignore())
+            .ForMember(d => d.IsActive, o => o.Ignore())
+            .ForMember(d => d.CreatedOn, o => o.Ignore())
+            .ForMember(d => d.CreatedBy, o => o.Ignore())
+            .ForMember(d => d.ModifiedOn, o => o.Ignore())
+            .ForMember(d => d.ModifiedBy, o => o.Ignore())
+            .ForMember(d => d.RowVersion, o => o.Ignore());
+        CreateMap<UpdateUnitDto, PhrUnit>()
+            .ForMember(d => d.Id, o => o.Ignore())
+            .ForMember(d => d.TenantId, o => o.Ignore())
+            .ForMember(d => d.FacilityId, o => o.Ignore())
+            .ForMember(d => d.IsDeleted, o => o.Ignore())
+            .ForMember(d => d.IsActive, o => o.Ignore())
+            .ForMember(d => d.CreatedOn, o => o.Ignore())
+            .ForMember(d => d.CreatedBy, o => o.Ignore())
+            .ForMember(d => d.ModifiedOn, o => o.Ignore())
+            .ForMember(d => d.ModifiedBy, o => o.Ignore())
+            .ForMember(d => d.RowVersion, o => o.Ignore());
+
         CreateMap<PhrComposition, CompositionResponseDto>();
         CreateMap<CreateCompositionDto, PhrComposition>()
             .ForMember(d => d.Id, o => o.Ignore())

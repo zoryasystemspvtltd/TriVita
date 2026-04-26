@@ -71,6 +71,37 @@ export async function deleteManufacturer(id: number) {
   return data;
 }
 
+export async function getMedicineUnitPaged(params: PagedQueryParams) {
+  const { data } = await pharmacyClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/medicine-unit',
+    { params }
+  );
+  return data;
+}
+
+export async function getMedicineUnitById(id: number) {
+  const { data } = await pharmacyClient.get<BaseResponse<Record<string, unknown>>>(`/api/v1/medicine-unit/${id}`);
+  return data;
+}
+
+export async function createMedicineUnit(body: Record<string, unknown>) {
+  const { data } = await pharmacyClient.post<BaseResponse<Record<string, unknown>>>('/api/v1/medicine-unit', body);
+  return data;
+}
+
+export async function updateMedicineUnit(id: number, body: Record<string, unknown>) {
+  const { data } = await pharmacyClient.put<BaseResponse<Record<string, unknown>>>(
+    `/api/v1/medicine-unit/${id}`,
+    body
+  );
+  return data;
+}
+
+export async function deleteMedicineUnit(id: number) {
+  const { data } = await pharmacyClient.delete<BaseResponse<unknown>>(`/api/v1/medicine-unit/${id}`);
+  return data;
+}
+
 export async function getCompositionPaged(params: PagedQueryParams) {
   const { data } = await pharmacyClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
     '/api/v1/composition',

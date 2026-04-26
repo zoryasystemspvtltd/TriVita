@@ -23,7 +23,11 @@ import {
   getMedicinePaged,
   updateMedicine,
 } from '@/services/pharmacyService';
-import { loadPharmacyFormRefOptionsFromMedicines, loadPharmacyUnitOptionsFromMedicines } from '@/utils/pharmacyLookups';
+import {
+  getPharmacyUnitLabelMap,
+  loadPharmacyFormRefOptionsFromMedicines,
+  loadPharmacyUnitMasterOptions,
+} from '@/utils/pharmacyLookups';
 import { getApiErrorMessage } from '@/utils/errorMap';
 
 type MedicineRow = Record<string, unknown> & { id?: number };
@@ -130,6 +134,12 @@ export function MedicinePage() {
     staleTime: 60_000,
   });
 
+  const unitLabelQuery = useQuery({
+    queryKey: ['pharmacy', 'medicine-unit', 'label-map'],
+    queryFn: getPharmacyUnitLabelMap,
+    staleTime: 60_000,
+  });
+
   const detail = useQuery({
     queryKey: ['pharmacy', 'medicine', 'detail', drawerId],
     queryFn: () => getMedicineById(drawerId!),
@@ -171,21 +181,7 @@ export function MedicinePage() {
     return m;
   }, [manufacturers.data]);
 
-  const unitLabelMap = useMemo(() => {
-    const m = new Map<number, string>();
-    const data = labelSource.data?.success ? labelSource.data.data : null;
-    for (const r of (data?.items ?? []) as MedicineRow[]) {
-      const uid = r.defaultUnitId;
-      if (uid == null) continue;
-      const id = Number(uid);
-      if (!Number.isFinite(id)) continue;
-      const name = String(r.medicineName ?? '').trim();
-      if (!name) continue;
-      const cur = m.get(id);
-      m.set(id, cur ? `${cur.split(',')[0]}, ${name}`.slice(0, 80) : name);
-    }
-    return m;
-  }, [labelSource.data]);
+  const unitLabelMap = unitLabelQuery.data ?? new Map<number, string>();
 
   const formLabelMap = useMemo(() => {
     const m = new Map<number, string>();
@@ -549,8 +545,8 @@ export function MedicinePage() {
                 editId={editId}
                 allowNone
                 noneLabel="None"
-                queryKey={['pharmacy', 'medicine', 'lookup', 'unit']}
-                loadOptions={() => loadPharmacyUnitOptionsFromMedicines()}
+                queryKey={['pharmacy', 'medicine-unit', 'lookup-options']}
+                loadOptions={() => loadPharmacyUnitMasterOptions()}
               />
             </Grid>
             <Grid item xs={12} md={6}>
