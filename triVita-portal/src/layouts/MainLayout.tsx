@@ -27,7 +27,7 @@ import {
   NotificationsNone,
   ViewSidebar,
 } from '@mui/icons-material';
-import { Suspense, useMemo, useState } from 'react';
+import { Fragment, Suspense, useMemo, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { PageLoader } from '@/components/common/PageLoader';
 import { TriVitaLogo } from '@/components/common/TriVitaLogo';
@@ -140,16 +140,27 @@ export function MainLayout() {
             {(mod.children ?? []).map((c) => {
               const ModIcon = mod.icon;
               return (
-                <MuiLink key={c.path} component={Link} to={c.path} underline="none" color="inherit">
-                  <Tooltip title={desktopCollapsed ? c.label : ''} placement="right">
-                    <ListItemButton selected={location.pathname === c.path} sx={{ borderRadius: 1, mx: 0.5 }}>
-                      <ListItemIcon sx={{ minWidth: 36 }}>
-                        <ModIcon fontSize="small" color="primary" />
-                      </ListItemIcon>
-                      <ListItemText primary={c.label} sx={{ display: desktopCollapsed ? 'none' : 'block' }} />
-                    </ListItemButton>
-                  </Tooltip>
-                </MuiLink>
+                <Fragment key={c.path}>
+                  {c.section && !desktopCollapsed ? (
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ px: 2, pt: 1.5, pb: 0.5, display: 'block', textTransform: 'uppercase', letterSpacing: 0.6 }}
+                    >
+                      {c.section}
+                    </Typography>
+                  ) : null}
+                  <MuiLink component={Link} to={c.path} underline="none" color="inherit">
+                    <Tooltip title={desktopCollapsed ? c.label : ''} placement="right">
+                      <ListItemButton selected={location.pathname === c.path} sx={{ borderRadius: 1, mx: 0.5 }}>
+                        <ListItemIcon sx={{ minWidth: 36 }}>
+                          <ModIcon fontSize="small" color="primary" />
+                        </ListItemIcon>
+                        <ListItemText primary={c.label} sx={{ display: desktopCollapsed ? 'none' : 'block' }} />
+                      </ListItemButton>
+                    </Tooltip>
+                  </MuiLink>
+                </Fragment>
               );
             })}
           </Box>

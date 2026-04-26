@@ -25,6 +25,12 @@ export const HmsVisitsView = lazy(() =>
 export const HmsBillingHubView = lazy(() =>
   import('@/modules/hms/extendedViews').then((m) => ({ default: m.HmsBillingHubView }))
 );
+export const HmsMasterVisitTypeView = lazy(() =>
+  import('@/modules/hms/masters/VisitTypePage').then((m) => ({ default: m.VisitTypePage }))
+);
+export const HmsMasterPaymentModeView = lazy(() =>
+  import('@/modules/hms/masters/PaymentModePage').then((m) => ({ default: m.PaymentModePage }))
+);
 
 export const LmsTestMasterView = lazy(() =>
   import('@/modules/lms/views').then((m) => ({ default: m.LmsTestMasterView }))
@@ -40,6 +46,12 @@ export const LmsBarcodeView = lazy(() =>
 );
 export const LmsWorkflowDashboardView = lazy(() =>
   import('@/modules/lms/views').then((m) => ({ default: m.LmsWorkflowDashboardView }))
+);
+export const LmsMasterProcessingStageView = lazy(() =>
+  import('@/modules/lms/masters/ProcessingStagePage').then((m) => ({ default: m.ProcessingStagePage }))
+);
+export const LmsMasterEquipmentTypeView = lazy(() =>
+  import('@/modules/lms/masters/LmsEquipmentTypePage').then((m) => ({ default: m.LmsEquipmentTypePage }))
 );
 export const LmsEquipmentMappingsView = lazy(() =>
   import('@/modules/lms/extendedViews').then((m) => ({ default: m.LmsEquipmentMappingsView }))
@@ -66,9 +78,30 @@ export const LisSampleTrackingView = lazy(() =>
 export const LisResultHistoryView = lazy(() =>
   import('@/modules/lis/extendedViews').then((m) => ({ default: m.LisResultHistoryView }))
 );
+export const LisMasterSampleTypeView = lazy(() =>
+  import('@/modules/lis/masters/SampleTypePage').then((m) => ({ default: m.SampleTypePage }))
+);
+export const LisMasterTestCategoryView = lazy(() =>
+  import('@/modules/lis/masters/TestCategoryPage').then((m) => ({ default: m.TestCategoryPage }))
+);
 
 export const PharmacyMedicineView = lazy(() =>
   import('@/modules/pharmacy/views').then((m) => ({ default: m.PharmacyMedicineView }))
+);
+export const PharmacyMasterMedicineCategoryView = lazy(() =>
+  import('@/modules/pharmacy/masters/MedicineCategoryPage').then((m) => ({ default: m.MedicineCategoryPage }))
+);
+export const PharmacyMasterManufacturerView = lazy(() =>
+  import('@/modules/pharmacy/masters/ManufacturerPage').then((m) => ({ default: m.ManufacturerPage }))
+);
+export const PharmacyMasterCompositionView = lazy(() =>
+  import('@/modules/pharmacy/masters/CompositionPage').then((m) => ({ default: m.CompositionPage }))
+);
+export const PharmacyMasterUnitView = lazy(() =>
+  import('@/modules/pharmacy/masters/PharmacyUnitMasterPage').then((m) => ({ default: m.PharmacyUnitMasterPage }))
+);
+export const PharmacyMasterFormView = lazy(() =>
+  import('@/modules/pharmacy/masters/PharmacyFormMasterPage').then((m) => ({ default: m.PharmacyFormMasterPage }))
 );
 export const PharmacyInventoryView = lazy(() =>
   import('@/modules/pharmacy/views').then((m) => ({ default: m.PharmacyInventoryView }))

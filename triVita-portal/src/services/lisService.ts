@@ -48,3 +48,59 @@ export async function getResultHistoryPaged(params: PagedQueryParams) {
   );
   return data;
 }
+
+export async function getSampleTypePaged(params: PagedQueryParams) {
+  const { data } = await lisClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/sample-type',
+    { params }
+  );
+  return data;
+}
+
+export async function getSampleTypeById(id: number) {
+  const { data } = await lisClient.get<BaseResponse<Record<string, unknown>>>(`/api/v1/sample-type/${id}`);
+  return data;
+}
+
+export async function createSampleType(body: Record<string, unknown>) {
+  const { data } = await lisClient.post<BaseResponse<Record<string, unknown>>>('/api/v1/sample-type', body);
+  return data;
+}
+
+export async function updateSampleType(id: number, body: Record<string, unknown>) {
+  const { data } = await lisClient.put<BaseResponse<Record<string, unknown>>>(`/api/v1/sample-type/${id}`, body);
+  return data;
+}
+
+export async function deleteSampleType(id: number) {
+  const { data } = await lisClient.delete<BaseResponse<unknown>>(`/api/v1/sample-type/${id}`);
+  return data;
+}
+
+export async function getTestCategoryPaged(params: PagedQueryParams) {
+  const { data } = await lisClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/test-category',
+    { params }
+  );
+  return data;
+}
+
+export async function getTestCategoryById(id: number) {
+  const { data } = await lisClient.get<BaseResponse<Record<string, unknown>>>(`/api/v1/test-category/${id}`);
+  return data;
+}
+
+export async function createTestCategory(body: Record<string, unknown>) {
+  const { data } = await lisClient.post<BaseResponse<Record<string, unknown>>>('/api/v1/test-category', body);
+  return data;
+}
+
+export async function updateTestCategory(id: number, body: Record<string, unknown>) {
+  const { data } = await lisClient.put<BaseResponse<Record<string, unknown>>>(`/api/v1/test-category/${id}`, body);
+  return data;
+}
+
+export async function deleteTestCategory(id: number) {
+  const { data } = await lisClient.delete<BaseResponse<unknown>>(`/api/v1/test-category/${id}`);
+  return data;
+}

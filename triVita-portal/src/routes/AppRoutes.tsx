@@ -99,6 +99,22 @@ export function AppRoutes() {
           }
         />
         <Route
+          path="hms/masters/visit-types"
+          element={
+            <RequirePermission permission={TriVitaPermissions.HmsApi}>
+              <Lazy.HmsMasterVisitTypeView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="hms/masters/payment-modes"
+          element={
+            <RequirePermission permission={TriVitaPermissions.HmsApi}>
+              <Lazy.HmsMasterPaymentModeView />
+            </RequirePermission>
+          }
+        />
+        <Route
           path="lms/test-master"
           element={
             <RequirePermission permission={TriVitaPermissions.LmsApi}>
@@ -155,6 +171,22 @@ export function AppRoutes() {
           }
         />
         <Route
+          path="lms/masters/processing-stage"
+          element={
+            <RequirePermission permission={TriVitaPermissions.LmsApi}>
+              <Lazy.LmsMasterProcessingStageView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="lms/masters/equipment-type"
+          element={
+            <RequirePermission permission={TriVitaPermissions.LmsApi}>
+              <Lazy.LmsMasterEquipmentTypeView />
+            </RequirePermission>
+          }
+        />
+        <Route
           path="lis/analyzer"
           element={
             <RequirePermission permission={TriVitaPermissions.LisApi}>
@@ -203,6 +235,22 @@ export function AppRoutes() {
           }
         />
         <Route
+          path="lis/masters/sample-type"
+          element={
+            <RequirePermission permission={TriVitaPermissions.LisApi}>
+              <Lazy.LisMasterSampleTypeView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="lis/masters/test-category"
+          element={
+            <RequirePermission permission={TriVitaPermissions.LisApi}>
+              <Lazy.LisMasterTestCategoryView />
+            </RequirePermission>
+          }
+        />
+        <Route
           path="pharmacy/medicines"
           element={
             <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
@@ -211,7 +259,47 @@ export function AppRoutes() {
           }
         />
         <Route
-          path="pharmacy/batches"
+          path="pharmacy/masters/medicine-category"
+          element={
+            <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
+              <Lazy.PharmacyMasterMedicineCategoryView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="pharmacy/masters/manufacturer"
+          element={
+            <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
+              <Lazy.PharmacyMasterManufacturerView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="pharmacy/masters/composition"
+          element={
+            <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
+              <Lazy.PharmacyMasterCompositionView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="pharmacy/masters/unit"
+          element={
+            <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
+              <Lazy.PharmacyMasterUnitView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="pharmacy/masters/form"
+          element={
+            <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
+              <Lazy.PharmacyMasterFormView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="pharmacy/masters/medicine-batches"
           element={
             <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
               <Lazy.PharmacyBatchesView />
@@ -219,31 +307,15 @@ export function AppRoutes() {
           }
         />
         <Route
-          path="pharmacy/inventory"
+          path="pharmacy/transactions/purchase-order"
           element={
             <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
-              <Lazy.PharmacyInventoryView />
+              <Lazy.PharmacyPurchaseOrdersView />
             </RequirePermission>
           }
         />
         <Route
-          path="pharmacy/stock-ledger"
-          element={
-            <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
-              <Lazy.PharmacyStockLedgerView />
-            </RequirePermission>
-          }
-        />
-        <Route
-          path="pharmacy/billing"
-          element={
-            <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
-              <Lazy.PharmacyBillingView />
-            </RequirePermission>
-          }
-        />
-        <Route
-          path="pharmacy/goods-receipt"
+          path="pharmacy/transactions/goods-receipt"
           element={
             <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
               <Lazy.PharmacyGoodsReceiptView />
@@ -251,13 +323,35 @@ export function AppRoutes() {
           }
         />
         <Route
-          path="pharmacy/purchase-orders"
+          path="pharmacy/transactions/sales"
           element={
             <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
-              <Lazy.PharmacyPurchaseOrdersView />
+              <Lazy.PharmacyBillingView />
             </RequirePermission>
           }
         />
+        <Route
+          path="pharmacy/reports/inventory"
+          element={
+            <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
+              <Lazy.PharmacyInventoryView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="pharmacy/reports/stock-ledger"
+          element={
+            <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
+              <Lazy.PharmacyStockLedgerView />
+            </RequirePermission>
+          }
+        />
+        <Route path="pharmacy/batches" element={<Navigate to="/pharmacy/masters/medicine-batches" replace />} />
+        <Route path="pharmacy/inventory" element={<Navigate to="/pharmacy/reports/inventory" replace />} />
+        <Route path="pharmacy/stock-ledger" element={<Navigate to="/pharmacy/reports/stock-ledger" replace />} />
+        <Route path="pharmacy/billing" element={<Navigate to="/pharmacy/transactions/sales" replace />} />
+        <Route path="pharmacy/goods-receipt" element={<Navigate to="/pharmacy/transactions/goods-receipt" replace />} />
+        <Route path="pharmacy/purchase-orders" element={<Navigate to="/pharmacy/transactions/purchase-order" replace />} />
         <Route
           path="shared/hierarchy"
           element={

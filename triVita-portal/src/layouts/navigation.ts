@@ -10,12 +10,19 @@ import {
 } from '@mui/icons-material';
 import { TriVitaPermissions } from '@/utils/permissions';
 
+export interface NavChild {
+  label: string;
+  path: string;
+  /** When set, a sidebar subheading is rendered above this item. */
+  section?: string;
+}
+
 export interface NavItem {
   label: string;
   path: string;
   icon: typeof LocalHospital;
   permission: string;
-  children?: { label: string; path: string }[];
+  children?: NavChild[];
 }
 
 /** Always visible for authenticated users (no module permission gate). */
@@ -38,6 +45,8 @@ export const mainNavigation: NavItem[] = [
       { label: 'IPD (wards / beds / admissions)', path: '/hms/ipd' },
       { label: 'Billing (line items)', path: '/hms/billing' },
       { label: 'Billing & payments (hub)', path: '/hms/billing-hub' },
+      { label: 'Visit types', path: '/hms/masters/visit-types' },
+      { label: 'Payment modes', path: '/hms/masters/payment-modes' },
       { label: 'API registry (admin)', path: '/hms/data-registry' },
     ],
   },
@@ -54,6 +63,8 @@ export const mainNavigation: NavItem[] = [
       { label: 'Barcode management', path: '/lms/barcodes' },
       { label: 'Work queue', path: '/lms/work-queue' },
       { label: 'Sample workflow', path: '/lms/workflow' },
+      { label: 'Processing stages', path: '/lms/masters/processing-stage' },
+      { label: 'Equipment types', path: '/lms/masters/equipment-type' },
       { label: 'API registry (admin)', path: '/lms/data-registry' },
     ],
   },
@@ -69,6 +80,8 @@ export const mainNavigation: NavItem[] = [
       { label: 'Result viewer', path: '/lis/results' },
       { label: 'Result history', path: '/lis/result-history' },
       { label: 'Result verification', path: '/lis/verification' },
+      { label: 'Sample types', path: '/lis/masters/sample-type' },
+      { label: 'Test categories', path: '/lis/masters/test-category' },
       { label: 'API registry (admin)', path: '/lis/data-registry' },
     ],
   },
@@ -78,14 +91,19 @@ export const mainNavigation: NavItem[] = [
     icon: LocalPharmacy,
     permission: TriVitaPermissions.PharmacyApi,
     children: [
-      { label: 'Medicine master', path: '/pharmacy/medicines' },
-      { label: 'Medicine batches', path: '/pharmacy/batches' },
-      { label: 'Inventory', path: '/pharmacy/inventory' },
-      { label: 'Stock ledger', path: '/pharmacy/stock-ledger' },
-      { label: 'Billing (sales)', path: '/pharmacy/billing' },
-      { label: 'Goods receipt', path: '/pharmacy/goods-receipt' },
-      { label: 'Purchase orders', path: '/pharmacy/purchase-orders' },
-      { label: 'API registry (admin)', path: '/pharmacy/data-registry' },
+      { label: 'Medicine master', path: '/pharmacy/medicines', section: 'Masters' },
+      { label: 'Category master', path: '/pharmacy/masters/medicine-category' },
+      { label: 'Manufacturer master', path: '/pharmacy/masters/manufacturer' },
+      { label: 'Composition master', path: '/pharmacy/masters/composition' },
+      { label: 'Unit master', path: '/pharmacy/masters/unit' },
+      { label: 'Form master', path: '/pharmacy/masters/form' },
+      { label: 'Medicine batches', path: '/pharmacy/masters/medicine-batches' },
+      { label: 'Purchase order', path: '/pharmacy/transactions/purchase-order', section: 'Transactions' },
+      { label: 'Goods receipt (GRN)', path: '/pharmacy/transactions/goods-receipt' },
+      { label: 'Sales / billing', path: '/pharmacy/transactions/sales' },
+      { label: 'Inventory', path: '/pharmacy/reports/inventory', section: 'Reports' },
+      { label: 'Stock ledger', path: '/pharmacy/reports/stock-ledger' },
+      { label: 'API registry (admin)', path: '/pharmacy/data-registry', section: 'Admin' },
     ],
   },
   {

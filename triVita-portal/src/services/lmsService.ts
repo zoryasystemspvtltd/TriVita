@@ -55,3 +55,62 @@ export async function getWorkQueuePaged(params: PagedQueryParams) {
   );
   return data;
 }
+
+export async function getProcessingStagePaged(params: PagedQueryParams) {
+  const { data } = await lmsClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/processing-stage',
+    { params }
+  );
+  return data;
+}
+
+export async function getProcessingStageById(id: number) {
+  const { data } = await lmsClient.get<BaseResponse<Record<string, unknown>>>(`/api/v1/processing-stage/${id}`);
+  return data;
+}
+
+export async function createProcessingStage(body: Record<string, unknown>) {
+  const { data } = await lmsClient.post<BaseResponse<Record<string, unknown>>>('/api/v1/processing-stage', body);
+  return data;
+}
+
+export async function updateProcessingStage(id: number, body: Record<string, unknown>) {
+  const { data } = await lmsClient.put<BaseResponse<Record<string, unknown>>>(
+    `/api/v1/processing-stage/${id}`,
+    body
+  );
+  return data;
+}
+
+export async function deleteProcessingStage(id: number) {
+  const { data } = await lmsClient.delete<BaseResponse<unknown>>(`/api/v1/processing-stage/${id}`);
+  return data;
+}
+
+export async function getEquipmentTypeById(id: number) {
+  const { data } = await lmsClient.get<BaseResponse<Record<string, unknown>>>(
+    `/api/v1/workflow/equipment-types/${id}`
+  );
+  return data;
+}
+
+export async function createEquipmentType(body: Record<string, unknown>) {
+  const { data } = await lmsClient.post<BaseResponse<Record<string, unknown>>>(
+    '/api/v1/workflow/equipment-types',
+    body
+  );
+  return data;
+}
+
+export async function updateEquipmentType(id: number, body: Record<string, unknown>) {
+  const { data } = await lmsClient.put<BaseResponse<Record<string, unknown>>>(
+    `/api/v1/workflow/equipment-types/${id}`,
+    body
+  );
+  return data;
+}
+
+export async function deleteEquipmentType(id: number) {
+  const { data } = await lmsClient.delete<BaseResponse<unknown>>(`/api/v1/workflow/equipment-types/${id}`);
+  return data;
+}

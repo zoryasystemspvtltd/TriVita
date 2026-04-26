@@ -139,3 +139,49 @@ export async function getLabBillingInvoicesPaged(params: PagedQueryParams) {
   );
   return data;
 }
+
+export async function getVisitTypesPaged(params: PagedQueryParams) {
+  const { data } = await hmsClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/visit-types',
+    { params }
+  );
+  return data;
+}
+
+export async function createVisitType(body: Record<string, unknown>) {
+  const { data } = await hmsClient.post<BaseResponse<Record<string, unknown>>>('/api/v1/visit-types', body);
+  return data;
+}
+
+export async function updateVisitType(id: number, body: Record<string, unknown>) {
+  const { data } = await hmsClient.put<BaseResponse<Record<string, unknown>>>(`/api/v1/visit-types/${id}`, body);
+  return data;
+}
+
+export async function deleteVisitType(id: number) {
+  const { data } = await hmsClient.delete<BaseResponse<unknown>>(`/api/v1/visit-types/${id}`);
+  return data;
+}
+
+export async function getPaymentModesPaged(params: PagedQueryParams) {
+  const { data } = await hmsClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/payment-modes',
+    { params }
+  );
+  return data;
+}
+
+export async function createPaymentMode(body: Record<string, unknown>) {
+  const { data } = await hmsClient.post<BaseResponse<Record<string, unknown>>>('/api/v1/payment-modes', body);
+  return data;
+}
+
+export async function updatePaymentMode(id: number, body: Record<string, unknown>) {
+  const { data } = await hmsClient.put<BaseResponse<Record<string, unknown>>>(`/api/v1/payment-modes/${id}`, body);
+  return data;
+}
+
+export async function deletePaymentMode(id: number) {
+  const { data } = await hmsClient.delete<BaseResponse<unknown>>(`/api/v1/payment-modes/${id}`);
+  return data;
+}
