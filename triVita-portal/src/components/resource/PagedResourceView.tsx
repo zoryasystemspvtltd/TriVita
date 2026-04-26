@@ -20,7 +20,7 @@ export function PagedResourceView({
   showPageHeader?: boolean;
 }) {
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3}>
       {showPageHeader && title ? <PageHeader title={title} subtitle={subtitle} /> : null}
       <Button size="small" variant="outlined" onClick={() => void list.query.refetch()} sx={{ alignSelf: 'flex-start' }}>
         Refresh

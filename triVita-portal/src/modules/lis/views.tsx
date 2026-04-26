@@ -14,7 +14,7 @@ export function LisAnalyzerView() {
   });
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3}>
       <PageHeader title="Analyzer monitoring" subtitle="LIS analyzer query-test (barcode → equipment codes)." />
       <TextField
         label="Barcode"
@@ -48,8 +48,8 @@ export function LisResultsView() {
   const total = q.data?.success && q.data.data ? q.data.data.totalCount : 0;
 
   return (
-    <Stack spacing={2}>
-      <PageHeader title="Result viewer" subtitle="/api/v1/lab-result" />
+    <Stack spacing={3}>
+      <PageHeader title="Result viewer" subtitle="Review and explore verified laboratory results." />
       <DataTable
         columns={[
           { id: 'id', label: 'ID' },
@@ -85,8 +85,8 @@ export function LisVerificationView() {
   const total = q.data?.success && q.data.data ? q.data.data.totalCount : 0;
 
   return (
-    <Stack spacing={2}>
-      <PageHeader title="Result verification" subtitle="/api/v1/result-approval" />
+    <Stack spacing={3}>
+      <PageHeader title="Result verification" subtitle="Approve or release results through the lab workflow." />
       <Button size="small" variant="outlined" onClick={() => void q.refetch()}>
         Refresh
       </Button>

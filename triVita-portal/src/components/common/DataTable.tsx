@@ -1,16 +1,9 @@
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  Typography,
-} from '@mui/material';
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { EmptyState } from './EmptyState';
+
+const CARD_BORDER = '1px solid #e5e7eb';
+const CARD_SHADOW = '0 2px 6px rgba(0, 0, 0, 0.05)';
 
 export interface Column<T> {
   id: string;
@@ -36,7 +29,17 @@ export interface DataTableProps<T> {
   onRowClick?: (row: T) => void;
 }
 
-/** Enterprise-style data grid using MUI Table + server-friendly pagination. */
+function cellAlign<T>(c: Column<T>): 'right' | 'left' | 'center' {
+  if (c.align) return c.align;
+  if (c.id === '_actions' || c.id === '_a' || c.id === '__actions') return 'right';
+  return 'left';
+}
+
+function isActionColumnId(id: string) {
+  return id === '_actions' || id === '_a' || id === '__actions';
+}
+
+/** Enterprise data grid: white card shell, clear row separation, right-aligned actions. */
 export function DataTable<T extends object>({
   columns,
   rows,
@@ -64,28 +67,43 @@ export function DataTable<T extends object>({
   }, [rows, page, pageSize, serverMode]);
 
   return (
-    <Paper elevation={0} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 560 }}>
-        <Table stickyHeader size="small" aria-label={tableAriaLabel}>
+    <Paper
+      variant="outlined"
+      elevation={0}
+      sx={{
+        borderRadius: '10px',
+        border: CARD_BORDER,
+        bgcolor: '#ffffff',
+        boxShadow: CARD_SHADOW,
+        overflow: 'hidden',
+      }}
+    >
+      <TableContainer sx={{ maxHeight: 560, bgcolor: '#ffffff' }}>
+        <Table stickyHeader size="medium" aria-label={tableAriaLabel} sx={{ borderCollapse: 'separate' }}>
           <TableHead>
             <TableRow>
-              {columns.map((c) => (
-                <TableCell key={c.id} align={c.align} sx={{ minWidth: c.minWidth, fontWeight: 600 }}>
-                  {c.label}
-                </TableCell>
-              ))}
+              {columns.map((c) => {
+                const align = cellAlign(c);
+                return (
+                  <TableCell key={c.id} align={align} sx={{ minWidth: c.minWidth }}>
+                    {c.label}
+                  </TableCell>
+                );
+              })}
             </TableRow>
           </TableHead>
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={columns.length}>
-                  <Typography color="text.secondary">Loading…</Typography>
+                <TableCell colSpan={columns.length} sx={{ py: 3 }}>
+                  <Typography variant="body1" color="text.secondary" sx={{ fontSize: '0.875rem' }}>
+                    Loading…
+                  </Typography>
                 </TableCell>
               </TableRow>
             ) : slice.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={columns.length} sx={{ border: 0, py: 6 }}>
+                <TableCell colSpan={columns.length} sx={{ border: 0, py: 0, verticalAlign: 'middle' }}>
                   <EmptyState title={emptyTitle} />
                 </TableCell>
               </TableRow>
@@ -97,19 +115,57 @@ export function DataTable<T extends object>({
                   onClick={onRowClick ? () => onRowClick(row) : undefined}
                   sx={onRowClick ? { cursor: 'pointer' } : undefined}
                 >
-                  {columns.map((c) => (
-                    <TableCell
-                      key={c.id}
-                      align={c.align}
-                      onClick={(e) => {
-                        if (!onRowClick) return;
-                        const t = e.target as HTMLElement;
-                        if (t.closest('button, a, [role="button"]')) e.stopPropagation();
-                      }}
-                    >
-                      {c.format ? c.format(row) : String((row as Record<string, unknown>)[c.id] ?? '—')}
-                    </TableCell>
-                  ))}
+                  {columns.map((c) => {
+                    const align = cellAlign(c);
+                    const actionCol = isActionColumnId(c.id);
+                    return (
+                      <TableCell
+                        key={c.id}
+                        align={align}
+                        onClick={(e) => {
+                          if (!onRowClick) return;
+                          const t = e.target as HTMLElement;
+                          if (t.closest('button, a, [role="button"]')) e.stopPropagation();
+                        }}
+                        sx={actionCol ? { verticalAlign: 'middle' } : undefined}
+                      >
+                        {c.format ? (
+                          actionCol ? (
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                                alignItems: 'center',
+                                flexWrap: 'wrap',
+                                columnGap: 1.5,
+                                rowGap: 0.5,
+                                width: 1,
+                                ml: 'auto',
+                                '& .MuiLink-root, a': {
+                                  fontWeight: 500,
+                                  color: 'primary.main',
+                                  textDecoration: 'none',
+                                  '&:hover': { color: 'primary.dark' },
+                                },
+                                '& a[color="error"], & .MuiLink-root[color="error"]': {
+                                  color: 'error.main',
+                                  '&:hover': { color: 'error.dark' },
+                                },
+                              }}
+                            >
+                              {c.format(row)}
+                            </Box>
+                          ) : (
+                            c.format(row)
+                          )
+                        ) : (
+                          <Typography variant="body1" color="text.primary" sx={{ fontSize: '0.8125rem' }}>
+                            {String((row as Record<string, unknown>)[c.id] ?? '—')}
+                          </Typography>
+                        )}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))
             )}

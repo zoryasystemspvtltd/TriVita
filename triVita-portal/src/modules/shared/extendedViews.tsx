@@ -161,10 +161,10 @@ function EnterprisesCrud({ setBanner }: { setBanner: (b: Banner | null) => void 
   };
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3}>
       <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={1}>
         <Typography variant="body2" color="text.secondary">
-          GET/POST/PUT/DELETE /api/v1/enterprises
+          Create, update, and retire top-level organizations for your tenant.
         </Typography>
         <Button variant="contained" onClick={openCreate}>
           Add enterprise
@@ -217,7 +217,7 @@ function EnterprisesCrud({ setBanner }: { setBanner: (b: Banner | null) => void 
           </>
         }
       >
-        <Stack spacing={2} sx={{ pt: 1 }}>
+        <Stack spacing={3} sx={{ pt: 1 }}>
           <TextField label="Enterprise code" required value={code} onChange={(e) => setCode(e.target.value)} />
           <TextField label="Enterprise name" required value={name} onChange={(e) => setName(e.target.value)} />
           <TextField label="Registration details" multiline minRows={2} value={reg} onChange={(e) => setReg(e.target.value)} />
@@ -360,7 +360,7 @@ function CompaniesCrud({ setBanner }: { setBanner: (b: Banner | null) => void })
   });
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3}>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ sm: 'center' }}>
         <TextField
           label="Filter by enterprise ID"
@@ -378,7 +378,7 @@ function CompaniesCrud({ setBanner }: { setBanner: (b: Banner | null) => void })
         </Button>
       </Stack>
       <Typography variant="body2" color="text.secondary">
-        GET/POST/PUT/DELETE /api/v1/companies
+        Companies linked to the enterprise with registration and effectivity.
       </Typography>
       <DataTable
         columns={[
@@ -429,7 +429,7 @@ function CompaniesCrud({ setBanner }: { setBanner: (b: Banner | null) => void })
           </>
         }
       >
-        <Stack spacing={2} sx={{ pt: 1 }}>
+        <Stack spacing={3} sx={{ pt: 1 }}>
           <TextField label="Enterprise ID" required value={entId} onChange={(e) => setEntId(e.target.value)} />
           <TextField label="Company code" required value={code} onChange={(e) => setCode(e.target.value)} />
           <TextField label="Company name" required value={name} onChange={(e) => setName(e.target.value)} />
@@ -561,7 +561,7 @@ function BusinessUnitsCrud({ setBanner }: { setBanner: (b: Banner | null) => voi
   });
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3}>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ sm: 'center' }}>
         <TextField
           label="Filter by company ID"
@@ -579,7 +579,7 @@ function BusinessUnitsCrud({ setBanner }: { setBanner: (b: Banner | null) => voi
         </Button>
       </Stack>
       <Typography variant="body2" color="text.secondary">
-        GET/POST/PUT/DELETE /api/v1/business-units
+        Business units and divisions used for org structure and reporting.
       </Typography>
       <DataTable
         columns={[
@@ -631,7 +631,7 @@ function BusinessUnitsCrud({ setBanner }: { setBanner: (b: Banner | null) => voi
           </>
         }
       >
-        <Stack spacing={2} sx={{ pt: 1 }}>
+        <Stack spacing={3} sx={{ pt: 1 }}>
           <TextField label="Company ID" required value={coId} onChange={(e) => setCoId(e.target.value)} />
           <TextField label="Business unit code" required value={code} onChange={(e) => setCode(e.target.value)} />
           <TextField label="Business unit name" required value={name} onChange={(e) => setName(e.target.value)} />
@@ -762,7 +762,7 @@ function DepartmentsCrud({ setBanner }: { setBanner: (b: Banner | null) => void 
   });
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3}>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ sm: 'center' }}>
         <TextField
           label="Filter by facility ID"
@@ -780,7 +780,7 @@ function DepartmentsCrud({ setBanner }: { setBanner: (b: Banner | null) => void 
         </Button>
       </Stack>
       <Typography variant="body2" color="text.secondary">
-        GET/POST/PUT/DELETE /api/v1/departments (list filter: facilityId)
+        Departments, optionally filtered by the selected facility.
       </Typography>
       <DataTable
         columns={[
@@ -831,7 +831,7 @@ function DepartmentsCrud({ setBanner }: { setBanner: (b: Banner | null) => void 
           </>
         }
       >
-        <Stack spacing={2} sx={{ pt: 1 }}>
+        <Stack spacing={3} sx={{ pt: 1 }}>
           <TextField
             label="Facility parent ID"
             required
@@ -975,7 +975,7 @@ function FacilitiesCrud({ setBanner }: { setBanner: (b: Banner | null) => void }
   });
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3}>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ sm: 'center' }}>
         <TextField
           label="Filter by business unit ID"
@@ -993,7 +993,7 @@ function FacilitiesCrud({ setBanner }: { setBanner: (b: Banner | null) => void }
         </Button>
       </Stack>
       <Typography variant="body2" color="text.secondary">
-        GET/POST/PUT/DELETE /api/v1/facilities
+        Care facilities, codes, and addresses for the enterprise hierarchy.
       </Typography>
       <DataTable
         columns={[
@@ -1045,7 +1045,7 @@ function FacilitiesCrud({ setBanner }: { setBanner: (b: Banner | null) => void }
           </>
         }
       >
-        <Stack spacing={2} sx={{ pt: 1 }}>
+        <Stack spacing={3} sx={{ pt: 1 }}>
           <TextField label="Business unit ID" required value={buId} onChange={(e) => setBuId(e.target.value)} />
           <TextField label="Facility code" required value={code} onChange={(e) => setCode(e.target.value)} />
           <TextField label="Facility name" required value={name} onChange={(e) => setName(e.target.value)} />
@@ -1079,7 +1079,7 @@ export function SharedEnterpriseAdminView() {
   const clearBanner = useCallback(() => setBanner(null), []);
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3}>
       <PageHeader
         title="Enterprise administration"
         subtitle="CRUD for enterprises, companies, business units, departments, and facilities via IIS SharedService."

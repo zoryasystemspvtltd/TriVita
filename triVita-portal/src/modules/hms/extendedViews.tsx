@@ -51,10 +51,10 @@ export function HmsIpdHubView() {
           ];
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3}>
       <PageHeader
         title="IPD — wards, beds & admissions"
-        subtitle="GET /api/v1/ipd/wards, /ipd/beds, /admissions"
+        subtitle="Wards, beds, and current admissions for inpatient operations."
       />
       <Tabs
         value={tab}
@@ -87,7 +87,7 @@ export function HmsPrescriptionsView() {
   return (
     <PagedResourceView
       title="Prescriptions"
-      subtitle="GET /api/v1/prescriptions"
+      subtitle="Active and historical medication orders associated with care episodes."
       tableLabel="Prescriptions"
       list={list}
       columns={[
@@ -107,7 +107,7 @@ export function HmsVisitsView() {
   return (
     <PagedResourceView
       title="OPD / visits"
-      subtitle="GET /api/v1/visits"
+      subtitle="Outpatient and encounter visits with patient and provider context."
       tableLabel="Clinical visits"
       list={list}
       columns={[
@@ -167,7 +167,7 @@ export function HmsBillingHubView() {
             ];
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3}>
       <PageHeader
         title="Billing & payments"
         subtitle="Headers, line items, payments, and LMS lab invoices via HMS integration."

@@ -266,7 +266,7 @@ export function MedicinePage() {
   };
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3}>
       <PageHeader title="Medicine Master" />
 
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ sm: 'center' }} justifyContent="space-between">

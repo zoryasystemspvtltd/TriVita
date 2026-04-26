@@ -9,7 +9,7 @@ export function LisLabOrdersView() {
   return (
     <PagedResourceView
       title="Lab orders (ingestion context)"
-      subtitle="GET /api/v1/lab-order — orders driving results and workflow."
+      subtitle="Laboratory orders driving accession, processing, and results."
       tableLabel="Lab orders"
       list={list}
       columns={[
@@ -29,7 +29,7 @@ export function LisSampleTrackingView() {
   return (
     <PagedResourceView
       title="Sample tracking"
-      subtitle="GET /api/v1/sample-tracking"
+      subtitle="Sample status from collection through processing."
       tableLabel="Sample tracking"
       list={list}
       columns={[
@@ -49,7 +49,7 @@ export function LisResultHistoryView() {
   return (
     <PagedResourceView
       title="Result history"
-      subtitle="GET /api/v1/result-history — audit trail for result changes."
+      subtitle="Audit history of result edits and sign-off events."
       tableLabel="Result history"
       list={list}
       columns={[

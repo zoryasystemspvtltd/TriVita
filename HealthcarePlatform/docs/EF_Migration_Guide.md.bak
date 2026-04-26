@@ -266,7 +266,7 @@ dotnet ef database update --context HealthcareDbContext --project TriVita.Unifie
 
 Warnings about `decimal` without precision come from the model. Fix in **`IEntityTypeConfiguration`** (e.g. `HasPrecision`) in the owning service’s Infrastructure project, then add a new migration.
 
---- 
+---
 
 ## 10. Best Practices
 

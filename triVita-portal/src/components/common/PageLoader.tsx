@@ -8,12 +8,14 @@ export function PageLoader({ message = 'Loading TriVita…' }: { message?: strin
       display="flex"
       alignItems="center"
       justifyContent="center"
-      sx={{ background: 'linear-gradient(180deg, #f4f8f9 0%, #fff 100%)' }}
+      bgcolor="background.default"
     >
-      <Stack spacing={3} alignItems="center">
+      <Stack spacing={2.5} alignItems="center" px={2}>
         <TriVitaLogo size="lg" />
-        <CircularProgress color="primary" size={36} />
-        <Typography color="text.secondary">{message}</Typography>
+        <CircularProgress color="primary" size={32} />
+        <Typography color="text.secondary" variant="body1" sx={{ fontSize: '0.875rem' }}>
+          {message}
+        </Typography>
       </Stack>
     </Box>
   );

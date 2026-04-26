@@ -29,8 +29,8 @@ export function LmsTestMasterView() {
   const total = q.data?.success && q.data.data ? q.data.data.totalCount : 0;
 
   return (
-    <Stack spacing={2}>
-      <PageHeader title="Test master" subtitle="/api/v1/workflow/test-masters" />
+    <Stack spacing={3}>
+      <PageHeader title="Test master" subtitle="Catalogue of workflow test definitions and metadata." />
       <DataTable
         columns={[
           { id: 'id', label: 'ID' },
@@ -66,8 +66,8 @@ export function LmsEquipmentMasterView() {
   const total = q.data?.success && q.data.data ? q.data.data.totalCount : 0;
 
   return (
-    <Stack spacing={2}>
-      <PageHeader title="Equipment master" subtitle="/api/v1/workflow/equipment-types" />
+    <Stack spacing={3}>
+      <PageHeader title="Equipment master" subtitle="Laboratory equipment types and configuration for scheduling." />
       <DataTable
         columns={[
           { id: 'id', label: 'ID' },
@@ -103,8 +103,8 @@ export function LmsTestBookingView() {
   const total = q.data?.success && q.data.data ? q.data.data.totalCount : 0;
 
   return (
-    <Stack spacing={2}>
-      <PageHeader title="Test booking" subtitle="/api/v1/workflow/test-bookings" />
+    <Stack spacing={3}>
+      <PageHeader title="Test booking" subtitle="Schedule and view patient test bookings in the lab workflow." />
       <DataTable
         columns={[
           { id: 'id', label: 'ID' },
@@ -140,7 +140,7 @@ export function LmsBarcodeView() {
   });
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3}>
       <PageHeader
         title="Barcode management"
         subtitle="Register samples and resolve workflow via LMS integration API."
@@ -205,7 +205,7 @@ export function LmsWorkflowDashboardView() {
   const tc = t.data?.success && t.data.data ? t.data.data.totalCount : 0;
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3}>
       <PageHeader
         title="Sample workflow dashboard"
         subtitle="Snapshot counts from test bookings and catalog tests."

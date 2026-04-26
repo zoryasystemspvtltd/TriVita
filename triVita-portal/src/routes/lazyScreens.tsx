@@ -89,7 +89,7 @@ export const PharmacyMedicineView = lazy(() =>
   import('@/modules/pharmacy/views').then((m) => ({ default: m.PharmacyMedicineView }))
 );
 export const PharmacyMasterMedicineCategoryView = lazy(() =>
-  import('@/modules/pharmacy/masters/MedicineCategoryPage').then((m) => ({ default: m.MedicineCategoryPage }))
+  import('@/modules/pharmacy/masters/CategoryMasterPage').then((m) => ({ default: m.CategoryMasterPage }))
 );
 export const PharmacyMasterManufacturerView = lazy(() =>
   import('@/modules/pharmacy/masters/ManufacturerPage').then((m) => ({ default: m.ManufacturerPage }))

@@ -43,19 +43,21 @@ export function ModuleDataRegistryPage({ module }: { module: ApiRegistryModule }
   };
 
   return (
-    <Stack spacing={2} sx={{ height: '100%' }}>
+    <Stack spacing={3} sx={{ height: '100%' }}>
       <PageHeader
         title="API registry"
         subtitle={`Administrator fallback — full CRUD, ID lookup, and workflow actions mapped to live APIs (${module.toUpperCase()}).`}
       />
-      <Stack direction={{ xs: 'column', lg: 'row' }} spacing={2} alignItems="stretch">
+      <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3} alignItems="stretch">
         <Paper
+          variant="outlined"
           elevation={0}
           sx={{
             flex: { lg: '0 0 320px' },
-            border: '1px solid',
-            borderColor: 'divider',
-            borderRadius: 2,
+            bgcolor: '#ffffff',
+            border: '1px solid #e5e7eb',
+            borderRadius: '10px',
+            boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
             p: 1,
             maxHeight: { lg: 'calc(100vh - 220px)' },
             overflow: 'hidden',
@@ -104,10 +106,20 @@ export function ModuleDataRegistryPage({ module }: { module: ApiRegistryModule }
           {selected ? (
             <EnterpriseCrudResourcePage def={selected} />
           ) : (
-            <Paper elevation={0} sx={{ p: 3, border: '1px dashed', borderColor: 'divider', borderRadius: 2 }}>
+            <Paper
+              variant="outlined"
+              elevation={0}
+              sx={{
+                p: 3,
+                border: '1px solid #e5e7eb',
+                borderRadius: '10px',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
+                bgcolor: '#ffffff',
+              }}
+            >
               <Typography color="text.secondary">
-                Select a resource from the list, or open a deep link with <code>?resource=medicine</code> (path after{' '}
-                <code>/api/v1/</code>).
+                Select a resource from the list, or open a deep link with <code>?resource=medicine</code> using the
+                registered path segment.
               </Typography>
             </Paper>
           )}

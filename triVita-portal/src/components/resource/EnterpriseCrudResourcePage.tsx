@@ -276,7 +276,7 @@ export function EnterpriseCrudResourcePage({
           without codegen. Use module business menus for day-to-day operations.
         </Alert>
       ) : null}
-      <PageHeader title={spec.title} subtitle={`${spec.module.toUpperCase()} · ${basePath}`} />
+      <PageHeader title={spec.title} subtitle={`${spec.module.toUpperCase()} · data registry`} />
 
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems={{ md: 'flex-end' }} flexWrap="wrap">
         {showListSection && spec.hasPagedList ? (

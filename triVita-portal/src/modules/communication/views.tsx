@@ -104,7 +104,7 @@ export function CommunicationNotificationsView() {
         }
       />
 
-      <SectionContainer title="Send using template" subtitle="Maps to POST /api/v1/notifications/send-template with structured DTO fields.">
+      <SectionContainer title="Send using template" subtitle="Send a templated message with structured field values.">
         <Formik
           initialValues={{
             eventType: 'PatientPortal',
@@ -142,7 +142,7 @@ export function CommunicationNotificationsView() {
         >
           {({ isSubmitting }) => (
             <Form>
-              <Stack spacing={2} useFlexGap flexWrap="wrap" direction="row">
+              <Stack spacing={3} useFlexGap flexWrap="wrap" direction="row">
                 <FormikTextField name="eventType" label="Event type" required sx={{ flex: '1 1 220px', minWidth: 200 }} />
                 <FormikTextField name="templateCode" label="Template code" required sx={{ flex: '1 1 220px', minWidth: 200 }} />
                 <FormikTextField name="channelTypeReferenceValueId" label="Channel type ref id" required sx={{ flex: '1 1 160px', minWidth: 140 }} />
@@ -167,7 +167,7 @@ export function CommunicationNotificationsView() {
         </Formik>
       </SectionContainer>
 
-      <SectionContainer title="Create notification (advanced)" subtitle="POST /api/v1/notifications — single channel + recipient for common cases.">
+      <SectionContainer title="Create notification (advanced)" subtitle="Ad-hoc single-channel notification to one recipient.">
         <Formik
           initialValues={{
             eventType: 'ClinicalAlert',
@@ -207,7 +207,7 @@ export function CommunicationNotificationsView() {
         >
           {({ isSubmitting }) => (
             <Form>
-              <Stack spacing={2} useFlexGap flexWrap="wrap" direction="row">
+              <Stack spacing={3} useFlexGap flexWrap="wrap" direction="row">
                 <FormikTextField name="eventType" label="Event type" required sx={{ flex: '1 1 220px', minWidth: 200 }} />
                 <FormikTextField name="referenceId" label="Reference id (optional)" sx={{ flex: '1 1 180px', minWidth: 160 }} />
                 <FormikTextField name="priorityReferenceValueId" label="Priority ref id" required sx={{ flex: '1 1 160px', minWidth: 140 }} />

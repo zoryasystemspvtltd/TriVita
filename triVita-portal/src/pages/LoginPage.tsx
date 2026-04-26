@@ -30,7 +30,8 @@ export function LoginPage() {
       alignItems="center"
       justifyContent="center"
       sx={{
-        background: 'radial-gradient(ellipse at top, rgba(13,115,119,0.12), transparent 55%), #f4f8f9',
+        background: 'radial-gradient(ellipse at top, rgba(13, 92, 74, 0.1), transparent 55%)',
+        bgcolor: 'background.default',
       }}
     >
       <Container maxWidth="sm">
@@ -42,7 +43,7 @@ export function LoginPage() {
             Healthcare enterprise portal
           </Typography>
         </Box>
-        <Card elevation={3} sx={{ borderRadius: 3 }}>
+        <Card variant="outlined" sx={{ borderRadius: 2, boxShadow: 3 }}>
           <CardContent sx={{ p: 4 }}>
             {error ? (
               <Alert severity="error" sx={{ mb: 2 }}>

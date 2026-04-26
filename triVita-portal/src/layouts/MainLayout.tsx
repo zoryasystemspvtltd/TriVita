@@ -7,7 +7,6 @@ import {
   Drawer,
   IconButton,
   Link as MuiLink,
-  List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
@@ -27,13 +26,14 @@ import {
   NotificationsNone,
   ViewSidebar,
 } from '@mui/icons-material';
-import { Fragment, Suspense, useMemo, useState } from 'react';
+import { Suspense, useMemo, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { PageLoader } from '@/components/common/PageLoader';
 import { TriVitaLogo } from '@/components/common/TriVitaLogo';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { clearSession, setFacilityId } from '@/store/slices/authSlice';
 import { hasPermission } from '@/utils/permissions';
+import { AppSideNav } from './AppSideNav';
 import { mainNavigation, utilityNavigation } from './navigation';
 import { useQuery } from '@tanstack/react-query';
 import { listFacilities } from '@/services/sharedService';
@@ -98,7 +98,7 @@ export function MainLayout() {
         </Tooltip>
       </Toolbar>
       <Divider />
-      <List sx={{ flex: 1, px: 1, py: 2 }}>
+      <Box component="div" sx={{ flex: 1, px: 1, py: 2, overflow: 'auto' }}>
         <MuiLink component={Link} to="/dashboard" underline="none" color="inherit">
           <Tooltip title={desktopCollapsed ? 'Home' : ''} placement="right">
             <ListItemButton selected={location.pathname === '/dashboard'} sx={{ borderRadius: 1, mx: 0.5 }}>
@@ -128,44 +128,12 @@ export function MainLayout() {
             </MuiLink>
           );
         })}
-        {visibleNav.map((mod) => (
-          <Box key={mod.path}>
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ px: 2, pt: 2, pb: 0.5, display: desktopCollapsed ? 'none' : 'block' }}
-            >
-              {mod.label}
-            </Typography>
-            {(mod.children ?? []).map((c) => {
-              const ModIcon = mod.icon;
-              return (
-                <Fragment key={c.path}>
-                  {c.section && !desktopCollapsed ? (
-                    <Typography
-                      variant="caption"
-                      color="text.secondary"
-                      sx={{ px: 2, pt: 1.5, pb: 0.5, display: 'block', textTransform: 'uppercase', letterSpacing: 0.6 }}
-                    >
-                      {c.section}
-                    </Typography>
-                  ) : null}
-                  <MuiLink component={Link} to={c.path} underline="none" color="inherit">
-                    <Tooltip title={desktopCollapsed ? c.label : ''} placement="right">
-                      <ListItemButton selected={location.pathname === c.path} sx={{ borderRadius: 1, mx: 0.5 }}>
-                        <ListItemIcon sx={{ minWidth: 36 }}>
-                          <ModIcon fontSize="small" color="primary" />
-                        </ListItemIcon>
-                        <ListItemText primary={c.label} sx={{ display: desktopCollapsed ? 'none' : 'block' }} />
-                      </ListItemButton>
-                    </Tooltip>
-                  </MuiLink>
-                </Fragment>
-              );
-            })}
-          </Box>
-        ))}
-      </List>
+        <AppSideNav
+          items={visibleNav}
+          desktopCollapsed={desktopCollapsed}
+          onSelectNav={() => setMobileOpen(false)}
+        />
+      </Box>
     </Box>
   );
 
@@ -319,7 +287,7 @@ export function MainLayout() {
         component="main"
         sx={{
           flexGrow: 1,
-          p: { xs: 2, sm: 3 },
+          p: 3,
           width: { md: `calc(100% - ${drawerWidth}px)` },
           mt: 8,
           backgroundColor: 'background.default',

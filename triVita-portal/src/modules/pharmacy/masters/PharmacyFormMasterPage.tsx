@@ -36,7 +36,7 @@ export function PharmacyFormMasterPage() {
   }, [meds.data]);
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3}>
       <PageHeader title="Form master" subtitle="Distinct dosage forms referenced on medicines (no raw identifiers shown)." />
       <FormSection title="Forms in use">
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>

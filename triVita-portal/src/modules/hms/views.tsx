@@ -201,8 +201,8 @@ export function HmsAppointmentsView() {
   const total = q.data?.success && q.data.data ? q.data.data.totalCount : 0;
 
   return (
-    <Stack spacing={2}>
-      <PageHeader title="Appointment booking" subtitle="Paged list from /api/v1/appointments." />
+    <Stack spacing={3}>
+      <PageHeader title="Appointment booking" subtitle="View and manage patient appointments for the active facility." />
       <Formik
         initialValues={{
           patientId: 1,
@@ -282,8 +282,8 @@ export function HmsOpdDashboardView() {
   const total = q.data?.success && q.data.data ? q.data.data.totalCount : 0;
 
   return (
-    <Stack spacing={2}>
-      <PageHeader title="OPD dashboard" subtitle="Appointment queue from /api/v1/appointment-queue." />
+    <Stack spacing={3}>
+      <PageHeader title="OPD dashboard" subtitle="Outpatient visit queue and appointment status at a glance." />
       <DataTable
         columns={[
           { id: 'id', label: 'ID' },
@@ -319,8 +319,8 @@ export function HmsBillingView() {
   const total = q.data?.success && q.data.data ? q.data.data.totalCount : 0;
 
   return (
-    <Stack spacing={2}>
-      <PageHeader title="HMS billing" subtitle="Billing line items from /api/v1/billing-items." />
+    <Stack spacing={3}>
+      <PageHeader title="HMS billing" subtitle="Service lines, amounts, and billing line detail for the selected period." />
       <DataTable
         columns={[
           { id: 'id', label: 'ID' },

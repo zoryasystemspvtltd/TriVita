@@ -286,10 +286,10 @@ export function MasterEntityShell<T extends Record<string, unknown> = Record<str
   const formId = `master-form-${resourcePath.replace(/\//g, '-')}`;
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3}>
       <PageHeader title={title} />
 
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ sm: 'center' }} justifyContent="space-between">
+      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ sm: 'center' }} justifyContent="space-between" sx={{ mb: 0.5 }}>
         <TextField
           size="small"
           label="Search (name / code)"

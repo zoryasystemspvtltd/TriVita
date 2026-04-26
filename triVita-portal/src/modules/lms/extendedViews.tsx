@@ -10,7 +10,7 @@ export function LmsEquipmentMappingsView() {
   return (
     <PagedResourceView
       title="Equipment ↔ facility mappings"
-      subtitle="GET /api/v1/workflow/equipment-facility-mappings"
+      subtitle="Map equipment to facilities and locations for operations."
       tableLabel="Equipment facility mappings"
       list={list}
       columns={[
@@ -30,7 +30,7 @@ export function LmsWorkQueueView() {
   return (
     <PagedResourceView
       title="Lab work queue"
-      subtitle="GET /api/v1/work-queue — operational queue for lab processing."
+      subtitle="Operational queue of active work for laboratory processing."
       tableLabel="Work queue"
       list={list}
       columns={[

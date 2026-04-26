@@ -4,7 +4,6 @@ import { forwardRef } from 'react';
 /** MUI Button with TriVita defaults. `to` is accepted for polymorphic `component={RouterLink}` usage. */
 export type TriVitaButtonProps = ButtonProps & { to?: string };
 
-/** Primary action button — consistent padding and no forced uppercase. */
 export const TriVitaButton = forwardRef<HTMLButtonElement, TriVitaButtonProps>(function TriVitaButton(
   { variant = 'contained', color = 'primary', size = 'medium', sx, to, ...rest },
   ref
@@ -16,7 +15,7 @@ export const TriVitaButton = forwardRef<HTMLButtonElement, TriVitaButtonProps>(f
       color={color}
       size={size}
       {...(to != null ? { to } : {})}
-      sx={{ minWidth: 96, ...sx }}
+      sx={{ minWidth: 96, boxSizing: 'border-box', ...sx }}
       {...rest}
     />
   );
