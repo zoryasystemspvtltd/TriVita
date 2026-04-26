@@ -80,6 +80,11 @@ public sealed class PhrGeneratedMappingProfile : Profile
             .ForMember(d => d.ModifiedBy, o => o.Ignore())
             .ForMember(d => d.RowVersion, o => o.Ignore());
 
+        CreateMap<PhrReferenceDataValue, MedicineFormResponseDto>()
+            .ForMember(d => d.FormCode, o => o.MapFrom(s => s.ValueCode))
+            .ForMember(d => d.FormName, o => o.MapFrom(s => s.ValueName))
+            .ForMember(d => d.Description, o => o.MapFrom(s => s.ValueText));
+
         CreateMap<PhrComposition, CompositionResponseDto>();
         CreateMap<CreateCompositionDto, PhrComposition>()
             .ForMember(d => d.Id, o => o.Ignore())
@@ -110,7 +115,7 @@ public sealed class PhrGeneratedMappingProfile : Profile
             .ForMember(d => d.TenantId, o => o.Ignore())
             .ForMember(d => d.FacilityId, o => o.Ignore())
             .ForMember(d => d.IsDeleted, o => o.Ignore())
-            .ForMember(d => d.IsActive, o => o.Ignore())
+            .ForMember(d => d.IsActive, o => o.MapFrom(s => s.IsActive))
             .ForMember(d => d.CreatedOn, o => o.Ignore())
             .ForMember(d => d.CreatedBy, o => o.Ignore())
             .ForMember(d => d.ModifiedOn, o => o.Ignore())
@@ -121,7 +126,7 @@ public sealed class PhrGeneratedMappingProfile : Profile
             .ForMember(d => d.TenantId, o => o.Ignore())
             .ForMember(d => d.FacilityId, o => o.Ignore())
             .ForMember(d => d.IsDeleted, o => o.Ignore())
-            .ForMember(d => d.IsActive, o => o.Ignore())
+            .ForMember(d => d.IsActive, o => o.MapFrom(s => s.IsActive))
             .ForMember(d => d.CreatedOn, o => o.Ignore())
             .ForMember(d => d.CreatedBy, o => o.Ignore())
             .ForMember(d => d.ModifiedOn, o => o.Ignore())

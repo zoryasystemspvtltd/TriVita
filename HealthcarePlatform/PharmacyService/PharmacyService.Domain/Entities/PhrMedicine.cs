@@ -11,5 +11,7 @@ public sealed class PhrMedicine : BaseEntity
     public string? Strength { get; set; }
     public long? DefaultUnitId { get; set; }
     public long? FormReferenceValueId { get; set; }
+    /// <summary>Optional primary ingredient (Composition master) for display and formulary.</summary>
+    public long? PrimaryCompositionId { get; set; }
     public string? Notes { get; set; }
 }

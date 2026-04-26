@@ -9,5 +9,7 @@ public sealed class CreateMedicineDto
     public string? Strength { get; set; }
     public long? DefaultUnitId { get; set; }
     public long? FormReferenceValueId { get; set; }
+    public long? PrimaryCompositionId { get; set; }
+    public bool IsActive { get; set; } = true;
     public string? Notes { get; set; }
 }

@@ -101,7 +101,7 @@ export const PharmacyMasterUnitView = lazy(() =>
   import('@/modules/pharmacy/masters/UnitMasterPage').then((m) => ({ default: m.UnitMasterPage }))
 );
 export const PharmacyMasterFormView = lazy(() =>
-  import('@/modules/pharmacy/masters/PharmacyFormMasterPage').then((m) => ({ default: m.PharmacyFormMasterPage }))
+  import('@/modules/pharmacy/masters/FormMasterPage').then((m) => ({ default: m.FormMasterPage }))
 );
 export const PharmacyInventoryView = lazy(() =>
   import('@/modules/pharmacy/views').then((m) => ({ default: m.PharmacyInventoryView }))

@@ -102,6 +102,37 @@ export async function deleteMedicineUnit(id: number) {
   return data;
 }
 
+export async function getMedicineFormPaged(params: PagedQueryParams) {
+  const { data } = await pharmacyClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/medicine-form',
+    { params }
+  );
+  return data;
+}
+
+export async function getMedicineFormById(id: number) {
+  const { data } = await pharmacyClient.get<BaseResponse<Record<string, unknown>>>(`/api/v1/medicine-form/${id}`);
+  return data;
+}
+
+export async function createMedicineForm(body: Record<string, unknown>) {
+  const { data } = await pharmacyClient.post<BaseResponse<Record<string, unknown>>>('/api/v1/medicine-form', body);
+  return data;
+}
+
+export async function updateMedicineForm(id: number, body: Record<string, unknown>) {
+  const { data } = await pharmacyClient.put<BaseResponse<Record<string, unknown>>>(
+    `/api/v1/medicine-form/${id}`,
+    body
+  );
+  return data;
+}
+
+export async function deleteMedicineForm(id: number) {
+  const { data } = await pharmacyClient.delete<BaseResponse<unknown>>(`/api/v1/medicine-form/${id}`);
+  return data;
+}
+
 export async function getCompositionPaged(params: PagedQueryParams) {
   const { data } = await pharmacyClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
     '/api/v1/composition',

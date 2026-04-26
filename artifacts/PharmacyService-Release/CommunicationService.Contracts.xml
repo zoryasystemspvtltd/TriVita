@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CommunicationService.Contracts</name>
+    </assembly>
+    <members>
+        <member name="P:CommunicationService.Contracts.Notifications.ChannelRequestDto.TemplateCode">
+            <summary>Optional template code; when set, subject/body are resolved from COM_NotificationTemplate.</summary>
+        </member>
+        <member name="T:CommunicationService.Contracts.Notifications.CreateNotificationRequestDto">
+            <summary>Creates a notification intent, recipients, delivery channels, and enqueues for processing.</summary>
+        </member>
+        <member name="P:CommunicationService.Contracts.Notifications.CreateNotificationRequestDto.Context">
+            <summary>Key-value pairs merged into templates as {{key}} placeholders.</summary>
+        </member>
+        <member name="P:CommunicationService.Contracts.Notifications.CreateNotificationRequestDto.StatusReferenceValueId">
+            <summary>When null, defaults to configured draft/queued status.</summary>
+        </member>
+        <member name="T:CommunicationService.Contracts.Notifications.INotificationApiClient">
+            <summary>HTTP client contract for other microservices (no direct SMTP/SMS calls outside CommunicationService).</summary>
+        </member>
+        <member name="T:CommunicationService.Contracts.Notifications.SendTemplateNotificationRequestDto">
+            <summary>Convenience payload for a single template + channel send.</summary>
+        </member>
+    </members>
+</doc>

@@ -250,8 +250,9 @@ export function AppRoutes() {
             </RequirePermission>
           }
         />
+        <Route path="pharmacy/medicines" element={<Navigate to="/pharmacy/masters/medicine" replace />} />
         <Route
-          path="pharmacy/medicines"
+          path="pharmacy/masters/medicine"
           element={
             <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
               <Lazy.PharmacyMedicineView />
