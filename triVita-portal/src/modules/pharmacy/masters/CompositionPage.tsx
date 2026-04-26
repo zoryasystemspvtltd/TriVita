@@ -5,6 +5,13 @@ import { MasterEntityShell } from '@/components/masters/MasterEntityShell';
 
 type Row = Record<string, unknown> & { id?: number };
 
+function compositionListSearch(row: Row, q: string): boolean {
+  const name = String(row.compositionName ?? '').toLowerCase();
+  const code = String(row.compositionCode ?? '').toLowerCase();
+  const notes = String(row.notes ?? '').toLowerCase();
+  return name.includes(q) || code.includes(q) || notes.includes(q);
+}
+
 const schema = Yup.object({
   compositionName: Yup.string().trim().required().max(200),
   compositionCode: Yup.string().trim().max(80).default(''),
@@ -66,6 +73,8 @@ export function CompositionPage() {
           <DetailKv label="Notes" value={String(r.notes ?? '')} />
         </Stack>
       )}
+      clientListSearch={compositionListSearch}
+      searchFieldLabel="Search (name / code / notes)"
     />
   );
 }

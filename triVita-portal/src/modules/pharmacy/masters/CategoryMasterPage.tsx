@@ -194,13 +194,12 @@ export function CategoryMasterPage() {
     if (!hasSearch) return [] as CategoryRow[];
     const base = searchSource.data ?? [];
     const q = searchTrim.toLowerCase();
-    const out = base.filter(
-      (item) =>
-        item.categoryName.toLowerCase().includes(q) || item.categoryCode.toLowerCase().includes(q)
-    );
-    // eslint-disable-next-line no-console -- temporary debug (Category Master search)
-    console.log('[CategoryMaster] filtered result count', out.length, { query: searchTrim });
-    return out;
+    return base.filter((item) => {
+      const name = item.categoryName.toLowerCase();
+      const code = item.categoryCode.toLowerCase();
+      const desc = (item.description ?? '').toLowerCase();
+      return name.includes(q) || code.includes(q) || desc.includes(q);
+    });
   }, [hasSearch, searchSource.data, searchTrim]);
 
   const tableRows = hasSearch ? filteredData : pagedRows;
@@ -286,7 +285,7 @@ export function CategoryMasterPage() {
           >
             <TextField
               size="small"
-              label="Search (name / code)"
+              label="Search (name / code / description)"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               sx={{ flex: 1, minWidth: 220, maxWidth: { sm: 480 } }}

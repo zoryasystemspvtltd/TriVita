@@ -84,23 +84,41 @@ export function ManufacturerMasterPage() {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [search, setSearch] = useState('');
-  const [searchApplied, setSearchApplied] = useState('');
   const [drawerId, setDrawerId] = useState<number | null>(null);
   const [modal, setModal] = useState<null | { mode: 'create' } | { mode: 'edit'; id: number }>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
-  useEffect(() => {
-    const t = window.setTimeout(() => setSearchApplied(search), 400);
-    return () => window.clearTimeout(t);
-  }, [search]);
+  const searchTrim = search.trim();
+  const hasSearch = searchTrim.length > 0;
 
   useEffect(() => {
     setPage(0);
-  }, [searchApplied]);
+  }, [searchTrim]);
 
   const list = useQuery({
-    queryKey: ['pharmacy', 'manufacturer-master', page, pageSize, searchApplied],
-    queryFn: () => getManufacturerPaged({ page: page + 1, pageSize, search: searchApplied || undefined }),
+    queryKey: ['pharmacy', 'manufacturer-master', 'paged', page, pageSize],
+    queryFn: () => getManufacturerPaged({ page: page + 1, pageSize }),
+    enabled: !hasSearch,
+  });
+
+  const searchSource = useQuery({
+    queryKey: ['pharmacy', 'manufacturer-master', 'search-source'],
+    queryFn: async () => {
+      const acc: ManufacturerRow[] = [];
+      const ps = 200;
+      let p = 1;
+      for (;;) {
+        const res = await getManufacturerPaged({ page: p, pageSize: ps });
+        if (!res.success || !res.data) break;
+        const { items, totalCount } = res.data;
+        for (const r of items) acc.push(toRow(r as Record<string, unknown>));
+        if (items.length === 0) break;
+        if (typeof totalCount === 'number' && acc.length >= totalCount) break;
+        p += 1;
+      }
+      return acc;
+    },
+    enabled: hasSearch,
   });
 
   const detail = useQuery({
@@ -123,11 +141,26 @@ export function ManufacturerMasterPage() {
     enabled: modal?.mode === 'edit',
   });
 
-  const rows = useMemo(() => {
+  const pagedRows = useMemo(() => {
     if (!list.data?.success || !list.data.data) return [] as ManufacturerRow[];
     return list.data.data.items.map((r) => toRow(r as Record<string, unknown>));
   }, [list.data]);
+
+  const filteredData = useMemo(() => {
+    if (!hasSearch) return [] as ManufacturerRow[];
+    const base = searchSource.data ?? [];
+    const q = searchTrim.toLowerCase();
+    return base.filter((item) => {
+      const name = item.manufacturerName.toLowerCase();
+      const code = (item.manufacturerCode ?? '').toLowerCase();
+      const country = (item.countryCode ?? '').toLowerCase();
+      return name.includes(q) || code.includes(q) || country.includes(q);
+    });
+  }, [hasSearch, searchSource.data, searchTrim]);
+
+  const tableRows = hasSearch ? filteredData : pagedRows;
   const total = list.data?.success && list.data.data ? list.data.data.totalCount : 0;
+  const listLoading = hasSearch ? searchSource.isLoading : list.isLoading;
 
   const {
     control,
@@ -206,7 +239,7 @@ export function ManufacturerMasterPage() {
           >
             <TextField
               size="small"
-              label="Search (name / code)"
+              label="Search (name / code / country)"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               sx={{ flex: 1, minWidth: 220, maxWidth: { sm: 480 } }}
@@ -219,6 +252,7 @@ export function ManufacturerMasterPage() {
           </Stack>
 
           <DataTable<ManufacturerRow>
+            key={hasSearch ? `mfr-search-${searchTrim}` : `mfr-paged-${page}-${pageSize}`}
             tableAriaLabel="Manufacturer master"
             columns={[
               {
@@ -289,16 +323,21 @@ export function ManufacturerMasterPage() {
                 },
               },
             ]}
-            rows={rows}
+            rows={tableRows}
             rowKey={(r) => r.id}
-            totalCount={total}
-            page={page}
-            pageSize={pageSize}
-            onPageChange={(p, ps) => {
-              setPage(p);
-              setPageSize(ps);
-            }}
-            loading={list.isLoading}
+            hidePagination={hasSearch}
+            {...(hasSearch
+              ? {}
+              : {
+                  totalCount: total,
+                  page,
+                  pageSize,
+                  onPageChange: (p: number, ps: number) => {
+                    setPage(p);
+                    setPageSize(ps);
+                  },
+                })}
+            loading={listLoading}
             emptyTitle="No manufacturers found"
             onRowClick={(row) => {
               if (Number.isFinite(row.id)) setDrawerId(row.id);

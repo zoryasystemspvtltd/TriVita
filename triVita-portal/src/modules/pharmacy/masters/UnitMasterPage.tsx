@@ -148,12 +148,13 @@ export function UnitMasterPage() {
     if (!hasSearch) return [] as UnitRow[];
     const base = searchSource.data ?? [];
     const q = searchTrim.toLowerCase();
-    return base.filter(
-      (item) =>
-        item.unitName.toLowerCase().includes(q) ||
-        item.unitCode.toLowerCase().includes(q) ||
-        item.unitSymbol.toLowerCase().includes(q)
-    );
+    return base.filter((item) => {
+      const name = item.unitName.toLowerCase();
+      const code = item.unitCode.toLowerCase();
+      const sym = item.unitSymbol.toLowerCase();
+      const desc = (item.description ?? '').toLowerCase();
+      return name.includes(q) || code.includes(q) || sym.includes(q) || desc.includes(q);
+    });
   }, [hasSearch, searchSource.data, searchTrim]);
 
   const tableRows = hasSearch ? filteredData : pagedRows;
@@ -237,7 +238,7 @@ export function UnitMasterPage() {
           >
             <TextField
               size="small"
-              label="Search (name / code / symbol)"
+              label="Search (name / code / symbol / description)"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               sx={{ flex: 1, minWidth: 220, maxWidth: { sm: 480 } }}

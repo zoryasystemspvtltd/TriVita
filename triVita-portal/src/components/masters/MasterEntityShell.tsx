@@ -81,6 +81,8 @@ export function MasterEntityShell<T extends Record<string, unknown> = Record<str
   getDrawerTitle,
   getDrawerSubtitle,
   beforeSave,
+  clientListSearch,
+  searchFieldLabel,
 }: {
   module: 'pharmacy' | 'lis' | 'lms' | 'hms';
   resourcePath: string;
@@ -96,6 +98,9 @@ export function MasterEntityShell<T extends Record<string, unknown> = Record<str
   getDrawerTitle: (row: T) => string;
   getDrawerSubtitle?: (row: T) => string | undefined;
   beforeSave?: (values: Record<string, string>, mode: 'create' | 'edit') => string | null;
+  /** Pharmacy-style masters: fetch all pages while searching, filter client-side (no API `search` param). */
+  clientListSearch?: (row: T, queryLower: string) => boolean;
+  searchFieldLabel?: string;
 }) {
   const client = getAxiosForModule(module);
   const basePath = `/api/v1/${resourcePath}`;
@@ -109,36 +114,82 @@ export function MasterEntityShell<T extends Record<string, unknown> = Record<str
   const [modal, setModal] = useState<ModalState>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
+  const useClientListSearch = clientListSearch != null;
+  const searchTrim = search.trim();
+  const hasSearch = useClientListSearch && searchTrim.length > 0;
+
   const rowToFormValuesRef = useRef(rowToFormValues);
   rowToFormValuesRef.current = rowToFormValues;
 
   useEffect(() => {
+    if (useClientListSearch) return;
     const t = window.setTimeout(() => setSearchApplied(search), 400);
     return () => window.clearTimeout(t);
-  }, [search]);
+  }, [search, useClientListSearch]);
 
   useEffect(() => {
+    if (useClientListSearch) return;
     setPage(0);
-  }, [searchApplied]);
+  }, [searchApplied, useClientListSearch]);
+
+  useEffect(() => {
+    if (!useClientListSearch) return;
+    setPage(0);
+  }, [searchTrim, useClientListSearch]);
 
   const listQuery = useQuery({
-    queryKey: ['master', module, resourcePath, page, pageSize, searchApplied],
+    queryKey: useClientListSearch
+      ? ['master', module, resourcePath, 'paged', page, pageSize]
+      : ['master', module, resourcePath, page, pageSize, searchApplied],
     queryFn: async () => {
       const params: PagedQueryParams = {
         page: page + 1,
         pageSize,
-        search: searchApplied.trim() || undefined,
+        ...(useClientListSearch ? {} : { search: searchApplied.trim() || undefined }),
       };
       const { data } = await client.get<BaseResponse<PagedResponse<T>>>(basePath, { params });
       return data;
     },
+    enabled: useClientListSearch ? !hasSearch : true,
   });
 
-  const rows = useMemo(
+  const searchSource = useQuery({
+    queryKey: ['master', module, resourcePath, 'search-source'],
+    queryFn: async () => {
+      const acc: T[] = [];
+      const ps = 200;
+      let p = 1;
+      for (;;) {
+        const { data } = await client.get<BaseResponse<PagedResponse<T>>>(basePath, {
+          params: { page: p, pageSize: ps },
+        });
+        if (!data.success || !data.data) break;
+        const { items, totalCount } = data.data;
+        for (const item of items) acc.push(item);
+        if (items.length === 0) break;
+        if (typeof totalCount === 'number' && acc.length >= totalCount) break;
+        p += 1;
+      }
+      return acc;
+    },
+    enabled: useClientListSearch && hasSearch,
+  });
+
+  const pagedRows = useMemo(
     () => (listQuery.data?.success && listQuery.data.data ? [...listQuery.data.data.items] : []) as T[],
     [listQuery.data]
   );
+
+  const filteredData = useMemo(() => {
+    if (!useClientListSearch || !hasSearch || !clientListSearch) return [] as T[];
+    const base = searchSource.data ?? [];
+    const q = searchTrim.toLowerCase();
+    return base.filter((item) => clientListSearch(item, q));
+  }, [useClientListSearch, hasSearch, clientListSearch, searchSource.data, searchTrim]);
+
+  const displayRows = useClientListSearch && hasSearch ? filteredData : pagedRows;
   const total = listQuery.data?.success && listQuery.data.data ? listQuery.data.data.totalCount : 0;
+  const listLoading = useClientListSearch && hasSearch ? searchSource.isLoading : listQuery.isLoading;
 
   const editId = modal?.mode === 'edit' ? modal.id : null;
 
@@ -158,9 +209,9 @@ export function MasterEntityShell<T extends Record<string, unknown> = Record<str
       reset(defaultCreateValues);
       return;
     }
-    const row = rows.find((r) => Number(r.id) === modal.id);
+    const row = displayRows.find((r) => Number(r.id) === modal.id);
     if (row) reset(rowToFormValuesRef.current(row));
-  }, [modal, rows, reset, defaultCreateValues]);
+  }, [modal, displayRows, reset, defaultCreateValues]);
 
   const invalidate = () => void qc.invalidateQueries({ queryKey: ['master', module, resourcePath] });
 
@@ -292,7 +343,7 @@ export function MasterEntityShell<T extends Record<string, unknown> = Record<str
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ sm: 'center' }} justifyContent="space-between" sx={{ mb: 0.5 }}>
         <TextField
           size="small"
-          label="Search (name / code)"
+          label={searchFieldLabel ?? 'Search (name / code)'}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           sx={{ flex: 1, minWidth: 220, maxWidth: { sm: 480 } }}
@@ -305,18 +356,30 @@ export function MasterEntityShell<T extends Record<string, unknown> = Record<str
       </Stack>
 
       <DataTable<T>
+        key={
+          useClientListSearch && hasSearch
+            ? `shell-search-${searchTrim}`
+            : useClientListSearch
+              ? `shell-paged-${page}-${pageSize}`
+              : `shell-${page}-${pageSize}-${searchApplied}`
+        }
         tableAriaLabel={title}
         columns={tableColumns}
-        rows={rows}
+        rows={displayRows}
         rowKey={(r) => String(r.id ?? '')}
-        totalCount={total}
-        page={page}
-        pageSize={pageSize}
-        onPageChange={(p, ps) => {
-          setPage(p);
-          setPageSize(ps);
-        }}
-        loading={listQuery.isLoading}
+        hidePagination={useClientListSearch && hasSearch}
+        {...(useClientListSearch && hasSearch
+          ? {}
+          : {
+              totalCount: total,
+              page,
+              pageSize,
+              onPageChange: (p: number, ps: number) => {
+                setPage(p);
+                setPageSize(ps);
+              },
+            })}
+        loading={listLoading}
         emptyTitle="No records"
         onRowClick={(row) => setDrawerRow(row)}
       />
