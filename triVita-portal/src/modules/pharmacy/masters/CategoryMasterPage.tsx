@@ -89,8 +89,12 @@ const schema = Yup.object({
 function toRow(raw: Record<string, unknown>): CategoryRow {
   return {
     id: Number(raw.id),
-    categoryCode: String(raw.categoryCode ?? ''),
-    categoryName: String(raw.categoryName ?? ''),
+    categoryCode: String(
+      raw.categoryCode ?? raw.CategoryCode ?? (raw as { code?: unknown }).code ?? ''
+    ),
+    categoryName: String(
+      raw.categoryName ?? raw.CategoryName ?? (raw as { name?: unknown }).name ?? ''
+    ),
     description: raw.description != null ? String(raw.description) : undefined,
     effectiveFrom: raw.effectiveFrom != null ? String(raw.effectiveFrom) : undefined,
     effectiveTo: raw.effectiveTo != null ? String(raw.effectiveTo) : undefined,
@@ -124,22 +128,16 @@ export function CategoryMasterPage() {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [search, setSearch] = useState('');
-  const [searchApplied, setSearchApplied] = useState('');
   const [drawerId, setDrawerId] = useState<number | null>(null);
   const [modal, setModal] = useState<null | { mode: 'create' } | { mode: 'edit'; id: number }>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
-  const searchQ = searchApplied.trim();
-  const hasSearch = searchQ.length > 0;
-
-  useEffect(() => {
-    const t = window.setTimeout(() => setSearchApplied(search), 400);
-    return () => window.clearTimeout(t);
-  }, [search]);
+  const searchTrim = search.trim();
+  const hasSearch = searchTrim.length > 0;
 
   useEffect(() => {
     setPage(0);
-  }, [searchApplied]);
+  }, [searchTrim]);
 
   const list = useQuery({
     queryKey: ['pharmacy', 'category-master', 'paged', page, pageSize],
@@ -147,8 +145,8 @@ export function CategoryMasterPage() {
     enabled: !hasSearch,
   });
 
-  const allForFilter = useQuery({
-    queryKey: ['pharmacy', 'category-master', 'all-for-search'],
+  const searchSource = useQuery({
+    queryKey: ['pharmacy', 'category-master', 'search-source'],
     queryFn: async () => {
       const acc: CategoryRow[] = [];
       const ps = 200;
@@ -158,7 +156,8 @@ export function CategoryMasterPage() {
         if (!res.success || !res.data) break;
         const { items, totalCount } = res.data;
         for (const r of items) acc.push(toRow(r as Record<string, unknown>));
-        if (acc.length >= totalCount || items.length === 0) break;
+        if (items.length === 0) break;
+        if (typeof totalCount === 'number' && acc.length >= totalCount) break;
         p += 1;
       }
       return acc;
@@ -186,26 +185,28 @@ export function CategoryMasterPage() {
     enabled: modal?.mode === 'edit',
   });
 
-  const rows = useMemo(() => {
-    if (hasSearch) {
-      const all = allForFilter.data;
-      if (!all) return [] as CategoryRow[];
-      const q = searchQ.toLowerCase();
-      return all.filter(
-        (r) =>
-          (r.categoryName && r.categoryName.toLowerCase().includes(q)) ||
-          (r.categoryCode && r.categoryCode.toLowerCase().includes(q))
-      );
-    }
+  const pagedRows = useMemo(() => {
     if (!list.data?.success || !list.data.data) return [] as CategoryRow[];
     return list.data.data.items.map((r) => toRow(r as Record<string, unknown>));
-  }, [hasSearch, allForFilter.data, searchQ, list.data]);
-  const total = hasSearch
-    ? undefined
-    : list.data?.success && list.data.data
-      ? list.data.data.totalCount
-      : 0;
-  const listLoading = hasSearch ? allForFilter.isLoading : list.isLoading;
+  }, [list.data]);
+
+  const filteredData = useMemo(() => {
+    if (!hasSearch) return [] as CategoryRow[];
+    const base = searchSource.data ?? [];
+    const q = searchTrim.toLowerCase();
+    const out = base.filter(
+      (item) =>
+        item.categoryName.toLowerCase().includes(q) || item.categoryCode.toLowerCase().includes(q)
+    );
+    // eslint-disable-next-line no-console -- temporary debug (Category Master search)
+    console.log('[CategoryMaster] filtered result count', out.length, { query: searchTrim });
+    return out;
+  }, [hasSearch, searchSource.data, searchTrim]);
+
+  const tableRows = hasSearch ? filteredData : pagedRows;
+  const total =
+    list.data?.success && list.data.data ? list.data.data.totalCount : 0;
+  const listLoading = hasSearch ? searchSource.isLoading : list.isLoading;
 
   const {
     control,
@@ -298,7 +299,7 @@ export function CategoryMasterPage() {
           </Stack>
 
           <DataTable<CategoryRow>
-            key={hasSearch ? 'category-search' : 'category-paged'}
+            key={hasSearch ? `cat-search-${searchTrim}` : `cat-paged-${page}-${pageSize}`}
             tableAriaLabel="Category master"
             columns={[
               {
@@ -386,12 +387,13 @@ export function CategoryMasterPage() {
                 },
               },
             ]}
-            rows={rows}
+            rows={tableRows}
             rowKey={(r) => r.id}
+            hidePagination={hasSearch}
             {...(hasSearch
               ? {}
               : {
-                  totalCount: total as number,
+                  totalCount: total,
                   page,
                   pageSize,
                   onPageChange: (p: number, ps: number) => {

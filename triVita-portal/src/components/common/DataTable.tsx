@@ -27,6 +27,8 @@ export interface DataTableProps<T> {
   tableAriaLabel?: string;
   /** When set, clicking a row (outside interactive cell content) invokes this handler. */
   onRowClick?: (row: T) => void;
+  /** When true, all rows render and the footer pager is hidden (e.g. client-only search results). */
+  hidePagination?: boolean;
 }
 
 function cellAlign<T>(c: Column<T>): 'right' | 'left' | 'center' {
@@ -52,6 +54,7 @@ export function DataTable<T extends object>({
   emptyTitle = 'No records',
   tableAriaLabel = 'Data table',
   onRowClick,
+  hidePagination = false,
 }: DataTableProps<T>) {
   const [localPage, setLocalPage] = useState(0);
   const [localSize, setLocalSize] = useState(controlledPageSize);
@@ -61,10 +64,10 @@ export function DataTable<T extends object>({
   const count = totalCount ?? rows.length;
 
   const slice = useMemo(() => {
-    if (serverMode) return rows;
+    if (serverMode || hidePagination) return rows;
     const start = page * pageSize;
     return rows.slice(start, start + pageSize);
-  }, [rows, page, pageSize, serverMode]);
+  }, [rows, page, pageSize, serverMode, hidePagination]);
 
   return (
     <Paper
@@ -172,28 +175,30 @@ export function DataTable<T extends object>({
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        component="div"
-        count={count}
-        page={page}
-        slotProps={{
-          select: { 'aria-label': 'Rows per page' } as object,
-        }}
-        onPageChange={(_, p) => {
-          if (serverMode) onPageChange?.(p, pageSize);
-          else setLocalPage(p);
-        }}
-        rowsPerPage={pageSize}
-        onRowsPerPageChange={(e) => {
-          const next = parseInt(e.target.value, 10);
-          if (serverMode) onPageChange?.(0, next);
-          else {
-            setLocalSize(next);
-            setLocalPage(0);
-          }
-        }}
-        rowsPerPageOptions={[10, 20, 50, 100]}
-      />
+      {hidePagination ? null : (
+        <TablePagination
+          component="div"
+          count={count}
+          page={page}
+          slotProps={{
+            select: { 'aria-label': 'Rows per page' } as object,
+          }}
+          onPageChange={(_, p) => {
+            if (serverMode) onPageChange?.(p, pageSize);
+            else setLocalPage(p);
+          }}
+          rowsPerPage={pageSize}
+          onRowsPerPageChange={(e) => {
+            const next = parseInt(e.target.value, 10);
+            if (serverMode) onPageChange?.(0, next);
+            else {
+              setLocalSize(next);
+              setLocalPage(0);
+            }
+          }}
+          rowsPerPageOptions={[10, 20, 50, 100]}
+        />
+      )}
     </Paper>
   );
 }
