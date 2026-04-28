@@ -26,6 +26,11 @@ public sealed class PhrSupplierService : IPhrSupplierService
     public const string SupplierDefinitionCode = "TRIVITA_PHARMACY_SUPPLIER";
     private const string DuplicateMessage = "Supplier already exists with same name or code.";
     private const string DuplicatePanMessage = "Supplier already exists with same PAN.";
+    private const string DuplicateMsmeMessage = "Supplier already exists with same MSME number.";
+    private const string DuplicateTanMessage = "Supplier already exists with same TAN.";
+    private const string DuplicateGstMessage = "Supplier already exists with same GST number.";
+    private const string DuplicateIecMessage = "Supplier already exists with same Export/Import Code.";
+    private const string DuplicateCinMessage = "Supplier already exists with same CIN.";
 
     private readonly IRepository<PhrReferenceDataValue> _values;
     private readonly IRepository<PhrReferenceDataDefinition> _definitions;
@@ -180,6 +185,24 @@ public sealed class PhrSupplierService : IPhrSupplierService
         return false;
     }
 
+    private async Task<bool> HasDuplicateTextFieldAsync(
+        long defId,
+        string key,
+        string value,
+        long? excludeId,
+        CancellationToken cancellationToken)
+    {
+        var all = await _values.ListAsync(v => v.ReferenceDataDefinitionId == defId && !v.IsDeleted, cancellationToken);
+        foreach (var v in all)
+        {
+            if (excludeId is long e && v.Id == e) continue;
+            var existing = ExtractValueFromText(v.ValueText, key);
+            if (existing != null && string.Equals(existing.Trim(), value, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+        return false;
+    }
+
     public async Task<BaseResponse<SupplierResponseDto>> GetByIdAsync(long id, CancellationToken cancellationToken = default)
     {
         var defId = await GetOrCreateDefinitionIdAsync(cancellationToken);
@@ -237,6 +260,16 @@ public sealed class PhrSupplierService : IPhrSupplierService
             return BaseResponse<SupplierResponseDto>.Fail(DuplicateMessage);
         if (await HasDuplicatePanAsync(defId, dto.Pan, null, cancellationToken))
             return BaseResponse<SupplierResponseDto>.Fail(DuplicatePanMessage);
+        if (dto.Msme != null && await HasDuplicateTextFieldAsync(defId, "MSME", dto.Msme, null, cancellationToken))
+            return BaseResponse<SupplierResponseDto>.Fail(DuplicateMsmeMessage);
+        if (dto.Tan != null && await HasDuplicateTextFieldAsync(defId, "TAN", dto.Tan, null, cancellationToken))
+            return BaseResponse<SupplierResponseDto>.Fail(DuplicateTanMessage);
+        if (dto.GstNo != null && await HasDuplicateTextFieldAsync(defId, "GST", dto.GstNo, null, cancellationToken))
+            return BaseResponse<SupplierResponseDto>.Fail(DuplicateGstMessage);
+        if (dto.ExportImportCode != null && await HasDuplicateTextFieldAsync(defId, "IEC", dto.ExportImportCode, null, cancellationToken))
+            return BaseResponse<SupplierResponseDto>.Fail(DuplicateIecMessage);
+        if (dto.Cin != null && await HasDuplicateTextFieldAsync(defId, "CIN", dto.Cin, null, cancellationToken))
+            return BaseResponse<SupplierResponseDto>.Fail(DuplicateCinMessage);
 
         var entity = new PhrReferenceDataValue
         {
@@ -285,6 +318,16 @@ public sealed class PhrSupplierService : IPhrSupplierService
             return BaseResponse<SupplierResponseDto>.Fail(DuplicateMessage);
         if (await HasDuplicatePanAsync(defId, dto.Pan, id, cancellationToken))
             return BaseResponse<SupplierResponseDto>.Fail(DuplicatePanMessage);
+        if (dto.Msme != null && await HasDuplicateTextFieldAsync(defId, "MSME", dto.Msme, id, cancellationToken))
+            return BaseResponse<SupplierResponseDto>.Fail(DuplicateMsmeMessage);
+        if (dto.Tan != null && await HasDuplicateTextFieldAsync(defId, "TAN", dto.Tan, id, cancellationToken))
+            return BaseResponse<SupplierResponseDto>.Fail(DuplicateTanMessage);
+        if (dto.GstNo != null && await HasDuplicateTextFieldAsync(defId, "GST", dto.GstNo, id, cancellationToken))
+            return BaseResponse<SupplierResponseDto>.Fail(DuplicateGstMessage);
+        if (dto.ExportImportCode != null && await HasDuplicateTextFieldAsync(defId, "IEC", dto.ExportImportCode, id, cancellationToken))
+            return BaseResponse<SupplierResponseDto>.Fail(DuplicateIecMessage);
+        if (dto.Cin != null && await HasDuplicateTextFieldAsync(defId, "CIN", dto.Cin, id, cancellationToken))
+            return BaseResponse<SupplierResponseDto>.Fail(DuplicateCinMessage);
 
         var cdto = new CreateSupplierDto
         {

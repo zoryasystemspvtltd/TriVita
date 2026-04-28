@@ -49,7 +49,15 @@ public sealed class SupplierController : ControllerBase
     {
         var res = await _service.CreateAsync(dto, ct);
         if (res.Success) return Ok(res);
-        if (res.Message is "Supplier already exists with same name or code." or "Supplier already exists with same PAN.") return Conflict(res);
+        if (res.Message is
+            "Supplier already exists with same name or code." or
+            "Supplier already exists with same PAN." or
+            "Supplier already exists with same MSME number." or
+            "Supplier already exists with same TAN." or
+            "Supplier already exists with same GST number." or
+            "Supplier already exists with same Export/Import Code." or
+            "Supplier already exists with same CIN.")
+            return Conflict(res);
         return BadRequest(res);
     }
 
@@ -58,7 +66,15 @@ public sealed class SupplierController : ControllerBase
     {
         var res = await _service.UpdateAsync(id, dto, ct);
         if (res.Success) return Ok(res);
-        if (res.Message is "Supplier already exists with same name or code." or "Supplier already exists with same PAN.") return Conflict(res);
+        if (res.Message is
+            "Supplier already exists with same name or code." or
+            "Supplier already exists with same PAN." or
+            "Supplier already exists with same MSME number." or
+            "Supplier already exists with same TAN." or
+            "Supplier already exists with same GST number." or
+            "Supplier already exists with same Export/Import Code." or
+            "Supplier already exists with same CIN.")
+            return Conflict(res);
         return BadRequest(res);
     }
 
