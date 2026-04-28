@@ -32,7 +32,7 @@ public static class DependencyInjection
         });
 
         services.AddDbContext<LmsDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("LmsDatabase")));
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 

@@ -74,10 +74,17 @@ internal static class SharedEnterpriseTestData
         return (ent.Id, comp.Id, bu.Id, fac.Id);
     }
 
-    public static SharedDbContext CreateInMemoryContext()
+    public static SharedDbContext CreateContext()
     {
+        var cs =
+            Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
+            ?? Environment.GetEnvironmentVariable("DefaultConnection");
+
+        if (string.IsNullOrWhiteSpace(cs) || !cs.Contains("Database=TriVita", StringComparison.OrdinalIgnoreCase))
+            throw new InvalidOperationException("ConnectionStrings__DefaultConnection must be set to TriVita database.");
+
         var options = new DbContextOptionsBuilder<SharedDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
+            .UseSqlServer(cs)
             .Options;
         return new SharedDbContext(options);
     }

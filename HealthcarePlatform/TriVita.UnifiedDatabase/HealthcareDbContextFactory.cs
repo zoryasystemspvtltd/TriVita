@@ -13,8 +13,11 @@ public sealed class HealthcareDbContextFactory : IDesignTimeDbContextFactory<Hea
 {
     public HealthcareDbContext CreateDbContext(string[] args)
     {
-        var cs = Environment.GetEnvironmentVariable("TRIVITA_UNIFIED_SQL")
-                 ?? "Server=.\\SQLEXPRESS;Database=TriVitaHealthcare;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true";
+        var cs = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
+                 ?? Environment.GetEnvironmentVariable("DefaultConnection");
+
+        if (string.IsNullOrWhiteSpace(cs) || !cs.Contains("Database=TriVita", StringComparison.OrdinalIgnoreCase))
+            throw new InvalidOperationException("ConnectionStrings__DefaultConnection must be set to TriVita database.");
 
         var useModuleSchemas = !string.Equals(
             Environment.GetEnvironmentVariable("TRIVITA_USE_MODULE_SCHEMAS"),

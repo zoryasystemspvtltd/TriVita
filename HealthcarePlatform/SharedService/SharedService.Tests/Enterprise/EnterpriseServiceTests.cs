@@ -16,7 +16,7 @@ public sealed class EnterpriseServiceTests
     [Fact]
     public async Task GetByIdAsync_Should_Return_Error_When_NotFound()
     {
-        await using var db = CreateContext();
+        await using var db = SharedEnterpriseTestData.CreateContext();
         var tenant = new Mock<ITenantContext>();
         tenant.SetupGet(t => t.TenantId).Returns(1L);
         tenant.SetupGet(t => t.UserId).Returns(1L);
@@ -32,7 +32,7 @@ public sealed class EnterpriseServiceTests
     [Fact]
     public async Task ListAsync_Should_Return_Empty_When_No_Enterprises()
     {
-        await using var db = CreateContext();
+        await using var db = SharedEnterpriseTestData.CreateContext();
         var tenant = new Mock<ITenantContext>();
         tenant.SetupGet(t => t.TenantId).Returns(1L);
         tenant.SetupGet(t => t.UserId).Returns(1L);
@@ -48,7 +48,7 @@ public sealed class EnterpriseServiceTests
     [Fact]
     public async Task CreateAsync_Should_Create_When_Valid()
     {
-        await using var db = CreateContext();
+        await using var db = SharedEnterpriseTestData.CreateContext();
         var tenant = new Mock<ITenantContext>();
         tenant.SetupGet(t => t.TenantId).Returns(1L);
         tenant.SetupGet(t => t.UserId).Returns(1L);
@@ -69,7 +69,7 @@ public sealed class EnterpriseServiceTests
     [Fact]
     public async Task GetHierarchyAsync_Should_Return_Tree_When_Enterprise_Exists()
     {
-        await using var db = CreateContext();
+        await using var db = SharedEnterpriseTestData.CreateContext();
         SeedHierarchy(db);
 
         var tenant = new Mock<ITenantContext>();
@@ -88,14 +88,6 @@ public sealed class EnterpriseServiceTests
         result.Data.Companies[0].BusinessUnits.Should().HaveCount(1);
         result.Data.Companies[0].BusinessUnits[0].Facilities.Should().HaveCount(1);
         result.Data.Companies[0].BusinessUnits[0].Facilities[0].Departments.Should().HaveCount(1);
-    }
-
-    private static SharedDbContext CreateContext()
-    {
-        var options = new DbContextOptionsBuilder<SharedDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
-            .Options;
-        return new SharedDbContext(options);
     }
 
     private static void SeedHierarchy(SharedDbContext db)

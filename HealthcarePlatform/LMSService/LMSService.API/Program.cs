@@ -10,11 +10,23 @@ using LMSService.Application;
 using LMSService.Application.DTOs;
 using LMSService.Infrastructure;
 using LMSService.Infrastructure.Persistence;
+using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var cs = builder.Configuration.GetConnectionString("DefaultConnection");
+if (!string.IsNullOrWhiteSpace(cs))
+{
+    var csb = new SqlConnectionStringBuilder(cs);
+    Console.WriteLine($"DB: Server={csb.DataSource}; Database={csb.InitialCatalog}");
+}
+else
+{
+    Console.WriteLine("DB: DefaultConnection is missing.");
+}
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

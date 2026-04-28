@@ -48,7 +48,7 @@ public static class DependencyInjection
         });
 
         services.AddDbContext<HmsDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("HmsDatabase")));
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IAppointmentRepository, AppointmentRepository>();
         services.AddScoped<IVisitRepository, VisitRepository>();

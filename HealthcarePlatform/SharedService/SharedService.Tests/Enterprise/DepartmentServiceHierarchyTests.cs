@@ -16,7 +16,7 @@ public sealed class DepartmentServiceHierarchyTests
     [Fact]
     public async Task UpdateAsync_WhenParentWouldCreateCycle_ReturnsFailure()
     {
-        await using var db = CreateInMemoryContext();
+        await using var db = SharedEnterpriseTestData.CreateContext();
         SeedMinimalHierarchy(db);
 
         var parent = db.Departments.Single(d => d.DepartmentCode == "P");
@@ -42,15 +42,6 @@ public sealed class DepartmentServiceHierarchyTests
 
         result.Success.Should().BeFalse();
         result.Message.Should().Contain("circular");
-    }
-
-    private static SharedDbContext CreateInMemoryContext()
-    {
-        var options = new DbContextOptionsBuilder<SharedDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
-            .Options;
-
-        return new SharedDbContext(options);
     }
 
     private static void SeedMinimalHierarchy(SharedDbContext db)

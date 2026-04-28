@@ -42,7 +42,7 @@ public static class DependencyInjection
         });
 
         services.AddDbContext<LisDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("LisDatabase")));
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 

@@ -27,7 +27,7 @@ public static class DependencyInjection
         services.Configure<CommunicationOptions>(configuration.GetSection(CommunicationOptions.SectionName));
 
         services.AddDbContext<CommunicationDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("CommunicationDatabase")));
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<INotificationRepository, NotificationRepository>();
         services.AddScoped<INotificationTemplateRepository, NotificationTemplateRepository>();

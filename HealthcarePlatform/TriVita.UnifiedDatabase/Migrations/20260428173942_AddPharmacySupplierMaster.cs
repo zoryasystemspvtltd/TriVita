@@ -11,69 +11,58 @@ namespace TriVita.UnifiedDatabase.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Supplier",
-                schema: "pharmacy",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SupplierCode = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
-                    SupplierName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
-                    Pan = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    Msme = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Tan = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    ExportImportCode = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    GstNo = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
-                    Cin = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    ContactPerson = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    TenantId = table.Column<long>(type: "bigint", nullable: false),
-                    FacilityId = table.Column<long>(type: "bigint", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<long>(type: "bigint", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedBy = table.Column<long>(type: "bigint", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Supplier", x => x.Id);
-                });
+            migrationBuilder.Sql(@"
+IF SCHEMA_ID(N'pharmacy') IS NULL
+    EXEC(N'CREATE SCHEMA [pharmacy]');
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Supplier_TenantId_Pan",
-                schema: "pharmacy",
-                table: "Supplier",
-                columns: new[] { "TenantId", "Pan" },
-                unique: true);
+IF OBJECT_ID(N'[pharmacy].[Supplier]', N'U') IS NULL
+BEGIN
+    CREATE TABLE [pharmacy].[Supplier] (
+        [Id] bigint NOT NULL IDENTITY,
+        [SupplierCode] nvarchar(80) NOT NULL,
+        [SupplierName] nvarchar(250) NOT NULL,
+        [Pan] nvarchar(10) NOT NULL,
+        [Msme] nvarchar(50) NULL,
+        [Tan] nvarchar(20) NULL,
+        [ExportImportCode] nvarchar(30) NULL,
+        [GstNo] nvarchar(15) NULL,
+        [Cin] nvarchar(30) NULL,
+        [ContactPerson] nvarchar(120) NULL,
+        [Phone] nvarchar(40) NULL,
+        [Email] nvarchar(120) NULL,
+        [Address] nvarchar(300) NULL,
+        [Description] nvarchar(500) NULL,
+        [TenantId] bigint NOT NULL,
+        [FacilityId] bigint NULL,
+        [IsActive] bit NOT NULL,
+        [IsDeleted] bit NOT NULL,
+        [CreatedOn] datetime2 NOT NULL,
+        [CreatedBy] bigint NOT NULL,
+        [ModifiedOn] datetime2 NOT NULL,
+        [ModifiedBy] bigint NOT NULL,
+        [RowVersion] rowversion NOT NULL,
+        CONSTRAINT [PK_Supplier] PRIMARY KEY ([Id])
+    );
+END
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Supplier_TenantId_SupplierCode",
-                schema: "pharmacy",
-                table: "Supplier",
-                columns: new[] { "TenantId", "SupplierCode" },
-                unique: true);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_Supplier_TenantId_Pan' AND object_id = OBJECT_ID(N'[pharmacy].[Supplier]'))
+    CREATE UNIQUE INDEX [IX_Supplier_TenantId_Pan] ON [pharmacy].[Supplier] ([TenantId], [Pan]);
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Supplier_TenantId_SupplierName",
-                schema: "pharmacy",
-                table: "Supplier",
-                columns: new[] { "TenantId", "SupplierName" },
-                unique: true);
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_Supplier_TenantId_SupplierCode' AND object_id = OBJECT_ID(N'[pharmacy].[Supplier]'))
+    CREATE UNIQUE INDEX [IX_Supplier_TenantId_SupplierCode] ON [pharmacy].[Supplier] ([TenantId], [SupplierCode]);
+
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_Supplier_TenantId_SupplierName' AND object_id = OBJECT_ID(N'[pharmacy].[Supplier]'))
+    CREATE UNIQUE INDEX [IX_Supplier_TenantId_SupplierName] ON [pharmacy].[Supplier] ([TenantId], [SupplierName]);
+");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Supplier",
-                schema: "pharmacy");
+            migrationBuilder.Sql(@"
+IF OBJECT_ID(N'[pharmacy].[Supplier]', N'U') IS NOT NULL
+    DROP TABLE [pharmacy].[Supplier];
+");
         }
     }
 }

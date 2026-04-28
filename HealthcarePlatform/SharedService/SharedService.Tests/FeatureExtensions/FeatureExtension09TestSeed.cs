@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SharedService.Domain.Enterprise;
 using SharedService.Infrastructure.Persistence;
+using SharedService.Tests.Enterprise;
 
 namespace SharedService.Tests.FeatureExtensions;
 
@@ -76,9 +77,6 @@ internal static class FeatureExtension09TestSeed
 
     public static SharedDbContext CreateInMemoryContext()
     {
-        var options = new DbContextOptionsBuilder<SharedDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
-            .Options;
-        return new SharedDbContext(options);
+        return SharedEnterpriseTestData.CreateContext();
     }
 }

@@ -32,7 +32,7 @@ public static class DependencyInjection
         });
 
         services.AddDbContext<PharmacyDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("PharmacyDatabase")));
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 

@@ -17,7 +17,7 @@ public sealed class EnterpriseB2BContractServiceTests
     [Fact]
     public async Task ListByEnterpriseAsync_Should_Fail_When_Enterprise_Missing()
     {
-        await using var db = CreateContext();
+        await using var db = SharedEnterpriseTestData.CreateContext();
         var tenant = MockTenant(1, 1);
         var sut = CreateSut(db, tenant.Object);
 
@@ -29,7 +29,7 @@ public sealed class EnterpriseB2BContractServiceTests
     [Fact]
     public async Task ListByEnterpriseAsync_Should_Return_Empty_When_None()
     {
-        await using var db = CreateContext();
+        await using var db = SharedEnterpriseTestData.CreateContext();
         var entId = await SeedEnterprise(db, 1);
         var tenant = MockTenant(1, 1);
         var sut = CreateSut(db, tenant.Object);
@@ -43,7 +43,7 @@ public sealed class EnterpriseB2BContractServiceTests
     [Fact]
     public async Task CreateAsync_Should_Create_When_Valid()
     {
-        await using var db = CreateContext();
+        await using var db = SharedEnterpriseTestData.CreateContext();
         var entId = await SeedEnterprise(db, 1);
         var tenant = MockTenant(1, 1);
         var sut = CreateSut(db, tenant.Object);
@@ -64,7 +64,7 @@ public sealed class EnterpriseB2BContractServiceTests
     [Fact]
     public async Task CreateAsync_Should_Fail_On_Duplicate_Code()
     {
-        await using var db = CreateContext();
+        await using var db = SharedEnterpriseTestData.CreateContext();
         var entId = await SeedEnterprise(db, 1);
         var tenant = MockTenant(1, 1);
         var sut = CreateSut(db, tenant.Object);
@@ -91,7 +91,7 @@ public sealed class EnterpriseB2BContractServiceTests
     [Fact]
     public async Task UpdateAsync_Should_Update_When_Found()
     {
-        await using var db = CreateContext();
+        await using var db = SharedEnterpriseTestData.CreateContext();
         var entId = await SeedEnterprise(db, 1);
         var tenant = MockTenant(1, 1);
         var sut = CreateSut(db, tenant.Object);
@@ -119,7 +119,7 @@ public sealed class EnterpriseB2BContractServiceTests
     [Fact]
     public async Task DeleteAsync_Should_SoftDelete()
     {
-        await using var db = CreateContext();
+        await using var db = SharedEnterpriseTestData.CreateContext();
         var entId = await SeedEnterprise(db, 1);
         var tenant = MockTenant(1, 1);
         var sut = CreateSut(db, tenant.Object);
@@ -142,7 +142,7 @@ public sealed class EnterpriseB2BContractServiceTests
     [Fact]
     public async Task CreateAsync_Should_Fail_Validation_When_EffectiveRange_Invalid()
     {
-        await using var db = CreateContext();
+        await using var db = SharedEnterpriseTestData.CreateContext();
         var entId = await SeedEnterprise(db, 1);
         var tenant = MockTenant(1, 1);
         var sut = CreateSut(db, tenant.Object);
@@ -196,11 +196,4 @@ public sealed class EnterpriseB2BContractServiceTests
         return ent.Id;
     }
 
-    private static SharedDbContext CreateContext()
-    {
-        var options = new DbContextOptionsBuilder<SharedDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
-            .Options;
-        return new SharedDbContext(options);
-    }
 }

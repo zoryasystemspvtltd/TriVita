@@ -20,7 +20,7 @@ public static class DependencyInjection
         services.AddSingleton<IEventPublisher, NoOpEventPublisher>();
 
         services.AddDbContext<SharedDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("SharedDatabase")));
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IEnterpriseService, EnterpriseService>();
         services.AddScoped<ICompanyService, CompanyService>();
