@@ -300,6 +300,14 @@ export function AppRoutes() {
           }
         />
         <Route
+          path="pharmacy/masters/supplier"
+          element={
+            <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
+              <Lazy.PharmacyMasterSupplierView />
+            </RequirePermission>
+          }
+        />
+        <Route
           path="pharmacy/masters/medicine-batches"
           element={
             <RequirePermission permission={TriVitaPermissions.PharmacyApi}>

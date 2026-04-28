@@ -224,6 +224,14 @@ export async function getMedicineBatchPaged(params: PagedQueryParams) {
   return data;
 }
 
+export async function getSupplierPaged(params: PagedQueryParams) {
+  const { data } = await pharmacyClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/supplier',
+    { params }
+  );
+  return data;
+}
+
 export async function getGoodsReceiptPaged(params: PagedQueryParams) {
   const { data } = await pharmacyClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
     '/api/v1/goods-receipt',

@@ -158,6 +158,7 @@ public sealed partial class HealthcareDbContext
     public DbSet<PhrPurchaseOrderItem> PhrPurchaseOrderItems => Set<PhrPurchaseOrderItem>();
     public DbSet<PhrGoodsReceipt> PhrGoodsReceipts => Set<PhrGoodsReceipt>();
     public DbSet<PhrGoodsReceiptItem> PhrGoodsReceiptItems => Set<PhrGoodsReceiptItem>();
+    public DbSet<PhrSupplier> PhrSuppliers => Set<PhrSupplier>();
     public DbSet<PhrPharmacySale> PhrPharmacySales => Set<PhrPharmacySale>();
     public DbSet<PhrPharmacySalesItem> PhrPharmacySalesItems => Set<PhrPharmacySalesItem>();
     public DbSet<PhrPrescriptionMapping> PhrPrescriptionMappings => Set<PhrPrescriptionMapping>();

@@ -114,5 +114,5 @@ public sealed partial class HealthcareDbContext : DbContext
             or SecDataChangeAuditLog or LmsB2BPartner or LmsReferralDoctorProfile
             or LmsEquipmentType or LmsCatalogParameter
             or PhrMedicineCategory or PhrManufacturer or PhrComposition or PhrMedicine or PhrMedicineComposition
-            or PhrMedicineBatch;
+            or PhrMedicineBatch or PhrSupplier;
 }

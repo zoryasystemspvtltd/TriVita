@@ -28,6 +28,13 @@ type BaseField = {
   showOn?: MasterFieldShowOn;
 };
 
+export type MasterSectionField = {
+  kind: 'section';
+  name: string;
+  label: string;
+  showOn?: MasterFieldShowOn;
+};
+
 export type MasterTextField = BaseField & { kind: 'text'; readOnlyOnEdit?: boolean };
 export type MasterTextAreaField = BaseField & { kind: 'textarea'; minRows?: number };
 export type MasterNumberField = BaseField & { kind: 'number'; integer?: boolean };
@@ -45,6 +52,7 @@ export type MasterLookupField = BaseField & {
 };
 
 export type MasterField =
+  | MasterSectionField
   | MasterTextField
   | MasterTextAreaField
   | MasterNumberField
@@ -409,6 +417,16 @@ export function MasterEntityShell<T extends Record<string, unknown> = Record<str
         <Box component="form" id={formId} onSubmit={handleSubmit(onSave)} noValidate>
           <FormGroup>
             {activeFields.map((f) => {
+              if (f.kind === 'section') {
+                return (
+                  <Grid key={f.name} item xs={12}>
+                    <Typography variant="subtitle2" sx={{ mt: 1 }}>
+                      {f.label}
+                    </Typography>
+                  </Grid>
+                );
+              }
+
               const md = f.gridCols ?? 6;
               return (
                 <Grid key={f.name} item xs={12} md={md}>

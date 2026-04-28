@@ -35,6 +35,7 @@ import {
   deletePurchaseOrder,
   deletePurchaseOrderItem,
   getMedicinePaged,
+  getSupplierPaged,
   getPurchaseOrderById,
   getPurchaseOrderItemsPaged,
   getPurchaseOrdersPaged,
@@ -47,7 +48,7 @@ type Row = Record<string, unknown> & { id?: number };
 
 type HeaderForm = {
   purchaseOrderNo: string;
-  supplierName: string;
+  supplierId: string;
   orderDate: string;
   expectedOn: string;
   statusReferenceValueId: string;
@@ -56,7 +57,7 @@ type HeaderForm = {
 
 const headerSchema = Yup.object({
   purchaseOrderNo: Yup.string().trim().required().max(80),
-  supplierName: Yup.string().trim().required().max(200),
+  supplierId: Yup.string().trim().required().matches(/^\d+$/, 'Select a supplier'),
   orderDate: Yup.string().required(),
   expectedOn: Yup.string().default(''),
   statusReferenceValueId: Yup.string().trim().required().matches(/^\d+$/),
@@ -159,7 +160,7 @@ export function PharmacyPurchaseOrderWorkspace() {
     resolver: yupResolver(headerSchema) as Resolver<HeaderForm>,
     defaultValues: {
       purchaseOrderNo: '',
-      supplierName: '',
+      supplierId: '',
       orderDate: new Date().toISOString().slice(0, 10),
       expectedOn: '',
       statusReferenceValueId: '',
@@ -172,7 +173,7 @@ export function PharmacyPurchaseOrderWorkspace() {
     if (modal.mode === 'create') {
       reset({
         purchaseOrderNo: '',
-        supplierName: '',
+        supplierId: '',
         orderDate: new Date().toISOString().slice(0, 10),
         expectedOn: '',
         statusReferenceValueId: statusOpts.data?.[0]?.value ?? '',
@@ -185,7 +186,7 @@ export function PharmacyPurchaseOrderWorkspace() {
       const r = d.data as Row;
       reset({
         purchaseOrderNo: pickStr(r, 'purchaseOrderNo', 'PurchaseOrderNo'),
-        supplierName: pickStr(r, 'supplierName', 'SupplierName'),
+        supplierId: '',
         orderDate: pickStr(r, 'orderDate', 'OrderDate').slice(0, 10),
         expectedOn: r.expectedOn != null ? String(r.expectedOn).slice(0, 10) : '',
         statusReferenceValueId: String(r.statusReferenceValueId ?? ''),
@@ -193,6 +194,32 @@ export function PharmacyPurchaseOrderWorkspace() {
       });
     }
   }, [modal, editSeed.data, reset, statusOpts.data]);
+
+  const supplierOptions = useQuery({
+    queryKey: ['pharmacy', 'supplier', 'opts'],
+    queryFn: async () => {
+      const acc: { value: string; label: string; name: string }[] = [];
+      const ps = 200;
+      let p = 1;
+      for (;;) {
+        const res = await getSupplierPaged({ page: p, pageSize: ps });
+        if (!res.success || !res.data) break;
+        const { items, totalCount } = res.data;
+        for (const s of items as Row[]) {
+          const id = Number(s.id);
+          if (!Number.isFinite(id)) continue;
+          const name = pickStr(s, 'supplierName', 'SupplierName');
+          const code = pickStr(s, 'supplierCode', 'SupplierCode');
+          acc.push({ value: String(id), label: code ? `${name} (${code})` : name, name });
+        }
+        if ((items as Row[]).length === 0) break;
+        if (typeof totalCount === 'number' && acc.length >= totalCount) break;
+        p += 1;
+      }
+      return acc;
+    },
+    staleTime: 120_000,
+  });
 
   useEffect(() => {
     if (linePoId == null || !itemsForLines.data?.success || !itemsForLines.data.data) {
@@ -215,9 +242,10 @@ export function PharmacyPurchaseOrderWorkspace() {
 
   const saveHeader = useMutation({
     mutationFn: async (args: { v: HeaderForm; editId?: number }) => {
+      const sup = supplierOptions.data?.find((o) => o.value === args.v.supplierId) ?? null;
       const body = {
         purchaseOrderNo: args.v.purchaseOrderNo.trim(),
-        supplierName: args.v.supplierName.trim(),
+        supplierName: (sup?.name ?? '').trim(),
         orderDate: new Date(args.v.orderDate).toISOString(),
         expectedOn: args.v.expectedOn.trim() ? new Date(args.v.expectedOn).toISOString() : undefined,
         statusReferenceValueId: Number(args.v.statusReferenceValueId),
@@ -574,12 +602,16 @@ export function PharmacyPurchaseOrderWorkspace() {
               />
             </Grid>
             <Grid item xs={12} md={6}>
-              <Controller
-                name="supplierName"
-                control={control}
-                render={({ field }) => (
-                  <TriVitaTextField {...field} label="Supplier name" required error={Boolean(errors.supplierName)} helperText={errors.supplierName?.message} />
-                )}
+              <LookupSelect<Record<string, string>>
+                name="supplierId"
+                control={control as never}
+                label="Supplier"
+                required
+                editId={null}
+                queryKey={['pharmacy', 'supplier', 'lookup']}
+                loadOptions={async () =>
+                  (supplierOptions.data ?? []).map((o) => ({ value: o.value, label: o.label }))
+                }
               />
             </Grid>
             <Grid item xs={12} md={6}>

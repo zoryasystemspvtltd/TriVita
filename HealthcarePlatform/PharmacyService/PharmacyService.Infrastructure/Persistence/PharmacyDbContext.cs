@@ -39,6 +39,7 @@ public sealed class PharmacyDbContext : DbContext
     public DbSet<PhrStockTransfer> PhrStockTransfers => Set<PhrStockTransfer>();
     public DbSet<PhrStockTransferItem> PhrStockTransferItems => Set<PhrStockTransferItem>();
     public DbSet<PhrExpiryTracking> PhrExpiryTrackings => Set<PhrExpiryTracking>();
+    public DbSet<PhrSupplier> PhrSuppliers => Set<PhrSupplier>();
 
     public DbSet<PhrInventoryLocation> PhrInventoryLocations => Set<PhrInventoryLocation>();
     public DbSet<PhrSalesReturn> PhrSalesReturns => Set<PhrSalesReturn>();
@@ -94,5 +95,5 @@ public sealed class PharmacyDbContext : DbContext
 
     private static bool IsTenantCatalogOptionalFacility(BaseEntity entity) =>
         entity is PhrMedicineCategory or PhrManufacturer or PhrComposition or PhrMedicine or PhrMedicineComposition
-            or PhrMedicineBatch or PhrUnit or PhrReferenceDataDefinition or PhrReferenceDataValue;
+            or PhrMedicineBatch or PhrUnit or PhrReferenceDataDefinition or PhrReferenceDataValue or PhrSupplier;
 }
