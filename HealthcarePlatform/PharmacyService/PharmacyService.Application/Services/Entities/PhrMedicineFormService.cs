@@ -112,9 +112,9 @@ public sealed class PhrMedicineFormService : IPhrMedicineFormService
         {
             if (excludeId is long e && v.Id == e) continue;
             if (string.Equals(v.ValueCode.Trim(), code, StringComparison.OrdinalIgnoreCase))
-                return "A form with this code already exists.";
+                return "Form already exists with same name or code.";
             if (string.Equals(v.ValueName.Trim(), name, StringComparison.OrdinalIgnoreCase))
-                return "A form with this name already exists.";
+                return "Form already exists with same name or code.";
         }
         return null;
     }

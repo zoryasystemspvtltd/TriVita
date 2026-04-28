@@ -201,7 +201,7 @@ export function PharmacyBatchesDesk() {
 
   return (
     <Stack spacing={2}>
-      <PageHeader title="Medicine batches" subtitle="Lot, expiry, and pricing for formulary stock." />
+      <PageHeader title="Medicine Batches" subtitle="Lot, expiry, and pricing for formulary stock." />
 
       <FormSection title="Search">
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ sm: 'center' }} justifyContent="space-between">
@@ -216,7 +216,7 @@ export function PharmacyBatchesDesk() {
 
       <FormSection title="Batch register">
         <DataTable<Row>
-          tableAriaLabel="Medicine batches"
+          tableAriaLabel="Medicine Batches"
           columns={[
             {
               id: 'medicine',

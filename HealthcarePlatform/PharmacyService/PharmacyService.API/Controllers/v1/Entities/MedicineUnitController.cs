@@ -47,11 +47,21 @@ public sealed class MedicineUnitController : ControllerBase
 
     [HttpPost]
     public async Task<ActionResult<BaseResponse<UnitResponseDto>>> Create([FromBody] CreateUnitDto dto, CancellationToken ct)
-        => Ok(await _service.CreateAsync(dto, ct));
+    {
+        var res = await _service.CreateAsync(dto, ct);
+        if (res.Success) return Ok(res);
+        if (res.Message == "Unit already exists with same name/code/symbol.") return Conflict(res);
+        return BadRequest(res);
+    }
 
     [HttpPut("{id:long}")]
     public async Task<ActionResult<BaseResponse<UnitResponseDto>>> Update(long id, [FromBody] UpdateUnitDto dto, CancellationToken ct)
-        => Ok(await _service.UpdateAsync(id, dto, ct));
+    {
+        var res = await _service.UpdateAsync(id, dto, ct);
+        if (res.Success) return Ok(res);
+        if (res.Message == "Unit already exists with same name/code/symbol.") return Conflict(res);
+        return BadRequest(res);
+    }
 
     [HttpDelete("{id:long}")]
     public async Task<ActionResult<BaseResponse<object?>>> Delete(long id, CancellationToken ct)

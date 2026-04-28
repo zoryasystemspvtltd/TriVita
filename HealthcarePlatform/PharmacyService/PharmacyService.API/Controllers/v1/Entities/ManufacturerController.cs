@@ -43,11 +43,21 @@ public sealed class ManufacturerController : ControllerBase
 
     [HttpPost]
     public async Task<ActionResult<BaseResponse<ManufacturerResponseDto>>> Create([FromBody] CreateManufacturerDto dto, CancellationToken ct)
-        => Ok(await _service.CreateAsync(dto, ct));
+    {
+        var res = await _service.CreateAsync(dto, ct);
+        if (res.Success) return Ok(res);
+        if (res.Message is "Manufacturer name already exists." or "Manufacturer code already exists.") return Conflict(res);
+        return BadRequest(res);
+    }
 
     [HttpPut("{id:long}")]
     public async Task<ActionResult<BaseResponse<ManufacturerResponseDto>>> Update(long id, [FromBody] UpdateManufacturerDto dto, CancellationToken ct)
-        => Ok(await _service.UpdateAsync(id, dto, ct));
+    {
+        var res = await _service.UpdateAsync(id, dto, ct);
+        if (res.Success) return Ok(res);
+        if (res.Message is "Manufacturer name already exists." or "Manufacturer code already exists.") return Conflict(res);
+        return BadRequest(res);
+    }
 
     [HttpDelete("{id:long}")]
     public async Task<ActionResult<BaseResponse<object?>>> Delete(long id, CancellationToken ct)

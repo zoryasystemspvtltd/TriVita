@@ -1,3 +1,4 @@
+using System.Linq;
 using AutoMapper;
 using FluentValidation;
 using Healthcare.Common.Pagination;
@@ -21,6 +22,8 @@ public interface IPhrCompositionService
 
 public sealed class PhrCompositionService : PhrCrudServiceBase<PhrComposition, CreateCompositionDto, UpdateCompositionDto, CompositionResponseDto, PhrCompositionService>, IPhrCompositionService
 {
+    private const string DuplicateMessage = "Composition already exists with same name, strength, and unit.";
+
     public PhrCompositionService(
         IRepository<PhrComposition> repository,
         IMapper mapper,
@@ -35,4 +38,54 @@ public sealed class PhrCompositionService : PhrCrudServiceBase<PhrComposition, C
 
     public Task<BaseResponse<PagedResponse<CompositionResponseDto>>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default)
         => GetPagedCoreAsync(query, null, cancellationToken);
+
+    public override async Task<BaseResponse<CompositionResponseDto>> CreateAsync(
+        CreateCompositionDto dto,
+        CancellationToken cancellationToken = default)
+    {
+        dto.CompositionName = dto.CompositionName?.Trim();
+        dto.CompositionCode = dto.CompositionCode?.Trim();
+
+        var name = (dto.CompositionName ?? string.Empty).Trim();
+        var code = dto.CompositionCode?.Trim();
+
+        var dups = await Repository.ListAsync(
+            e =>
+                e.TenantId == Tenant.TenantId &&
+                !e.IsDeleted &&
+                (e.CompositionName.ToLower() == name.ToLower() ||
+                 (code != null && e.CompositionCode != null && e.CompositionCode.ToLower() == code.ToLower())),
+            cancellationToken);
+
+        if (dups.Count > 0)
+            return BaseResponse<CompositionResponseDto>.Fail(DuplicateMessage);
+
+        return await base.CreateAsync(dto, cancellationToken);
+    }
+
+    public override async Task<BaseResponse<CompositionResponseDto>> UpdateAsync(
+        long id,
+        UpdateCompositionDto dto,
+        CancellationToken cancellationToken = default)
+    {
+        dto.CompositionName = dto.CompositionName?.Trim();
+        dto.CompositionCode = dto.CompositionCode?.Trim();
+
+        var name = (dto.CompositionName ?? string.Empty).Trim();
+        var code = dto.CompositionCode?.Trim();
+
+        var dups = await Repository.ListAsync(
+            e =>
+                e.TenantId == Tenant.TenantId &&
+                !e.IsDeleted &&
+                e.Id != id &&
+                (e.CompositionName.ToLower() == name.ToLower() ||
+                 (code != null && e.CompositionCode != null && e.CompositionCode.ToLower() == code.ToLower())),
+            cancellationToken);
+
+        if (dups.Count > 0)
+            return BaseResponse<CompositionResponseDto>.Fail(DuplicateMessage);
+
+        return await base.UpdateAsync(id, dto, cancellationToken);
+    }
 }

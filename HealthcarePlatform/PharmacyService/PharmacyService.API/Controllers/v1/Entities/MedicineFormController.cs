@@ -46,11 +46,21 @@ public sealed class MedicineFormController : ControllerBase
 
     [HttpPost]
     public async Task<ActionResult<BaseResponse<MedicineFormResponseDto>>> Create([FromBody] CreateMedicineFormDto dto, CancellationToken ct)
-        => Ok(await _service.CreateAsync(dto, ct));
+    {
+        var res = await _service.CreateAsync(dto, ct);
+        if (res.Success) return Ok(res);
+        if (res.Message == "Form already exists with same name or code.") return Conflict(res);
+        return BadRequest(res);
+    }
 
     [HttpPut("{id:long}")]
     public async Task<ActionResult<BaseResponse<MedicineFormResponseDto>>> Update(long id, [FromBody] UpdateMedicineFormDto dto, CancellationToken ct)
-        => Ok(await _service.UpdateAsync(id, dto, ct));
+    {
+        var res = await _service.UpdateAsync(id, dto, ct);
+        if (res.Success) return Ok(res);
+        if (res.Message == "Form already exists with same name or code.") return Conflict(res);
+        return BadRequest(res);
+    }
 
     [HttpDelete("{id:long}")]
     public async Task<ActionResult<BaseResponse<object?>>> Delete(long id, CancellationToken ct)

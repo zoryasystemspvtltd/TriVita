@@ -21,6 +21,8 @@ public interface IPhrMedicineBatchService
 
 public sealed class PhrMedicineBatchService : PhrCrudServiceBase<PhrMedicineBatch, CreateMedicineBatchDto, UpdateMedicineBatchDto, MedicineBatchResponseDto, PhrMedicineBatchService>, IPhrMedicineBatchService
 {
+    private const string DuplicateBatchMessage = "Batch number already exists for the selected medicine.";
+
     public PhrMedicineBatchService(
         IRepository<PhrMedicineBatch> repository,
         IMapper mapper,
@@ -35,4 +37,60 @@ public sealed class PhrMedicineBatchService : PhrCrudServiceBase<PhrMedicineBatc
 
     public Task<BaseResponse<PagedResponse<MedicineBatchResponseDto>>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default)
         => GetPagedCoreAsync(query, null, cancellationToken);
+
+    public override async Task<BaseResponse<MedicineBatchResponseDto>> CreateAsync(
+        CreateMedicineBatchDto dto,
+        CancellationToken cancellationToken = default)
+    {
+        dto.BatchNo = dto.BatchNo?.Trim();
+
+        var exists = await Repository.ListAsync(
+            e =>
+                e.TenantId == Tenant.TenantId &&
+                !e.IsDeleted &&
+                e.MedicineId == dto.MedicineId &&
+                e.BatchNo == dto.BatchNo,
+            cancellationToken);
+
+        if (exists.Count > 0)
+            return BaseResponse<MedicineBatchResponseDto>.Fail(DuplicateBatchMessage);
+
+        try
+        {
+            return await base.CreateAsync(dto, cancellationToken);
+        }
+        catch
+        {
+            return BaseResponse<MedicineBatchResponseDto>.Fail(DuplicateBatchMessage);
+        }
+    }
+
+    public override async Task<BaseResponse<MedicineBatchResponseDto>> UpdateAsync(
+        long id,
+        UpdateMedicineBatchDto dto,
+        CancellationToken cancellationToken = default)
+    {
+        dto.BatchNo = dto.BatchNo?.Trim();
+
+        var exists = await Repository.ListAsync(
+            e =>
+                e.TenantId == Tenant.TenantId &&
+                !e.IsDeleted &&
+                e.Id != id &&
+                e.MedicineId == dto.MedicineId &&
+                e.BatchNo == dto.BatchNo,
+            cancellationToken);
+
+        if (exists.Count > 0)
+            return BaseResponse<MedicineBatchResponseDto>.Fail(DuplicateBatchMessage);
+
+        try
+        {
+            return await base.UpdateAsync(id, dto, cancellationToken);
+        }
+        catch
+        {
+            return BaseResponse<MedicineBatchResponseDto>.Fail(DuplicateBatchMessage);
+        }
+    }
 }

@@ -1,3 +1,4 @@
+using System.Linq;
 using AutoMapper;
 using FluentValidation;
 using Healthcare.Common.Pagination;
@@ -21,6 +22,9 @@ public interface IPhrMedicineService
 
 public sealed class PhrMedicineService : PhrCrudServiceBase<PhrMedicine, CreateMedicineDto, UpdateMedicineDto, MedicineResponseDto, PhrMedicineService>, IPhrMedicineService
 {
+    private const string DuplicateNameMessage = "Medicine already exists with same name or code.";
+    private const string DuplicateCodeMessage = "Medicine already exists with same name or code.";
+
     public PhrMedicineService(
         IRepository<PhrMedicine> repository,
         IMapper mapper,
@@ -35,4 +39,52 @@ public sealed class PhrMedicineService : PhrCrudServiceBase<PhrMedicine, CreateM
 
     public Task<BaseResponse<PagedResponse<MedicineResponseDto>>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default)
         => GetPagedCoreAsync(query, null, cancellationToken);
+
+    public override async Task<BaseResponse<MedicineResponseDto>> CreateAsync(
+        CreateMedicineDto dto,
+        CancellationToken cancellationToken = default)
+    {
+        dto.MedicineName = dto.MedicineName?.Trim();
+        dto.MedicineCode = dto.MedicineCode?.Trim();
+
+        var name = (dto.MedicineName ?? string.Empty).Trim();
+        var code = (dto.MedicineCode ?? string.Empty).Trim();
+
+        var dups = await Repository.ListAsync(
+            e =>
+                e.TenantId == Tenant.TenantId &&
+                !e.IsDeleted &&
+                (e.MedicineName.ToLower() == name.ToLower() || e.MedicineCode.ToLower() == code.ToLower()),
+            cancellationToken);
+
+        if (dups.Count > 0)
+            return BaseResponse<MedicineResponseDto>.Fail(DuplicateNameMessage);
+
+        return await base.CreateAsync(dto, cancellationToken);
+    }
+
+    public override async Task<BaseResponse<MedicineResponseDto>> UpdateAsync(
+        long id,
+        UpdateMedicineDto dto,
+        CancellationToken cancellationToken = default)
+    {
+        dto.MedicineName = dto.MedicineName?.Trim();
+        dto.MedicineCode = dto.MedicineCode?.Trim();
+
+        var name = (dto.MedicineName ?? string.Empty).Trim();
+        var code = (dto.MedicineCode ?? string.Empty).Trim();
+
+        var dups = await Repository.ListAsync(
+            e =>
+                e.TenantId == Tenant.TenantId &&
+                !e.IsDeleted &&
+                e.Id != id &&
+                (e.MedicineName.ToLower() == name.ToLower() || e.MedicineCode.ToLower() == code.ToLower()),
+            cancellationToken);
+
+        if (dups.Count > 0)
+            return BaseResponse<MedicineResponseDto>.Fail(DuplicateCodeMessage);
+
+        return await base.UpdateAsync(id, dto, cancellationToken);
+    }
 }

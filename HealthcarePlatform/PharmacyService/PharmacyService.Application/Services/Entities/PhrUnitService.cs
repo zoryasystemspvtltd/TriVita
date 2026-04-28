@@ -1,3 +1,4 @@
+using System.Linq;
 using AutoMapper;
 using FluentValidation;
 using Healthcare.Common.Pagination;
@@ -23,6 +24,8 @@ public sealed class PhrUnitService
     : PhrCrudServiceBase<PhrUnit, CreateUnitDto, UpdateUnitDto, UnitResponseDto, PhrUnitService>,
         IPhrUnitService
 {
+    private const string DuplicateMessage = "Unit already exists with same name/code/symbol.";
+
     public PhrUnitService(
         IRepository<PhrUnit> repository,
         IMapper mapper,
@@ -41,4 +44,60 @@ public sealed class PhrUnitService
         PagedQuery query,
         CancellationToken cancellationToken = default)
         => GetPagedCoreAsync(query, null, cancellationToken);
+
+    public override async Task<BaseResponse<UnitResponseDto>> CreateAsync(
+        CreateUnitDto dto,
+        CancellationToken cancellationToken = default)
+    {
+        dto.UnitName = dto.UnitName?.Trim();
+        dto.UnitCode = dto.UnitCode?.Trim();
+        dto.UnitSymbol = dto.UnitSymbol?.Trim();
+
+        var name = (dto.UnitName ?? string.Empty).Trim();
+        var code = (dto.UnitCode ?? string.Empty).Trim();
+        var sym = (dto.UnitSymbol ?? string.Empty).Trim();
+
+        var dups = await Repository.ListAsync(
+            e =>
+                e.TenantId == Tenant.TenantId &&
+                !e.IsDeleted &&
+                (e.UnitName.ToLower() == name.ToLower() ||
+                 e.UnitCode.ToLower() == code.ToLower() ||
+                 (e.UnitSymbol != null && e.UnitSymbol.ToLower() == sym.ToLower())),
+            cancellationToken);
+
+        if (dups.Count > 0)
+            return BaseResponse<UnitResponseDto>.Fail(DuplicateMessage);
+
+        return await base.CreateAsync(dto, cancellationToken);
+    }
+
+    public override async Task<BaseResponse<UnitResponseDto>> UpdateAsync(
+        long id,
+        UpdateUnitDto dto,
+        CancellationToken cancellationToken = default)
+    {
+        dto.UnitName = dto.UnitName?.Trim();
+        dto.UnitCode = dto.UnitCode?.Trim();
+        dto.UnitSymbol = dto.UnitSymbol?.Trim();
+
+        var name = (dto.UnitName ?? string.Empty).Trim();
+        var code = (dto.UnitCode ?? string.Empty).Trim();
+        var sym = (dto.UnitSymbol ?? string.Empty).Trim();
+
+        var dups = await Repository.ListAsync(
+            e =>
+                e.TenantId == Tenant.TenantId &&
+                !e.IsDeleted &&
+                e.Id != id &&
+                (e.UnitName.ToLower() == name.ToLower() ||
+                 e.UnitCode.ToLower() == code.ToLower() ||
+                 (e.UnitSymbol != null && e.UnitSymbol.ToLower() == sym.ToLower())),
+            cancellationToken);
+
+        if (dups.Count > 0)
+            return BaseResponse<UnitResponseDto>.Fail(DuplicateMessage);
+
+        return await base.UpdateAsync(id, dto, cancellationToken);
+    }
 }

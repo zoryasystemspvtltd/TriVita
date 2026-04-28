@@ -43,11 +43,21 @@ public sealed class MedicineCategoryController : ControllerBase
 
     [HttpPost]
     public async Task<ActionResult<BaseResponse<MedicineCategoryResponseDto>>> Create([FromBody] CreateMedicineCategoryDto dto, CancellationToken ct)
-        => Ok(await _service.CreateAsync(dto, ct));
+    {
+        var res = await _service.CreateAsync(dto, ct);
+        if (res.Success) return Ok(res);
+        if (res.Message is "Category name already exists." or "Category code already exists.") return Conflict(res);
+        return BadRequest(res);
+    }
 
     [HttpPut("{id:long}")]
     public async Task<ActionResult<BaseResponse<MedicineCategoryResponseDto>>> Update(long id, [FromBody] UpdateMedicineCategoryDto dto, CancellationToken ct)
-        => Ok(await _service.UpdateAsync(id, dto, ct));
+    {
+        var res = await _service.UpdateAsync(id, dto, ct);
+        if (res.Success) return Ok(res);
+        if (res.Message is "Category name already exists." or "Category code already exists.") return Conflict(res);
+        return BadRequest(res);
+    }
 
     [HttpDelete("{id:long}")]
     public async Task<ActionResult<BaseResponse<object?>>> Delete(long id, CancellationToken ct)
