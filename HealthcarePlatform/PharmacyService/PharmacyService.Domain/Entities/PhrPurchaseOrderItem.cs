@@ -10,5 +10,6 @@ public sealed class PhrPurchaseOrderItem : BaseEntity
     public decimal QuantityOrdered { get; set; }
     public long? UnitId { get; set; }
     public decimal? PurchaseRate { get; set; }
+    public decimal LineTotal { get; set; }
     public string? Notes { get; set; }
 }

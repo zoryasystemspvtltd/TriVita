@@ -35,6 +35,7 @@ public static class DependencyInjection
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+        services.AddScoped<IPharmacyUnitOfWork, PharmacyUnitOfWork>();
 
         return services;
     }

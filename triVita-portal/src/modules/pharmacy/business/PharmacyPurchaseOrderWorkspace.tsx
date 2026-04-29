@@ -16,7 +16,7 @@ import {
 import { Add, Delete } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
-import { Controller, useForm, type Resolver } from 'react-hook-form';
+import { Controller, useForm, useWatch, type Resolver } from 'react-hook-form';
 import * as Yup from 'yup';
 import { DataTable } from '@/components/common/DataTable';
 import { LookupSelect } from '@/components/common/LookupSelect';
@@ -40,6 +40,7 @@ import {
   getPurchaseOrderItemsPaged,
   getPurchaseOrdersPaged,
   updatePurchaseOrder,
+  updatePurchaseOrderItem,
 } from '@/services/pharmacyService';
 import { buildPharmacyReferenceStatusOptions } from '@/utils/pharmacyStatusOptions';
 import { getApiErrorMessage } from '@/utils/errorMap';
@@ -52,19 +53,25 @@ type HeaderForm = {
   orderDate: string;
   expectedOn: string;
   statusReferenceValueId: string;
+  discountAmount: string;
+  gstPercent: string;
+  otherTaxAmount: string;
   notes: string;
 };
 
 const headerSchema = Yup.object({
-  purchaseOrderNo: Yup.string().trim().required().max(80),
+  purchaseOrderNo: Yup.string().trim().max(80),
   supplierId: Yup.string().trim().required().matches(/^\d+$/, 'Select a supplier'),
   orderDate: Yup.string().required(),
   expectedOn: Yup.string().default(''),
   statusReferenceValueId: Yup.string().trim().required().matches(/^\d+$/),
+  discountAmount: Yup.string().trim().default(''),
+  gstPercent: Yup.string().trim().default(''),
+  otherTaxAmount: Yup.string().trim().default(''),
   notes: Yup.string().trim().max(2000).default(''),
 });
 
-type LineForm = { medicineId: string; quantityOrdered: string; purchaseRate: string; notes: string };
+type LineForm = { medicineId: string; quantityOrdered: string; unitPrice: string; notes: string };
 
 function pickStr(r: Record<string, unknown>, ...keys: string[]) {
   for (const k of keys) {
@@ -86,8 +93,9 @@ export function PharmacyPurchaseOrderWorkspace() {
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [linePoId, setLinePoId] = useState<number | null>(null);
   const [lineRows, setLineRows] = useState<
-    { id?: number; medicineId: string; quantityOrdered: string; purchaseRate: string; notes: string; lineNum: number }[]
+    { id?: number; medicineId: string; quantityOrdered: string; unitPrice: string; lineTotal: string; notes: string; lineNum: number }[]
   >([]);
+  const [editLine, setEditLine] = useState<null | { id: number; medicineId: string; quantityOrdered: string; unitPrice: string; notes: string; lineNum: number }>(null);
 
   useEffect(() => {
     const t = window.setTimeout(() => setSearchApplied(search), 400);
@@ -164,36 +172,27 @@ export function PharmacyPurchaseOrderWorkspace() {
       orderDate: new Date().toISOString().slice(0, 10),
       expectedOn: '',
       statusReferenceValueId: '',
+      discountAmount: '',
+      gstPercent: '',
+      otherTaxAmount: '',
       notes: '',
     },
   });
 
-  useEffect(() => {
-    if (!modal) return;
-    if (modal.mode === 'create') {
-      reset({
-        purchaseOrderNo: '',
-        supplierId: '',
-        orderDate: new Date().toISOString().slice(0, 10),
-        expectedOn: '',
-        statusReferenceValueId: statusOpts.data?.[0]?.value ?? '',
-        notes: '',
-      });
-      return;
-    }
-    const d = editSeed.data;
-    if (d?.success && d.data) {
-      const r = d.data as Row;
-      reset({
-        purchaseOrderNo: pickStr(r, 'purchaseOrderNo', 'PurchaseOrderNo'),
-        supplierId: '',
-        orderDate: pickStr(r, 'orderDate', 'OrderDate').slice(0, 10),
-        expectedOn: r.expectedOn != null ? String(r.expectedOn).slice(0, 10) : '',
-        statusReferenceValueId: String(r.statusReferenceValueId ?? ''),
-        notes: pickStr(r, 'notes', 'Notes'),
-      });
-    }
-  }, [modal, editSeed.data, reset, statusOpts.data]);
+  const discountWatch = useWatch({ control, name: 'discountAmount' });
+  const gstPercentWatch = useWatch({ control, name: 'gstPercent' });
+  const otherTaxWatch = useWatch({ control, name: 'otherTaxAmount' });
+
+  const billing = useMemo(() => {
+    const subTotal = lineRows.reduce((acc, r) => acc + (Number(r.lineTotal) || 0), 0);
+    const discount = Number(discountWatch) || 0;
+    const gstPercent = Number(gstPercentWatch) || 0;
+    const otherTax = Number(otherTaxWatch) || 0;
+    const taxable = Math.max(0, subTotal - discount);
+    const gstAmount = (taxable * gstPercent) / 100;
+    const total = subTotal - discount + gstAmount + otherTax;
+    return { subTotal, discount, gstPercent, gstAmount, otherTax, total };
+  }, [lineRows, discountWatch, gstPercentWatch, otherTaxWatch]);
 
   const supplierOptions = useQuery({
     queryKey: ['pharmacy', 'supplier', 'opts'],
@@ -222,6 +221,41 @@ export function PharmacyPurchaseOrderWorkspace() {
   });
 
   useEffect(() => {
+    if (!modal) return;
+    if (modal.mode === 'create') {
+      reset({
+        purchaseOrderNo: '',
+        supplierId: '',
+        orderDate: new Date().toISOString().slice(0, 10),
+        expectedOn: '',
+        statusReferenceValueId: statusOpts.data?.[0]?.value ?? '',
+        discountAmount: '',
+        gstPercent: '',
+        otherTaxAmount: '',
+        notes: '',
+      });
+      return;
+    }
+    const d = editSeed.data;
+    if (d?.success && d.data) {
+      const r = d.data as Row;
+      const supplierName = pickStr(r, 'supplierName', 'SupplierName').trim().toLowerCase();
+      const sup = supplierOptions.data?.find((x) => x.name.trim().toLowerCase() === supplierName) ?? null;
+      reset({
+        purchaseOrderNo: pickStr(r, 'purchaseOrderNo', 'PurchaseOrderNo'),
+        supplierId: sup?.value ?? '',
+        orderDate: pickStr(r, 'orderDate', 'OrderDate').slice(0, 10),
+        expectedOn: r.expectedOn != null ? String(r.expectedOn).slice(0, 10) : '',
+        statusReferenceValueId: String(r.statusReferenceValueId ?? ''),
+        discountAmount: r.discountAmount != null ? String(r.discountAmount) : '',
+        gstPercent: r.gstPercent != null ? String(r.gstPercent) : '',
+        otherTaxAmount: r.otherTaxAmount != null ? String(r.otherTaxAmount) : '',
+        notes: pickStr(r, 'notes', 'Notes'),
+      });
+    }
+  }, [modal, editSeed.data, reset, statusOpts.data, supplierOptions.data]);
+
+  useEffect(() => {
     if (linePoId == null || !itemsForLines.data?.success || !itemsForLines.data.data) {
       setLineRows([]);
       return;
@@ -233,7 +267,8 @@ export function PharmacyPurchaseOrderWorkspace() {
         id: Number(x.id),
         medicineId: String(x.medicineId ?? ''),
         quantityOrdered: String(x.quantityOrdered ?? ''),
-        purchaseRate: String(x.purchaseRate ?? ''),
+        unitPrice: String(x.unitPrice ?? ''),
+        lineTotal: String(x.lineTotal ?? ''),
         notes: pickStr(x, 'notes', 'Notes'),
         lineNum: Number(x.lineNum ?? i + 1),
       }))
@@ -244,11 +279,14 @@ export function PharmacyPurchaseOrderWorkspace() {
     mutationFn: async (args: { v: HeaderForm; editId?: number }) => {
       const sup = supplierOptions.data?.find((o) => o.value === args.v.supplierId) ?? null;
       const body = {
-        purchaseOrderNo: args.v.purchaseOrderNo.trim(),
+        purchaseOrderNo: args.v.purchaseOrderNo.trim(), // can be blank -> server generates PO/YYYY/XXXX
         supplierName: (sup?.name ?? '').trim(),
         orderDate: new Date(args.v.orderDate).toISOString(),
         expectedOn: args.v.expectedOn.trim() ? new Date(args.v.expectedOn).toISOString() : undefined,
         statusReferenceValueId: Number(args.v.statusReferenceValueId),
+        discountAmount: args.v.discountAmount.trim() ? Number(args.v.discountAmount) : 0,
+        gstPercent: args.v.gstPercent.trim() ? Number(args.v.gstPercent) : 0,
+        otherTaxAmount: args.v.otherTaxAmount.trim() ? Number(args.v.otherTaxAmount) : 0,
         notes: args.v.notes.trim() || undefined,
       };
       if (args.editId != null) return updatePurchaseOrder(args.editId, body);
@@ -290,7 +328,7 @@ export function PharmacyPurchaseOrderWorkspace() {
   const [lineDraft, setLineDraft] = useState<LineForm>({
     medicineId: '',
     quantityOrdered: '',
-    purchaseRate: '',
+    unitPrice: '',
     notes: '',
   });
 
@@ -304,7 +342,7 @@ export function PharmacyPurchaseOrderWorkspace() {
         lineNum: nextLine,
         medicineId: Number(lineDraft.medicineId),
         quantityOrdered: Number(lineDraft.quantityOrdered),
-        purchaseRate: lineDraft.purchaseRate.trim() ? Number(lineDraft.purchaseRate) : undefined,
+        unitPrice: Number(lineDraft.unitPrice),
         notes: lineDraft.notes.trim() || undefined,
       };
       return createPurchaseOrderItem(body);
@@ -315,7 +353,7 @@ export function PharmacyPurchaseOrderWorkspace() {
         return;
       }
       showToast('Line added', 'success');
-      setLineDraft({ medicineId: '', quantityOrdered: '', purchaseRate: '', notes: '' });
+      setLineDraft({ medicineId: '', quantityOrdered: '', unitPrice: '', notes: '' });
       void qc.invalidateQueries({ queryKey: ['pharmacy', 'po-items'] });
     },
     onError: (e) => showToast(getApiErrorMessage(e), 'error'),
@@ -328,6 +366,30 @@ export function PharmacyPurchaseOrderWorkspace() {
         showToast(res.message ?? 'Delete failed', 'error');
         return;
       }
+      void qc.invalidateQueries({ queryKey: ['pharmacy', 'po-items'] });
+    },
+    onError: (e) => showToast(getApiErrorMessage(e), 'error'),
+  });
+
+  const updLineMut = useMutation({
+    mutationFn: async (args: { id: number; row: typeof editLine }) => {
+      if (args.row == null || linePoId == null) throw new Error('No row');
+      return updatePurchaseOrderItem(args.id, {
+        purchaseOrderId: linePoId,
+        lineNum: args.row.lineNum,
+        medicineId: Number(args.row.medicineId),
+        quantityOrdered: Number(args.row.quantityOrdered),
+        unitPrice: Number(args.row.unitPrice),
+        notes: args.row.notes.trim() || undefined,
+      });
+    },
+    onSuccess: (res) => {
+      if (!res.success) {
+        showToast(res.message ?? 'Update failed', 'error');
+        return;
+      }
+      showToast('Line updated', 'success');
+      setEditLine(null);
       void qc.invalidateQueries({ queryKey: ['pharmacy', 'po-items'] });
     },
     onError: (e) => showToast(getApiErrorMessage(e), 'error'),
@@ -467,7 +529,8 @@ export function PharmacyPurchaseOrderWorkspace() {
               <TableRow>
                 <TableCell>Medicine</TableCell>
                 <TableCell align="right">Qty</TableCell>
-                <TableCell align="right">Rate</TableCell>
+                <TableCell align="right">Unit price</TableCell>
+                <TableCell align="right">Line total</TableCell>
                 <TableCell>Notes</TableCell>
                 <TableCell align="right">Actions</TableCell>
               </TableRow>
@@ -477,24 +540,35 @@ export function PharmacyPurchaseOrderWorkspace() {
                 <TableRow key={lr.id ?? `${lr.lineNum}`} hover>
                   <TableCell>{medMap.get(Number(lr.medicineId)) ?? '—'}</TableCell>
                   <TableCell align="right">{lr.quantityOrdered}</TableCell>
-                  <TableCell align="right">{lr.purchaseRate}</TableCell>
+                  <TableCell align="right">{lr.unitPrice}</TableCell>
+                  <TableCell align="right">{lr.lineTotal}</TableCell>
                   <TableCell>{lr.notes}</TableCell>
                   <TableCell align="right">
                     {lr.id != null ? (
-                      <IconButton
-                        size="small"
-                        aria-label="delete line"
-                        onClick={() => delLineMut.mutate(lr.id!)}
-                        disabled={delLineMut.isPending}
-                      >
-                        <Delete fontSize="small" />
-                      </IconButton>
+                      <Stack direction="row" spacing={1} justifyContent="flex-end">
+                        <IconButton size="small" aria-label="edit line" onClick={() => setEditLine({ id: lr.id!, medicineId: lr.medicineId, quantityOrdered: lr.quantityOrdered, unitPrice: lr.unitPrice, notes: lr.notes, lineNum: lr.lineNum })}>
+                          <Add fontSize="small" />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          aria-label="delete line"
+                          onClick={() => delLineMut.mutate(lr.id!)}
+                          disabled={delLineMut.isPending}
+                        >
+                          <Delete fontSize="small" />
+                        </IconButton>
+                      </Stack>
                     ) : null}
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 2 }} justifyContent="flex-end">
+            <Typography variant="body2">Subtotal: {billing.subTotal.toFixed(2)}</Typography>
+            <Typography variant="body2">GST: {billing.gstAmount.toFixed(2)}</Typography>
+            <Typography variant="body2">Total: {billing.total.toFixed(2)}</Typography>
+          </Stack>
           <Typography variant="subtitle2" sx={{ mb: 1 }}>
             Add line
           </Typography>
@@ -525,10 +599,10 @@ export function PharmacyPurchaseOrderWorkspace() {
               sx={{ width: 120 }}
             />
             <TriVitaTextField
-              label="Purchase rate"
+              label="Unit price"
               size="small"
-              value={lineDraft.purchaseRate}
-              onChange={(e) => setLineDraft((d) => ({ ...d, purchaseRate: e.target.value }))}
+              value={lineDraft.unitPrice}
+              onChange={(e) => setLineDraft((d) => ({ ...d, unitPrice: e.target.value }))}
               sx={{ width: 140 }}
             />
             <TriVitaTextField
@@ -545,7 +619,9 @@ export function PharmacyPurchaseOrderWorkspace() {
                 addLineMut.isPending ||
                 !lineDraft.medicineId ||
                 !lineDraft.quantityOrdered.trim() ||
-                Number.isNaN(Number(lineDraft.quantityOrdered))
+                Number.isNaN(Number(lineDraft.quantityOrdered)) ||
+                !lineDraft.unitPrice.trim() ||
+                Number.isNaN(Number(lineDraft.unitPrice))
               }
               onClick={() => addLineMut.mutate()}
             >
@@ -646,6 +722,15 @@ export function PharmacyPurchaseOrderWorkspace() {
                 }}
               />
             </Grid>
+            <Grid item xs={12} md={6}>
+              <Controller name="discountAmount" control={control} render={({ field }) => <TriVitaTextField {...field} label="Discount amount" />} />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Controller name="gstPercent" control={control} render={({ field }) => <TriVitaTextField {...field} label="GST %" />} />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Controller name="otherTaxAmount" control={control} render={({ field }) => <TriVitaTextField {...field} label="Other tax amount" />} />
+            </Grid>
             <Grid item xs={12}>
               <Controller
                 name="notes"
@@ -657,6 +742,28 @@ export function PharmacyPurchaseOrderWorkspace() {
             </Grid>
           </FormGroup>
         </Box>
+      </TriVitaModal>
+
+      <TriVitaModal
+        open={editLine != null}
+        onClose={() => setEditLine(null)}
+        title="Edit PO line"
+        actions={
+          <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ width: '100%' }}>
+            <TriVitaButton onClick={() => setEditLine(null)}>Cancel</TriVitaButton>
+            <TriVitaButton variant="contained" onClick={() => editLine != null && updLineMut.mutate({ id: editLine.id, row: editLine })} disabled={updLineMut.isPending}>
+              Save
+            </TriVitaButton>
+          </Stack>
+        }
+      >
+        {editLine ? (
+          <Stack spacing={2}>
+            <TriVitaTextField label="Quantity" value={editLine.quantityOrdered} onChange={(e) => setEditLine({ ...editLine, quantityOrdered: e.target.value })} />
+            <TriVitaTextField label="Unit price" value={editLine.unitPrice} onChange={(e) => setEditLine({ ...editLine, unitPrice: e.target.value })} />
+            <TriVitaTextField label="Notes" value={editLine.notes} onChange={(e) => setEditLine({ ...editLine, notes: e.target.value })} />
+          </Stack>
+        ) : null}
       </TriVitaModal>
 
       <TriVitaModal

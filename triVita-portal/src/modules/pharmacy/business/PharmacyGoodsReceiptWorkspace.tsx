@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Grid, IconButton, Link, Stack, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from '@mui/material';
-import { Add, Delete } from '@mui/icons-material';
+import { Add, Delete, Edit } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm, useWatch, type Resolver } from 'react-hook-form';
@@ -19,18 +19,17 @@ import { useToast } from '@/components/toast/ToastProvider';
 import {
   createGoodsReceipt,
   createGoodsReceiptItem,
-  createMedicineBatch,
   deleteGoodsReceipt,
   deleteGoodsReceiptItem,
   getGoodsReceiptById,
   getGoodsReceiptItemsPaged,
   getGoodsReceiptPaged,
-  getMedicineBatchPaged,
   getMedicinePaged,
   getSupplierPaged,
   getPurchaseOrderItemsPaged,
   getPurchaseOrdersPaged,
   updateGoodsReceipt,
+  updateGoodsReceiptItem,
 } from '@/services/pharmacyService';
 import { buildPharmacyReferenceStatusOptions } from '@/utils/pharmacyStatusOptions';
 import { getApiErrorMessage } from '@/utils/errorMap';
@@ -52,6 +51,9 @@ type HForm = {
   supplierId: string;
   receivedOn: string;
   statusReferenceValueId: string;
+  discountAmount: string;
+  gstPercent: string;
+  otherTaxAmount: string;
   notes: string;
 };
 
@@ -74,6 +76,9 @@ const hSchema = Yup.object({
     }),
   receivedOn: Yup.string().required(),
   statusReferenceValueId: Yup.string().trim().required().matches(/^\d+$/),
+  discountAmount: Yup.string().trim().default(''),
+  gstPercent: Yup.string().trim().default(''),
+  otherTaxAmount: Yup.string().trim().default(''),
   notes: Yup.string().trim().max(2000).default(''),
 });
 
@@ -88,17 +93,16 @@ export function PharmacyGoodsReceiptWorkspace() {
   const [modal, setModal] = useState<null | { mode: 'create' } | { mode: 'edit'; id: number }>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [lineCtx, setLineCtx] = useState<null | { grId: number; poId?: number | null; mode: 'withPO' | 'withoutPO' }>(null);
+  const [editLine, setEditLine] = useState<null | { id: number; quantityReceived: string; unitPrice: string; batchNo: string; expiryDate: string; mrp: string; purchaseOrderItemId?: string; medicineId?: string }>(null);
   const [lineDraft, setLineDraft] = useState({
     purchaseOrderItemId: '',
     medicineId: '',
-    medicineBatchId: '',
     quantityReceived: '',
-    purchaseRate: '',
+    unitPrice: '',
+    batchNo: '',
     expiryDate: '',
     mrp: '',
   });
-  const [batchMini, setBatchMini] = useState<null | { medicineId: number }>(null);
-  const [batchForm, setBatchForm] = useState({ batchNo: '', expiryDate: '', mrp: '', purchaseRate: '' });
 
   useEffect(() => {
     const t = window.setTimeout(() => setSearchApplied(search), 400);
@@ -215,16 +219,6 @@ export function PharmacyGoodsReceiptWorkspace() {
     return m;
   }, [medicines.data]);
 
-  const batches = useQuery({
-    queryKey: [
-      'pharmacy',
-      'grn-batches',
-      lineCtx?.mode === 'withPO' ? lineDraft.purchaseOrderItemId : lineDraft.medicineId,
-    ],
-    queryFn: () => getMedicineBatchPaged({ page: 1, pageSize: 500 }),
-    enabled: lineCtx != null,
-  });
-
   const poItemRows = useMemo(() => {
     if (!poItems.data?.success || !poItems.data.data || lineCtx == null || lineCtx.mode !== 'withPO' || lineCtx.poId == null) return [];
     return (poItems.data.data.items as Row[]).filter(
@@ -262,6 +256,9 @@ export function PharmacyGoodsReceiptWorkspace() {
       supplierId: '',
       receivedOn: new Date().toISOString().slice(0, 10),
       statusReferenceValueId: '',
+      discountAmount: '',
+      gstPercent: '',
+      otherTaxAmount: '',
       notes: '',
     },
   });
@@ -278,6 +275,9 @@ export function PharmacyGoodsReceiptWorkspace() {
         supplierId: '',
         receivedOn: new Date().toISOString().slice(0, 10),
         statusReferenceValueId: statusMap.data?.[0]?.value ?? '',
+        discountAmount: '',
+        gstPercent: '',
+        otherTaxAmount: '',
         notes: '',
       });
       return;
@@ -294,6 +294,9 @@ export function PharmacyGoodsReceiptWorkspace() {
         supplierId: hasPo ? String(r.supplierId ?? r.SupplierId ?? '') : String(r.supplierId ?? r.SupplierId ?? ''),
         receivedOn: pickStr(r, 'receivedOn', 'ReceivedOn').slice(0, 10),
         statusReferenceValueId: String(r.statusReferenceValueId ?? ''),
+        discountAmount: r.discountAmount != null ? String(r.discountAmount) : '',
+        gstPercent: r.gstPercent != null ? String(r.gstPercent) : '',
+        otherTaxAmount: r.otherTaxAmount != null ? String(r.otherTaxAmount) : '',
         notes: pickStr(r, 'notes', 'Notes'),
       });
     }
@@ -308,6 +311,9 @@ export function PharmacyGoodsReceiptWorkspace() {
         supplierId: !isWithPo && args.v.supplierId.trim() ? Number(args.v.supplierId) : null,
         receivedOn: new Date(args.v.receivedOn).toISOString(),
         statusReferenceValueId: Number(args.v.statusReferenceValueId),
+        discountAmount: args.v.discountAmount.trim() ? Number(args.v.discountAmount) : 0,
+        gstPercent: args.v.gstPercent.trim() ? Number(args.v.gstPercent) : 0,
+        otherTaxAmount: args.v.otherTaxAmount.trim() ? Number(args.v.otherTaxAmount) : 0,
         notes: args.v.notes.trim() || undefined,
       };
       if (args.editId != null) return updateGoodsReceipt(args.editId, body);
@@ -350,31 +356,6 @@ export function PharmacyGoodsReceiptWorkspace() {
     onError: (e) => showToast(getApiErrorMessage(e), 'error'),
   });
 
-  const createBatchMut = useMutation({
-    mutationFn: async () => {
-      if (batchMini == null) throw new Error('No medicine');
-      return createMedicineBatch({
-        medicineId: batchMini.medicineId,
-        batchNo: batchForm.batchNo.trim(),
-        expiryDate: batchForm.expiryDate.trim() ? new Date(batchForm.expiryDate).toISOString() : undefined,
-        mrp: batchForm.mrp.trim() ? Number(batchForm.mrp) : undefined,
-        purchaseRate: batchForm.purchaseRate.trim() ? Number(batchForm.purchaseRate) : undefined,
-      });
-    },
-    onSuccess: (res) => {
-      if (!res.success) {
-        showToast(res.message ?? 'Batch create failed', 'error');
-        return;
-      }
-      const id = (res.data as Row | undefined)?.id;
-      if (id != null) setLineDraft((d) => ({ ...d, medicineBatchId: String(id) }));
-      showToast('Batch created', 'success');
-      setBatchMini(null);
-      void qc.invalidateQueries({ queryKey: ['pharmacy', 'grn-batches'] });
-    },
-    onError: (e) => showToast(getApiErrorMessage(e), 'error'),
-  });
-
   const addLineMut = useMutation({
     mutationFn: async () => {
       if (lineCtx == null) throw new Error('No ctx');
@@ -382,7 +363,7 @@ export function PharmacyGoodsReceiptWorkspace() {
 
       let purchaseOrderItemId: number | null = null;
       let medicineId: number | null = null;
-      let purchaseRate: number | undefined = undefined;
+      let unitPrice: number | null = null;
 
       if (isWithPo) {
         const poItem = poItemRows.find((x) => String(x.id) === lineDraft.purchaseOrderItemId);
@@ -390,24 +371,27 @@ export function PharmacyGoodsReceiptWorkspace() {
 
         purchaseOrderItemId = Number(lineDraft.purchaseOrderItemId);
         medicineId = Number(poItem.medicineId ?? poItem.MedicineId);
-        purchaseRate = lineDraft.purchaseRate.trim() ? Number(lineDraft.purchaseRate) : undefined;
+        unitPrice = Number(lineDraft.unitPrice);
       } else {
         medicineId = Number(lineDraft.medicineId);
-        purchaseRate = lineDraft.purchaseRate.trim() ? Number(lineDraft.purchaseRate) : undefined;
+        unitPrice = Number(lineDraft.unitPrice);
       }
 
       if (medicineId == null || !Number.isFinite(medicineId)) throw new Error('MedicineId required');
       if (isWithPo && (purchaseOrderItemId == null || !Number.isFinite(purchaseOrderItemId))) throw new Error('PO item required');
+      if (unitPrice == null || !Number.isFinite(unitPrice) || unitPrice <= 0) throw new Error('UnitPrice required');
+      if (!lineDraft.batchNo.trim()) throw new Error('BatchNo required');
+      if (!lineDraft.expiryDate.trim()) throw new Error('ExpiryDate required');
       const nextLine = grLineRows.length === 0 ? 1 : Math.max(...grLineRows.map((r) => Number(r.lineNum ?? 0))) + 1;
       return createGoodsReceiptItem({
         goodsReceiptId: lineCtx.grId,
         lineNum: nextLine,
         purchaseOrderItemId,
         medicineId,
-        medicineBatchId: Number(lineDraft.medicineBatchId),
         quantityReceived: Number(lineDraft.quantityReceived),
-        purchaseRate,
-        expiryDate: lineDraft.expiryDate.trim() ? new Date(lineDraft.expiryDate).toISOString() : undefined,
+        unitPrice,
+        batchNo: lineDraft.batchNo.trim(),
+        expiryDate: new Date(lineDraft.expiryDate).toISOString(),
         mrp: lineDraft.mrp.trim() ? Number(lineDraft.mrp) : undefined,
       });
     },
@@ -420,9 +404,9 @@ export function PharmacyGoodsReceiptWorkspace() {
       setLineDraft({
         purchaseOrderItemId: '',
         medicineId: '',
-        medicineBatchId: '',
         quantityReceived: '',
-        purchaseRate: '',
+        unitPrice: '',
+        batchNo: '',
         expiryDate: '',
         mrp: '',
       });
@@ -443,22 +427,40 @@ export function PharmacyGoodsReceiptWorkspace() {
     onError: (e) => showToast(getApiErrorMessage(e), 'error'),
   });
 
-  const batchOptions = useMemo(() => {
-    if (!batches.data?.success || !batches.data.data) return [];
-    const mid =
-      lineCtx?.mode === 'withPO'
+  const updLineMut = useMutation({
+    mutationFn: async () => {
+      if (editLine == null || lineCtx == null) throw new Error('No line');
+      const isWithPo = lineCtx.mode === 'withPO';
+      const poItemId = isWithPo ? Number(editLine.purchaseOrderItemId) : null;
+      const medId = isWithPo
         ? (() => {
-            const sel = poItemRows.find((x) => String(x.id) === lineDraft.purchaseOrderItemId);
-            return sel ? Number(sel.medicineId ?? sel.MedicineId) : NaN;
+            const poItem = poItemRows.find((x) => String(x.id) === String(editLine.purchaseOrderItemId));
+            return poItem ? Number(poItem.medicineId ?? poItem.MedicineId) : NaN;
           })()
-        : Number(lineDraft.medicineId);
-    return (batches.data.data.items as Row[])
-      .filter((b) => !Number.isFinite(mid) || Number(b.medicineId ?? b.MedicineId) === mid)
-      .map((b) => ({
-        value: String(b.id ?? ''),
-        label: `${pickStr(b, 'batchNo', 'BatchNo')} · exp ${pickStr(b, 'expiryDate', 'ExpiryDate').slice(0, 10)}`,
-      }));
-  }, [batches.data, lineCtx?.mode, lineDraft.purchaseOrderItemId, lineDraft.medicineId, poItemRows]);
+        : Number(editLine.medicineId);
+      return updateGoodsReceiptItem(editLine.id, {
+        goodsReceiptId: lineCtx.grId,
+        lineNum: 1,
+        purchaseOrderItemId: poItemId,
+        medicineId: medId,
+        quantityReceived: Number(editLine.quantityReceived),
+        unitPrice: Number(editLine.unitPrice),
+        batchNo: editLine.batchNo.trim(),
+        expiryDate: new Date(editLine.expiryDate).toISOString(),
+        mrp: editLine.mrp.trim() ? Number(editLine.mrp) : undefined,
+      });
+    },
+    onSuccess: (res) => {
+      if (!res.success) {
+        showToast(res.message ?? 'Update failed', 'error');
+        return;
+      }
+      showToast('Line updated', 'success');
+      setEditLine(null);
+      void qc.invalidateQueries({ queryKey: ['pharmacy', 'grn-items'] });
+    },
+    onError: (e) => showToast(getApiErrorMessage(e), 'error'),
+  });
 
   const detailData = (detail.data?.success ? detail.data.data : null) as Row | null;
 
@@ -589,6 +591,9 @@ export function PharmacyGoodsReceiptWorkspace() {
                 <TableCell>{lineCtx.mode === 'withPO' ? 'PO line' : '—'}</TableCell>
                 <TableCell>Medicine</TableCell>
                 <TableCell align="right">Qty received</TableCell>
+                <TableCell>Batch</TableCell>
+                <TableCell>Expiry</TableCell>
+                <TableCell align="right">Unit price</TableCell>
                 <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -602,10 +607,33 @@ export function PharmacyGoodsReceiptWorkspace() {
                 </TableCell>
                   <TableCell>{medMap.get(Number(lr.medicineId ?? lr.MedicineId)) ?? '—'}</TableCell>
                   <TableCell align="right">{String(lr.quantityReceived ?? '')}</TableCell>
+                  <TableCell>{String(lr.batchNo ?? lr.BatchNo ?? '—')}</TableCell>
+                  <TableCell>{String(lr.expiryDate ?? lr.ExpiryDate ?? '').slice(0, 10) || '—'}</TableCell>
+                  <TableCell align="right">{String(lr.unitPrice ?? lr.UnitPrice ?? '')}</TableCell>
                   <TableCell align="right">
-                    <IconButton size="small" onClick={() => lr.id != null && delLineMut.mutate(Number(lr.id))}>
-                      <Delete fontSize="small" />
-                    </IconButton>
+                    <Stack direction="row" spacing={1} justifyContent="flex-end">
+                      <IconButton
+                        size="small"
+                        onClick={() =>
+                          lr.id != null &&
+                          setEditLine({
+                            id: Number(lr.id),
+                            quantityReceived: String(lr.quantityReceived ?? ''),
+                            unitPrice: String(lr.unitPrice ?? lr.UnitPrice ?? ''),
+                            batchNo: String(lr.batchNo ?? lr.BatchNo ?? ''),
+                            expiryDate: String(lr.expiryDate ?? lr.ExpiryDate ?? '').slice(0, 10),
+                            mrp: String(lr.mrp ?? lr.MRP ?? ''),
+                            purchaseOrderItemId: String(lr.purchaseOrderItemId ?? lr.PurchaseOrderItemId ?? ''),
+                            medicineId: String(lr.medicineId ?? lr.MedicineId ?? ''),
+                          })
+                        }
+                      >
+                        <Edit fontSize="small" />
+                      </IconButton>
+                      <IconButton size="small" onClick={() => lr.id != null && delLineMut.mutate(Number(lr.id))}>
+                        <Delete fontSize="small" />
+                      </IconButton>
+                    </Stack>
                   </TableCell>
                 </TableRow>
               ))}
@@ -636,33 +664,7 @@ export function PharmacyGoodsReceiptWorkspace() {
                 </TriVitaTextField>
 
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ sm: 'center' }}>
-                  <TriVitaTextField
-                    select
-                    SelectProps={{ native: true }}
-                    label="Batch"
-                    size="small"
-                    value={lineDraft.medicineBatchId}
-                    onChange={(e) => setLineDraft((d) => ({ ...d, medicineBatchId: e.target.value }))}
-                    sx={{ flex: 1 }}
-                  >
-                    <option value="">Select batch</option>
-                    {batchOptions.map((o) => (
-                      <option key={o.value} value={o.value}>
-                        {o.label}
-                      </option>
-                    ))}
-                  </TriVitaTextField>
-
-                  <TriVitaButton
-                    variant="outlined"
-                    onClick={() => {
-                      const it = poItemRows.find((x) => String(x.id) === lineDraft.purchaseOrderItemId);
-                      if (it) setBatchMini({ medicineId: Number(it.medicineId ?? it.MedicineId) });
-                    }}
-                    disabled={!lineDraft.purchaseOrderItemId}
-                  >
-                    New batch
-                  </TriVitaButton>
+                  <TriVitaTextField label="Batch number" size="small" value={lineDraft.batchNo} onChange={(e) => setLineDraft((d) => ({ ...d, batchNo: e.target.value }))} sx={{ flex: 1 }} />
                 </Stack>
 
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
@@ -673,10 +675,10 @@ export function PharmacyGoodsReceiptWorkspace() {
                     onChange={(e) => setLineDraft((d) => ({ ...d, quantityReceived: e.target.value }))}
                   />
                   <TriVitaTextField
-                    label="Purchase rate"
+                    label="Unit price"
                     size="small"
-                    value={lineDraft.purchaseRate}
-                    onChange={(e) => setLineDraft((d) => ({ ...d, purchaseRate: e.target.value }))}
+                    value={lineDraft.unitPrice}
+                    onChange={(e) => setLineDraft((d) => ({ ...d, unitPrice: e.target.value }))}
                   />
                   <TriVitaTextField
                     label="Expiry"
@@ -701,7 +703,9 @@ export function PharmacyGoodsReceiptWorkspace() {
                     disabled={
                       addLineMut.isPending ||
                       !lineDraft.purchaseOrderItemId ||
-                      !lineDraft.medicineBatchId ||
+                      !lineDraft.batchNo.trim() ||
+                      !lineDraft.expiryDate.trim() ||
+                      !lineDraft.unitPrice.trim() ||
                       !lineDraft.quantityReceived.trim()
                     }
                     onClick={() => addLineMut.mutate()}
@@ -740,33 +744,7 @@ export function PharmacyGoodsReceiptWorkspace() {
                 </TriVitaTextField>
 
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ sm: 'center' }}>
-                  <TriVitaTextField
-                    select
-                    SelectProps={{ native: true }}
-                    label="Batch"
-                    size="small"
-                    value={lineDraft.medicineBatchId}
-                    onChange={(e) => setLineDraft((d) => ({ ...d, medicineBatchId: e.target.value }))}
-                    sx={{ flex: 1 }}
-                  >
-                    <option value="">Select batch</option>
-                    {batchOptions.map((o) => (
-                      <option key={o.value} value={o.value}>
-                        {o.label}
-                      </option>
-                    ))}
-                  </TriVitaTextField>
-
-                  <TriVitaButton
-                    variant="outlined"
-                    onClick={() => {
-                      if (!lineDraft.medicineId) return;
-                      setBatchMini({ medicineId: Number(lineDraft.medicineId) });
-                    }}
-                    disabled={!lineDraft.medicineId}
-                  >
-                    New batch
-                  </TriVitaButton>
+                  <TriVitaTextField label="Batch number" size="small" value={lineDraft.batchNo} onChange={(e) => setLineDraft((d) => ({ ...d, batchNo: e.target.value }))} sx={{ flex: 1 }} />
                 </Stack>
 
                 <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
@@ -777,10 +755,10 @@ export function PharmacyGoodsReceiptWorkspace() {
                     onChange={(e) => setLineDraft((d) => ({ ...d, quantityReceived: e.target.value }))}
                   />
                   <TriVitaTextField
-                    label="Purchase rate"
+                    label="Unit price"
                     size="small"
-                    value={lineDraft.purchaseRate}
-                    onChange={(e) => setLineDraft((d) => ({ ...d, purchaseRate: e.target.value }))}
+                    value={lineDraft.unitPrice}
+                    onChange={(e) => setLineDraft((d) => ({ ...d, unitPrice: e.target.value }))}
                   />
                   <TriVitaTextField
                     label="Expiry"
@@ -805,7 +783,9 @@ export function PharmacyGoodsReceiptWorkspace() {
                     disabled={
                       addLineMut.isPending ||
                       !lineDraft.medicineId ||
-                      !lineDraft.medicineBatchId ||
+                      !lineDraft.batchNo.trim() ||
+                      !lineDraft.expiryDate.trim() ||
+                      !lineDraft.unitPrice.trim() ||
                       !lineDraft.quantityReceived.trim()
                     }
                     onClick={() => addLineMut.mutate()}
@@ -978,6 +958,15 @@ export function PharmacyGoodsReceiptWorkspace() {
                 }}
               />
             </Grid>
+            <Grid item xs={12} md={6}>
+              <Controller name="discountAmount" control={control} render={({ field }) => <TriVitaTextField {...field} label="Discount amount" disabled={modeWatch === 'withPO'} />} />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Controller name="gstPercent" control={control} render={({ field }) => <TriVitaTextField {...field} label="GST %" disabled={modeWatch === 'withPO'} />} />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Controller name="otherTaxAmount" control={control} render={({ field }) => <TriVitaTextField {...field} label="Other tax amount" disabled={modeWatch === 'withPO'} />} />
+            </Grid>
             <Grid item xs={12}>
               <Controller
                 name="notes"
@@ -989,22 +978,6 @@ export function PharmacyGoodsReceiptWorkspace() {
         </Box>
       </TriVitaModal>
 
-      <TriVitaModal open={batchMini != null} onClose={() => setBatchMini(null)} title="New batch" actions={
-        <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ width: '100%' }}>
-          <TriVitaButton onClick={() => setBatchMini(null)}>Cancel</TriVitaButton>
-          <TriVitaButton variant="contained" disabled={createBatchMut.isPending || !batchForm.batchNo.trim()} onClick={() => createBatchMut.mutate()}>
-            Create
-          </TriVitaButton>
-        </Stack>
-      }>
-        <Stack spacing={2}>
-          <TriVitaTextField label="Batch number" required value={batchForm.batchNo} onChange={(e) => setBatchForm((b) => ({ ...b, batchNo: e.target.value }))} />
-          <TriVitaTextField label="Expiry" type="date" InputLabelProps={{ shrink: true }} value={batchForm.expiryDate} onChange={(e) => setBatchForm((b) => ({ ...b, expiryDate: e.target.value }))} />
-          <TriVitaTextField label="MRP" value={batchForm.mrp} onChange={(e) => setBatchForm((b) => ({ ...b, mrp: e.target.value }))} />
-          <TriVitaTextField label="Purchase rate" value={batchForm.purchaseRate} onChange={(e) => setBatchForm((b) => ({ ...b, purchaseRate: e.target.value }))} />
-        </Stack>
-      </TriVitaModal>
-
       <TriVitaModal open={deleteId != null} onClose={() => setDeleteId(null)} title="Delete GRN" actions={
         <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ width: '100%' }}>
           <TriVitaButton onClick={() => setDeleteId(null)}>Cancel</TriVitaButton>
@@ -1014,6 +987,30 @@ export function PharmacyGoodsReceiptWorkspace() {
         </Stack>
       }>
         <Typography>Delete this goods receipt?</Typography>
+      </TriVitaModal>
+
+      <TriVitaModal
+        open={editLine != null}
+        onClose={() => setEditLine(null)}
+        title="Edit GRN line"
+        actions={
+          <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ width: '100%' }}>
+            <TriVitaButton onClick={() => setEditLine(null)}>Cancel</TriVitaButton>
+            <TriVitaButton variant="contained" onClick={() => updLineMut.mutate()} disabled={updLineMut.isPending}>
+              Save
+            </TriVitaButton>
+          </Stack>
+        }
+      >
+        {editLine ? (
+          <Stack spacing={2}>
+            <TriVitaTextField label="Qty received" value={editLine.quantityReceived} onChange={(e) => setEditLine({ ...editLine, quantityReceived: e.target.value })} />
+            <TriVitaTextField label="Unit price" value={editLine.unitPrice} onChange={(e) => setEditLine({ ...editLine, unitPrice: e.target.value })} />
+            <TriVitaTextField label="Batch number" value={editLine.batchNo} onChange={(e) => setEditLine({ ...editLine, batchNo: e.target.value })} />
+            <TriVitaTextField label="Expiry" type="date" InputLabelProps={{ shrink: true }} value={editLine.expiryDate} onChange={(e) => setEditLine({ ...editLine, expiryDate: e.target.value })} />
+            <TriVitaTextField label="MRP" value={editLine.mrp} onChange={(e) => setEditLine({ ...editLine, mrp: e.target.value })} />
+          </Stack>
+        ) : null}
       </TriVitaModal>
     </Stack>
   );

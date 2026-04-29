@@ -11,20 +11,17 @@ public sealed class CreateGoodsReceiptItemDtoValidator : AbstractValidator<Creat
     private readonly IRepository<PhrGoodsReceipt> _goodsReceipts;
     private readonly IRepository<PhrPurchaseOrderItem> _purchaseOrderItems;
     private readonly IRepository<PhrGoodsReceiptItem> _goodsReceiptItems;
-    private readonly IRepository<PhrMedicineBatch> _medicineBatches;
     private readonly ITenantContext _tenant;
 
     public CreateGoodsReceiptItemDtoValidator(
         IRepository<PhrGoodsReceipt> goodsReceipts,
         IRepository<PhrPurchaseOrderItem> purchaseOrderItems,
         IRepository<PhrGoodsReceiptItem> goodsReceiptItems,
-        IRepository<PhrMedicineBatch> medicineBatches,
         ITenantContext tenant)
     {
         _goodsReceipts = goodsReceipts;
         _purchaseOrderItems = purchaseOrderItems;
         _goodsReceiptItems = goodsReceiptItems;
-        _medicineBatches = medicineBatches;
         _tenant = tenant;
 
         RuleFor(x => x)
@@ -45,6 +42,24 @@ public sealed class CreateGoodsReceiptItemDtoValidator : AbstractValidator<Creat
         if (dto.QuantityReceived <= 0)
         {
             ctx.AddFailure("QuantityReceived must be greater than zero.");
+            return;
+        }
+
+        if (dto.UnitPrice <= 0)
+        {
+            ctx.AddFailure("UnitPrice must be greater than zero.");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(dto.BatchNo))
+        {
+            ctx.AddFailure("BatchNo is required.");
+            return;
+        }
+
+        if (dto.ExpiryDate == default)
+        {
+            ctx.AddFailure("ExpiryDate is required.");
             return;
         }
 
@@ -82,30 +97,6 @@ public sealed class CreateGoodsReceiptItemDtoValidator : AbstractValidator<Creat
             if (poi.MedicineId != dto.MedicineId)
             {
                 ctx.AddFailure("MedicineId must match the selected PurchaseOrderItem.");
-                return;
-            }
-
-            // Batch must belong to the medicine.
-            var batch = await _medicineBatches.GetByIdAsync(dto.MedicineBatchId, ct);
-            if (batch is null || batch.MedicineId != dto.MedicineId)
-            {
-                ctx.AddFailure("MedicineBatchId is invalid for the selected MedicineId.");
-                return;
-            }
-
-            // No duplicate item entry in the same GRN.
-            IReadOnlyList<PhrGoodsReceiptItem> dupeItems = facilityId is long fid
-                ? await _goodsReceiptItems.ListAsync(x =>
-                    x.GoodsReceiptId == dto.GoodsReceiptId &&
-                    x.PurchaseOrderItemId == poiId &&
-                    x.FacilityId == fid, ct)
-                : await _goodsReceiptItems.ListAsync(x =>
-                    x.GoodsReceiptId == dto.GoodsReceiptId &&
-                    x.PurchaseOrderItemId == poiId, ct);
-
-            if (dupeItems.Count > 0)
-            {
-                ctx.AddFailure("Duplicate PO item is not allowed in the same Goods Receipt.");
                 return;
             }
 
@@ -147,25 +138,20 @@ public sealed class CreateGoodsReceiptItemDtoValidator : AbstractValidator<Creat
                 return;
             }
 
-            // Batch must belong to the medicine.
-            var batch = await _medicineBatches.GetByIdAsync(dto.MedicineBatchId, ct);
-            if (batch is null || batch.MedicineId != dto.MedicineId)
-            {
-                ctx.AddFailure("MedicineBatchId is invalid for the selected MedicineId.");
-                return;
-            }
-
-            // No duplicate item entry in the same GRN for the same batch.
+            // No duplicate item entry in the same GRN for the same medicine+batchno.
+            var bn = dto.BatchNo.Trim();
             IReadOnlyList<PhrGoodsReceiptItem> dupeItems = facilityId is long fid3
                 ? await _goodsReceiptItems.ListAsync(x =>
                     x.GoodsReceiptId == dto.GoodsReceiptId &&
                     x.PurchaseOrderItemId == null &&
-                    x.MedicineBatchId == dto.MedicineBatchId &&
+                    x.MedicineId == dto.MedicineId &&
+                    x.ExpiryDate == dto.ExpiryDate.Date &&
                     x.FacilityId == fid3, ct)
                 : await _goodsReceiptItems.ListAsync(x =>
                     x.GoodsReceiptId == dto.GoodsReceiptId &&
                     x.PurchaseOrderItemId == null &&
-                    x.MedicineBatchId == dto.MedicineBatchId, ct);
+                    x.MedicineId == dto.MedicineId &&
+                    x.ExpiryDate == dto.ExpiryDate.Date, ct);
 
             if (dupeItems.Count > 0)
             {

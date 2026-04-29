@@ -9,4 +9,8 @@ public sealed class UpdateGoodsReceiptDto
     public long? ReceivedByDoctorId { get; set; }
     public long StatusReferenceValueId { get; set; }
     public string? Notes { get; set; }
+
+    public decimal DiscountAmount { get; set; }
+    public decimal GstPercent { get; set; }
+    public decimal OtherTaxAmount { get; set; }
 }

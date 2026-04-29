@@ -13,6 +13,8 @@ public sealed class PhrGoodsReceiptItemConfiguration : IEntityTypeConfiguration<
         builder.Property(e => e.RowVersion).IsRowVersion();
         builder.Property(e => e.QuantityReceived).HasPrecision(18, 4);
         builder.Property(e => e.PurchaseRate).HasPrecision(18, 4);
+        builder.Property(e => e.LineTotal).HasPrecision(18, 4);
+        builder.Property(e => e.BatchNo).HasMaxLength(120);
         builder.Property(e => e.ExpiryDate).HasColumnType("date");
         builder.Property(e => e.MRP).HasPrecision(18, 4);
 

@@ -16,5 +16,16 @@ public sealed class PhrMedicineBatchConfiguration : IEntityTypeConfiguration<Phr
         builder.Property(e => e.MRP).HasPrecision(18, 4);
         builder.Property(e => e.PurchaseRate).HasPrecision(18, 4);
         builder.Property(e => e.ManufacturingDate).HasColumnType("date");
+
+        builder.Property(e => e.AvailableQuantity).HasPrecision(18, 4);
+
+        builder.HasIndex(e => new { e.TenantId, e.MedicineId, e.BatchNo })
+            .IsUnique()
+            .HasFilter("[IsDeleted] = 0");
+
+        builder.HasOne<PhrGoodsReceipt>()
+            .WithMany()
+            .HasForeignKey(e => e.CreatedFromGoodsReceiptId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

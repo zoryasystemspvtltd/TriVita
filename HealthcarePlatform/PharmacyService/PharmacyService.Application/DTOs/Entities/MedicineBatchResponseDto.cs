@@ -11,4 +11,6 @@ public sealed class MedicineBatchResponseDto
     public decimal? MRP { get; set; }
     public decimal? PurchaseRate { get; set; }
     public DateTime? ManufacturingDate { get; set; }
+    public decimal AvailableQuantity { get; set; }
+    public long? CreatedFromGoodsReceiptId { get; set; }
 }

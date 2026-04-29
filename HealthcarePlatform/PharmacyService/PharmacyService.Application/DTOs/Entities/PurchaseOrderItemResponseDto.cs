@@ -10,6 +10,7 @@ public sealed class PurchaseOrderItemResponseDto
     public long MedicineId { get; set; }
     public decimal QuantityOrdered { get; set; }
     public long? UnitId { get; set; }
-    public decimal? PurchaseRate { get; set; }
+    public decimal UnitPrice { get; set; }
+    public decimal LineTotal { get; set; }
     public string? Notes { get; set; }
 }

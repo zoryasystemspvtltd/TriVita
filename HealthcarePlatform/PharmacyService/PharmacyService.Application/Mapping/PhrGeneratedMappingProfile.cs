@@ -165,7 +165,9 @@ public sealed class PhrGeneratedMappingProfile : Profile
             .ForMember(d => d.CreatedBy, o => o.Ignore())
             .ForMember(d => d.ModifiedOn, o => o.Ignore())
             .ForMember(d => d.ModifiedBy, o => o.Ignore())
-            .ForMember(d => d.RowVersion, o => o.Ignore());
+            .ForMember(d => d.RowVersion, o => o.Ignore())
+            .ForMember(d => d.AvailableQuantity, o => o.Ignore())
+            .ForMember(d => d.CreatedFromGoodsReceiptId, o => o.Ignore());
         CreateMap<UpdateMedicineBatchDto, PhrMedicineBatch>()
             .ForMember(d => d.Id, o => o.Ignore())
             .ForMember(d => d.TenantId, o => o.Ignore())
@@ -176,7 +178,9 @@ public sealed class PhrGeneratedMappingProfile : Profile
             .ForMember(d => d.CreatedBy, o => o.Ignore())
             .ForMember(d => d.ModifiedOn, o => o.Ignore())
             .ForMember(d => d.ModifiedBy, o => o.Ignore())
-            .ForMember(d => d.RowVersion, o => o.Ignore());
+            .ForMember(d => d.RowVersion, o => o.Ignore())
+            .ForMember(d => d.AvailableQuantity, o => o.Ignore())
+            .ForMember(d => d.CreatedFromGoodsReceiptId, o => o.Ignore());
 
         CreateMap<PhrBatchStock, BatchStockResponseDto>();
         CreateMap<CreateBatchStockDto, PhrBatchStock>()
@@ -250,7 +254,8 @@ public sealed class PhrGeneratedMappingProfile : Profile
             .ForMember(d => d.ModifiedBy, o => o.Ignore())
             .ForMember(d => d.RowVersion, o => o.Ignore());
 
-        CreateMap<PhrPurchaseOrderItem, PurchaseOrderItemResponseDto>();
+        CreateMap<PhrPurchaseOrderItem, PurchaseOrderItemResponseDto>()
+            .ForMember(d => d.UnitPrice, o => o.MapFrom(s => s.PurchaseRate ?? 0m));
         CreateMap<CreatePurchaseOrderItemDto, PhrPurchaseOrderItem>()
             .ForMember(d => d.Id, o => o.Ignore())
             .ForMember(d => d.TenantId, o => o.Ignore())
@@ -261,7 +266,9 @@ public sealed class PhrGeneratedMappingProfile : Profile
             .ForMember(d => d.CreatedBy, o => o.Ignore())
             .ForMember(d => d.ModifiedOn, o => o.Ignore())
             .ForMember(d => d.ModifiedBy, o => o.Ignore())
-            .ForMember(d => d.RowVersion, o => o.Ignore());
+            .ForMember(d => d.RowVersion, o => o.Ignore())
+            .ForMember(d => d.PurchaseRate, o => o.MapFrom(s => s.UnitPrice))
+            .ForMember(d => d.LineTotal, o => o.Ignore());
         CreateMap<UpdatePurchaseOrderItemDto, PhrPurchaseOrderItem>()
             .ForMember(d => d.Id, o => o.Ignore())
             .ForMember(d => d.TenantId, o => o.Ignore())
@@ -272,7 +279,9 @@ public sealed class PhrGeneratedMappingProfile : Profile
             .ForMember(d => d.CreatedBy, o => o.Ignore())
             .ForMember(d => d.ModifiedOn, o => o.Ignore())
             .ForMember(d => d.ModifiedBy, o => o.Ignore())
-            .ForMember(d => d.RowVersion, o => o.Ignore());
+            .ForMember(d => d.RowVersion, o => o.Ignore())
+            .ForMember(d => d.PurchaseRate, o => o.MapFrom(s => s.UnitPrice))
+            .ForMember(d => d.LineTotal, o => o.Ignore());
 
         CreateMap<PhrGoodsReceipt, GoodsReceiptResponseDto>();
         CreateMap<CreateGoodsReceiptDto, PhrGoodsReceipt>()
@@ -298,7 +307,9 @@ public sealed class PhrGeneratedMappingProfile : Profile
             .ForMember(d => d.ModifiedBy, o => o.Ignore())
             .ForMember(d => d.RowVersion, o => o.Ignore());
 
-        CreateMap<PhrGoodsReceiptItem, GoodsReceiptItemResponseDto>();
+        CreateMap<PhrGoodsReceiptItem, GoodsReceiptItemResponseDto>()
+            .ForMember(d => d.UnitPrice, o => o.MapFrom(s => s.PurchaseRate ?? 0m))
+            .ForMember(d => d.ExpiryDate, o => o.MapFrom(s => s.ExpiryDate ?? default));
         CreateMap<CreateGoodsReceiptItemDto, PhrGoodsReceiptItem>()
             .ForMember(d => d.Id, o => o.Ignore())
             .ForMember(d => d.TenantId, o => o.Ignore())
@@ -309,7 +320,12 @@ public sealed class PhrGeneratedMappingProfile : Profile
             .ForMember(d => d.CreatedBy, o => o.Ignore())
             .ForMember(d => d.ModifiedOn, o => o.Ignore())
             .ForMember(d => d.ModifiedBy, o => o.Ignore())
-            .ForMember(d => d.RowVersion, o => o.Ignore());
+            .ForMember(d => d.RowVersion, o => o.Ignore())
+            .ForMember(d => d.PurchaseRate, o => o.MapFrom(s => s.UnitPrice))
+            .ForMember(d => d.MedicineBatchId, o => o.Ignore())
+            .ForMember(d => d.LineTotal, o => o.Ignore())
+            .ForMember(d => d.ExpiryDate, o => o.MapFrom(s => s.ExpiryDate))
+            .ForMember(d => d.BatchNo, o => o.MapFrom(s => s.BatchNo));
         CreateMap<UpdateGoodsReceiptItemDto, PhrGoodsReceiptItem>()
             .ForMember(d => d.Id, o => o.Ignore())
             .ForMember(d => d.TenantId, o => o.Ignore())
@@ -320,7 +336,12 @@ public sealed class PhrGeneratedMappingProfile : Profile
             .ForMember(d => d.CreatedBy, o => o.Ignore())
             .ForMember(d => d.ModifiedOn, o => o.Ignore())
             .ForMember(d => d.ModifiedBy, o => o.Ignore())
-            .ForMember(d => d.RowVersion, o => o.Ignore());
+            .ForMember(d => d.RowVersion, o => o.Ignore())
+            .ForMember(d => d.PurchaseRate, o => o.MapFrom(s => s.UnitPrice))
+            .ForMember(d => d.MedicineBatchId, o => o.Ignore())
+            .ForMember(d => d.LineTotal, o => o.Ignore())
+            .ForMember(d => d.ExpiryDate, o => o.MapFrom(s => s.ExpiryDate))
+            .ForMember(d => d.BatchNo, o => o.MapFrom(s => s.BatchNo));
 
         CreateMap<PhrPharmacySale, PharmacySaleResponseDto>();
         CreateMap<CreatePharmacySaleDto, PhrPharmacySale>()

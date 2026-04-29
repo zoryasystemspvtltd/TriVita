@@ -14,6 +14,13 @@ public sealed class PhrGoodsReceiptConfiguration : IEntityTypeConfiguration<PhrG
         builder.Property(e => e.GoodsReceiptNo).HasMaxLength(60);
         builder.Property(e => e.Notes).HasMaxLength(1000);
 
+        builder.Property(e => e.SubTotal).HasPrecision(18, 4);
+        builder.Property(e => e.DiscountAmount).HasPrecision(18, 4);
+        builder.Property(e => e.GstPercent).HasPrecision(18, 4);
+        builder.Property(e => e.GstAmount).HasPrecision(18, 4);
+        builder.Property(e => e.OtherTaxAmount).HasPrecision(18, 4);
+        builder.Property(e => e.TotalAmount).HasPrecision(18, 4);
+
         builder.Property(e => e.PurchaseOrderId).IsRequired(false);
         builder.Property(e => e.SupplierId).IsRequired(false);
 

@@ -12,4 +12,11 @@ public sealed class GoodsReceiptResponseDto
     public long? ReceivedByDoctorId { get; set; }
     public long StatusReferenceValueId { get; set; }
     public string? Notes { get; set; }
+
+    public decimal SubTotal { get; set; }
+    public decimal DiscountAmount { get; set; }
+    public decimal GstPercent { get; set; }
+    public decimal GstAmount { get; set; }
+    public decimal OtherTaxAmount { get; set; }
+    public decimal TotalAmount { get; set; }
 }

@@ -44,22 +44,22 @@ public sealed class MedicineBatchController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<BaseResponse<MedicineBatchResponseDto>>> Create([FromBody] CreateMedicineBatchDto dto, CancellationToken ct)
     {
-        var res = await _service.CreateAsync(dto, ct);
-        if (res.Success) return Ok(res);
-        if (res.Message == "Batch number already exists for the selected medicine.") return Conflict(res);
-        return BadRequest(res);
+        return StatusCode(
+            StatusCodes.Status405MethodNotAllowed,
+            BaseResponse<MedicineBatchResponseDto>.Fail("Manual batch creation is disabled. Batches are created from GRN only."));
     }
 
     [HttpPut("{id:long}")]
     public async Task<ActionResult<BaseResponse<MedicineBatchResponseDto>>> Update(long id, [FromBody] UpdateMedicineBatchDto dto, CancellationToken ct)
     {
-        var res = await _service.UpdateAsync(id, dto, ct);
-        if (res.Success) return Ok(res);
-        if (res.Message == "Batch number already exists for the selected medicine.") return Conflict(res);
-        return BadRequest(res);
+        return StatusCode(
+            StatusCodes.Status405MethodNotAllowed,
+            BaseResponse<MedicineBatchResponseDto>.Fail("Manual batch update is disabled. Batches are maintained from GRN only."));
     }
 
     [HttpDelete("{id:long}")]
     public async Task<ActionResult<BaseResponse<object?>>> Delete(long id, CancellationToken ct)
-        => Ok(await _service.DeleteAsync(id, ct));
+        => StatusCode(
+            StatusCodes.Status405MethodNotAllowed,
+            BaseResponse<object?>.Fail("Manual batch delete is disabled. Batches are maintained from GRN only."));
 }

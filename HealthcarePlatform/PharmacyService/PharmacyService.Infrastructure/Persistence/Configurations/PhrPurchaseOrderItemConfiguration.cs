@@ -13,6 +13,7 @@ public sealed class PhrPurchaseOrderItemConfiguration : IEntityTypeConfiguration
         builder.Property(e => e.RowVersion).IsRowVersion();
         builder.Property(e => e.QuantityOrdered).HasPrecision(18, 4);
         builder.Property(e => e.PurchaseRate).HasPrecision(18, 4);
+        builder.Property(e => e.LineTotal).HasPrecision(18, 4);
         builder.Property(e => e.Notes).HasMaxLength(1000);
     }
 }
