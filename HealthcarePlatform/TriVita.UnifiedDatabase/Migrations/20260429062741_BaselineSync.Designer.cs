@@ -12,8 +12,8 @@ using TriVita.UnifiedDatabase;
 namespace TriVita.UnifiedDatabase.Migrations
 {
     [DbContext(typeof(HealthcareDbContext))]
-    [Migration("20260429044755_AddSupplierTable")]
-    partial class AddSupplierTable
+    [Migration("20260429062741_BaselineSync")]
+    partial class BaselineSync
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
