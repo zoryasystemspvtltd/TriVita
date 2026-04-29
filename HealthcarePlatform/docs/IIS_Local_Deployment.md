@@ -16,7 +16,7 @@ This guide matches the layout under `I:\Projects\PROD\TriVita` and the automatio
 2. **ASP.NET Core Hosting Bundle** (match runtime, e.g. .NET 8): [Download](https://dotnet.microsoft.com/download/dotnet) → Hosting Bundle. Install after IIS.
 3. **URL Rewrite Module** for IIS: [IIS URL Rewrite](https://www.iis.net/downloads/microsoft/url-rewrite).
 4. **Node.js** (for building the portal on the build machine).
-5. **SQL Server** (or LocalDB) reachable using the connection strings in each API’s `appsettings.json` / environment overrides.
+5. **SQL Server** (e.g. Express or full edition) reachable using the connection strings in each API’s `appsettings.json` / environment overrides.
 
 ## One-step publish (build machine)
 

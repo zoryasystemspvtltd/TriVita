@@ -26,7 +26,7 @@ Migrations live in `TriVita.UnifiedDatabase/Migrations/`. Individual microservic
 ## 2. Prerequisites
 
 - **.NET SDK** 8.x (or compatible; solution targets `net8.0`).
-- **SQL Server** reachable from your machine (LocalDB, Docker SQL Server, Azure SQL, etc.).
+- **SQL Server** reachable from your machine (Express, full edition, Docker SQL Server, Azure SQL, etc.).
 - **EF Core CLI tools** (global or local tool manifest):
 
   ```powershell
@@ -62,10 +62,12 @@ Either:
 
 `HealthcareDbContextFactory` resolves the connection string in this order:
 
-1. Environment variable **`TRIVITA_UNIFIED_SQL`**
-2. If unset, default LocalDB:
+1. Environment variable **`ConnectionStrings__DefaultConnection`**
+2. Else environment variable **`DefaultConnection`**
 
-   `Server=(localdb)\mssqllocaldb;Database=TriVitaHealthcare;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true`
+The database name must be **`TriVita`** (factory validation). Example (SQL Server Express on the same machine):
+
+`Server=.\SQLEXPRESS;Database=TriVita;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true`
 
 Optional: **`TRIVITA_USE_MODULE_SCHEMAS=false`** assigns tables to the default schema (`dbo`) instead of module schemas (`hms`, `lms`, etc.). **Do not flip this casually** after migrations already exist; it changes the intended model shape.
 
@@ -84,8 +86,8 @@ Use this when **no migrations exist yet** in `TriVita.UnifiedDatabase`, or you a
 ```powershell
 cd I:\Projects\TriVita\HealthcarePlatform\TriVita.UnifiedDatabase
 
-# Optional: point to your SQL Server
-$env:TRIVITA_UNIFIED_SQL = "Server=YOUR_SERVER;Database=TriVitaHealthcare;User Id=...;Password=...;TrustServerCertificate=True"
+# Required: connection string (must include Database=TriVita)
+$env:ConnectionStrings__DefaultConnection = "Server=.\SQLEXPRESS;Database=TriVita;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true"
 
 # Create the first migration (choose a descriptive name once per greenfield baseline)
 dotnet ef migrations add InitialUnifiedSchema --project TriVita.UnifiedDatabase.csproj
@@ -211,7 +213,7 @@ This deletes the last migration files and reverts the model snapshot.
 | Concern | Recommendation |
 |--------|------------------|
 | Connection strings | Use **environment variables** or **User Secrets** / **Key Vault** per environment; never commit production passwords. |
-| Dev | LocalDB or shared dev SQL; `TRIVITA_UNIFIED_SQL` in your shell profile or `.env` (if your tooling loads it). |
+| Dev | `.\SQLEXPRESS` or shared dev SQL; `ConnectionStrings__DefaultConnection` in your shell profile or `.env` (if your tooling loads it). |
 | Test | Dedicated database; reset or migrate in CI before integration tests. |
 | Prod | Run `database update` from a **controlled pipeline** or generated **SQL script** reviewed by DBA; require **backup** first. |
 | Schema flag | Keep `TRIVITA_USE_MODULE_SCHEMAS` consistent per environment for a given database; changing it mid-life needs a migration plan. |
@@ -219,7 +221,7 @@ This deletes the last migration files and reverts the model snapshot.
 Example (PowerShell session for dev):
 
 ```powershell
-$env:TRIVITA_UNIFIED_SQL = "Server=dev-sql;Database=TriVita_Dev;..."
+$env:ConnectionStrings__DefaultConnection = "Server=dev-sql;Database=TriVita;..."
 cd I:\Projects\TriVita\HealthcarePlatform\TriVita.UnifiedDatabase
 dotnet ef database update --project TriVita.UnifiedDatabase.csproj
 ```
@@ -254,8 +256,8 @@ dotnet ef database update --context HealthcareDbContext --project TriVita.Unifie
 
 ### 9.5 Database connection errors
 
-- Verify `TRIVITA_UNIFIED_SQL` (firewall, credentials, `TrustServerCertificate`, encryption settings).
-- For LocalDB, ensure the instance is started: `sqllocaldb start mssqllocaldb`.
+- Verify `ConnectionStrings__DefaultConnection` (firewall, credentials, `TrustServerCertificate`, encryption settings).
+- For SQL Server Express, ensure the **SQL Server (SQLEXPRESS)** service is running (Services.msc or `Get-Service MSSQL$SQLEXPRESS`).
 - Confirm the database name and server match the environment you intend to change.
 
 ### 9.6 Build failures when running `dotnet ef`

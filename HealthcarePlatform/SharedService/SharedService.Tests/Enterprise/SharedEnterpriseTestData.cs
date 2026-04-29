@@ -74,14 +74,20 @@ internal static class SharedEnterpriseTestData
         return (ent.Id, comp.Id, bu.Id, fac.Id);
     }
 
+    private const string DefaultConnection =
+        "Server=.\\SQLEXPRESS;Database=TriVita;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true";
+
     public static SharedDbContext CreateContext()
     {
         var cs =
             Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection")
-            ?? Environment.GetEnvironmentVariable("DefaultConnection");
+            ?? Environment.GetEnvironmentVariable("DefaultConnection")
+            ?? DefaultConnection;
 
         if (string.IsNullOrWhiteSpace(cs) || !cs.Contains("Database=TriVita", StringComparison.OrdinalIgnoreCase))
             throw new InvalidOperationException("ConnectionStrings__DefaultConnection must be set to TriVita database.");
+        if (cs.Contains("(localdb)", StringComparison.OrdinalIgnoreCase) || cs.Contains("mssqllocaldb", StringComparison.OrdinalIgnoreCase))
+            throw new InvalidOperationException("LocalDB is not allowed. Use Server=.\\SQLEXPRESS;Database=TriVita;...");
 
         var options = new DbContextOptionsBuilder<SharedDbContext>()
             .UseSqlServer(cs)

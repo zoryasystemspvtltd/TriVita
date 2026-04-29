@@ -51,7 +51,7 @@ Per-service `DbContext` classes in each API are unchanged; this project is prima
 
 | Variable | Purpose |
 |----------|---------|
-| `TRIVITA_UNIFIED_SQL` | SQL Server connection string. If unset, LocalDB is used: `Server=(localdb)\mssqllocaldb;Database=TriVitaHealthcare;...` |
+| `ConnectionStrings__DefaultConnection` | Required for `dotnet ef` (see `HealthcareDbContextFactory`). Example: `Server=.\SQLEXPRESS;Database=TriVita;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true` |
 | `TRIVITA_USE_MODULE_SCHEMAS` | Set to `false` to build the model with default schema (`dbo`) for all mapped entities. **Changing this after migrations exist requires a new migration strategy** — do not toggle casually on an existing migrated database. |
 
 ## Commands
@@ -73,14 +73,14 @@ dotnet ef migrations script --project TriVita.UnifiedDatabase.csproj --output I:
 
 Ensure the EF CLI is available: `dotnet tool install --global dotnet-ef` (or use a manifest tool version aligned with EF 8.0.11).
 
-## Initial migration and validation (LocalDB)
+## Initial migration and validation (SQL Server Express)
 
 The first migration added in this setup:
 
 - **Name:** `InitialUnifiedSchema`  
 - **Files:** `Migrations/20260331192050_InitialUnifiedSchema.cs`, matching `.Designer.cs`, and `HealthcareDbContextModelSnapshot.cs`
 
-After `dotnet ef database update` against LocalDB, schema inventory was:
+After `dotnet ef database update` against `.\SQLEXPRESS`, schema inventory was:
 
 | Schema | Approx. table count |
 |--------|---------------------|
