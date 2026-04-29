@@ -54,7 +54,7 @@ type MedicineFormValues = {
   categoryId: string;
   manufacturerId: string;
   primaryCompositionId: string;
-  formReferenceValueId: string;
+  formId: string;
   defaultUnitId: string;
   strength: string;
   notes: string;
@@ -67,7 +67,7 @@ const emptyForm: MedicineFormValues = {
   categoryId: '',
   manufacturerId: '',
   primaryCompositionId: '',
-  formReferenceValueId: '',
+  formId: '',
   defaultUnitId: '',
   strength: '',
   notes: '',
@@ -80,7 +80,7 @@ const medicineSchema = Yup.object({
   categoryId: Yup.string().required('Category is required').matches(/^\d+$/, 'Select a category'),
   manufacturerId: Yup.string().required('Manufacturer is required').matches(/^\d+$/, 'Select a manufacturer'),
   primaryCompositionId: Yup.string().required('Composition is required').matches(/^\d+$/, 'Select a composition'),
-  formReferenceValueId: Yup.string().required('Form is required').matches(/^\d+$/, 'Select a form'),
+  formId: Yup.string().required('Form is required').matches(/^\d+$/, 'Select a form'),
   defaultUnitId: Yup.string().trim().matches(/^$|^\d+$/, 'Invalid unit'),
   strength: Yup.string().trim().max(120).default(''),
   notes: Yup.string().trim().max(1000).default(''),
@@ -101,7 +101,7 @@ function rowToFormValues(row: MedicineRow): MedicineFormValues {
     categoryId: row.categoryId != null ? String(row.categoryId) : '',
     manufacturerId: row.manufacturerId != null ? String(row.manufacturerId) : '',
     primaryCompositionId: pc != null ? String(pc) : '',
-    formReferenceValueId: row.formReferenceValueId != null ? String(row.formReferenceValueId) : '',
+    formId: row.formId != null ? String(row.formId) : '',
     defaultUnitId: row.defaultUnitId != null ? String(row.defaultUnitId) : '',
     strength: String(row.strength ?? ''),
     notes: String(row.notes ?? ''),
@@ -116,7 +116,7 @@ function buildApiBody(v: MedicineFormValues) {
     categoryId: Number(v.categoryId),
     manufacturerId: Number(v.manufacturerId),
     primaryCompositionId: Number(v.primaryCompositionId),
-    formReferenceValueId: Number(v.formReferenceValueId),
+    formId: Number(v.formId),
     defaultUnitId: v.defaultUnitId.trim() ? Number(v.defaultUnitId) : undefined,
     strength: v.strength.trim() || undefined,
     notes: v.notes.trim() || undefined,
@@ -362,11 +362,11 @@ export function MedicineMasterPage() {
                 format: (row) => formatCompositionCell(row, compositionMap, unitLabelMap),
               },
               {
-                id: 'formReferenceValueId',
+                id: 'formId',
                 label: 'Form',
                 minWidth: 140,
                 format: (row) => {
-                  const id = Number(row.formReferenceValueId);
+                  const id = Number(row.formId);
                   return Number.isFinite(id) ? formLabelMap.get(id) ?? '—' : '—';
                 },
               },
@@ -485,7 +485,7 @@ export function MedicineMasterPage() {
             <DetailKv
               label="Form"
               value={(() => {
-                const id = Number(detailRecord.formReferenceValueId);
+                const id = Number(detailRecord.formId);
                 return Number.isFinite(id) ? formLabelMap.get(id) ?? '—' : '—';
               })()}
             />
@@ -601,7 +601,7 @@ export function MedicineMasterPage() {
             </Grid>
             <Grid item xs={12} md={6}>
               <LookupSelect<MedicineFormValues>
-                name="formReferenceValueId"
+                name="formId"
                 control={control}
                 label="Form"
                 required

@@ -15,5 +15,12 @@ public sealed class PhrGoodsReceiptItemConfiguration : IEntityTypeConfiguration<
         builder.Property(e => e.PurchaseRate).HasPrecision(18, 4);
         builder.Property(e => e.ExpiryDate).HasColumnType("date");
         builder.Property(e => e.MRP).HasPrecision(18, 4);
+
+        builder.Property(e => e.PurchaseOrderItemId).IsRequired(false);
+
+        builder.HasOne<PhrPurchaseOrderItem>()
+            .WithMany()
+            .HasForeignKey(e => e.PurchaseOrderItemId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

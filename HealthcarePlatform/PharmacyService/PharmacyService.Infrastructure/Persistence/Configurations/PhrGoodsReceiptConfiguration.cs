@@ -13,5 +13,14 @@ public sealed class PhrGoodsReceiptConfiguration : IEntityTypeConfiguration<PhrG
         builder.Property(e => e.RowVersion).IsRowVersion();
         builder.Property(e => e.GoodsReceiptNo).HasMaxLength(60);
         builder.Property(e => e.Notes).HasMaxLength(1000);
+
+        builder.Property(e => e.PurchaseOrderId).IsRequired(false);
+        builder.Property(e => e.SupplierId).IsRequired(false);
+
+        // Supplier is only required in "GRN without PO" mode, but FK must exist to enforce integrity when provided.
+        builder.HasOne<PhrSupplier>()
+            .WithMany()
+            .HasForeignKey(e => e.SupplierId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

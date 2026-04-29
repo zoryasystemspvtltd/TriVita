@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TriVita.UnifiedDatabase;
 
@@ -11,9 +12,11 @@ using TriVita.UnifiedDatabase;
 namespace TriVita.UnifiedDatabase.Migrations
 {
     [DbContext(typeof(HealthcareDbContext))]
-    partial class HealthcareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260429074123_AddFormMaster")]
+    partial class AddFormMaster
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -9784,7 +9787,7 @@ namespace TriVita.UnifiedDatabase.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<long?>("PurchaseOrderId")
+                    b.Property<long>("PurchaseOrderId")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("ReceivedByDoctorId")
@@ -9802,15 +9805,10 @@ namespace TriVita.UnifiedDatabase.Migrations
                     b.Property<long>("StatusReferenceValueId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("SupplierId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("TenantId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SupplierId");
 
                     b.ToTable("GoodsReceipt", "pharmacy");
                 });
@@ -9863,7 +9861,7 @@ namespace TriVita.UnifiedDatabase.Migrations
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<long?>("PurchaseOrderItemId")
+                    b.Property<long>("PurchaseOrderItemId")
                         .HasColumnType("bigint");
 
                     b.Property<decimal?>("PurchaseRate")
@@ -9887,8 +9885,6 @@ namespace TriVita.UnifiedDatabase.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PurchaseOrderItemId");
 
                     b.ToTable("GoodsReceiptItems", "pharmacy");
                 });
@@ -12998,22 +12994,6 @@ namespace TriVita.UnifiedDatabase.Migrations
                         .HasPrincipalKey("TenantId", "FacilityId", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("PharmacyService.Domain.Entities.PhrGoodsReceipt", b =>
-                {
-                    b.HasOne("PharmacyService.Domain.Entities.PhrSupplier", null)
-                        .WithMany()
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.NoAction);
-                });
-
-            modelBuilder.Entity("PharmacyService.Domain.Entities.PhrGoodsReceiptItem", b =>
-                {
-                    b.HasOne("PharmacyService.Domain.Entities.PhrPurchaseOrderItem", null)
-                        .WithMany()
-                        .HasForeignKey("PurchaseOrderItemId")
-                        .OnDelete(DeleteBehavior.NoAction);
                 });
 
             modelBuilder.Entity("PharmacyService.Domain.Entities.PhrInventoryLocation", b =>

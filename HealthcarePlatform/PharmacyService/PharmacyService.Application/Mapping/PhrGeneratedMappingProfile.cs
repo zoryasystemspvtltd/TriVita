@@ -80,10 +80,7 @@ public sealed class PhrGeneratedMappingProfile : Profile
             .ForMember(d => d.ModifiedBy, o => o.Ignore())
             .ForMember(d => d.RowVersion, o => o.Ignore());
 
-        CreateMap<PhrReferenceDataValue, MedicineFormResponseDto>()
-            .ForMember(d => d.FormCode, o => o.MapFrom(s => s.ValueCode))
-            .ForMember(d => d.FormName, o => o.MapFrom(s => s.ValueName))
-            .ForMember(d => d.Description, o => o.MapFrom(s => s.ValueText));
+        CreateMap<PhrForm, MedicineFormResponseDto>();
 
         CreateMap<PhrComposition, CompositionResponseDto>();
         CreateMap<CreateCompositionDto, PhrComposition>()

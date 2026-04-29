@@ -16,10 +16,16 @@ public sealed class PhrMedicineConfiguration : IEntityTypeConfiguration<PhrMedic
         builder.Property(e => e.Strength).HasMaxLength(120);
         builder.Property(e => e.Notes).HasMaxLength(1000);
         builder.Property(e => e.PrimaryCompositionId);
+        builder.Property(e => e.FormId);
         builder
             .HasOne<PhrComposition>()
             .WithMany()
             .HasForeignKey(e => e.PrimaryCompositionId)
+            .OnDelete(DeleteBehavior.NoAction);
+        builder
+            .HasOne<PhrForm>()
+            .WithMany()
+            .HasForeignKey(e => e.FormId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

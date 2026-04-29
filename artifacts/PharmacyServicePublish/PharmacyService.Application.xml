@@ -8,7 +8,7 @@
             <summary>Basic Pharmacy module descriptor.</summary>
         </member>
         <member name="T:PharmacyService.Application.Services.Entities.PhrMedicineFormService">
-            <summary>Medicine dosage forms stored as <see cref="T:PharmacyService.Domain.Entities.PhrReferenceDataValue"/> under a tenant-specific definition.</summary>
+            <summary>Medicine dosage forms stored in dedicated <see cref="T:PharmacyService.Domain.Entities.PhrForm"/> master table.</summary>
         </member>
         <member name="M:PharmacyService.Application.Services.ILmsInventoryIntegrationService.RecordLmsReagentConsumptionAsync(PharmacyService.Application.Services.RecordLmsReagentConsumptionRequest,System.Threading.CancellationToken)">
             <summary>

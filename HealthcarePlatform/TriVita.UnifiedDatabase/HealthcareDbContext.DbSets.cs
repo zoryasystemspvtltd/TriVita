@@ -149,6 +149,7 @@ public sealed partial class HealthcareDbContext
     public DbSet<PhrMedicineCategory> PhrMedicineCategories => Set<PhrMedicineCategory>();
     public DbSet<PhrManufacturer> PhrManufacturers => Set<PhrManufacturer>();
     public DbSet<PhrComposition> PhrCompositions => Set<PhrComposition>();
+    public DbSet<PhrForm> PhrForms => Set<PhrForm>();
     public DbSet<PhrMedicine> PhrMedicines => Set<PhrMedicine>();
     public DbSet<PhrMedicineComposition> PhrMedicineCompositions => Set<PhrMedicineComposition>();
     public DbSet<PhrMedicineBatch> PhrMedicineBatches => Set<PhrMedicineBatch>();

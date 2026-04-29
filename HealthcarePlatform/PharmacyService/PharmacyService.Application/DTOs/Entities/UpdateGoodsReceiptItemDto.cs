@@ -3,7 +3,7 @@ namespace PharmacyService.Application.DTOs.Entities;
 public sealed class UpdateGoodsReceiptItemDto
 {
     public long GoodsReceiptId { get; set; }
-    public long PurchaseOrderItemId { get; set; }
+    public long? PurchaseOrderItemId { get; set; }
     public int LineNum { get; set; }
     public long MedicineId { get; set; }
     public long MedicineBatchId { get; set; }

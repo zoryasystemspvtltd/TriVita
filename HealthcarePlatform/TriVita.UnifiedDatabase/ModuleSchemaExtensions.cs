@@ -15,8 +15,9 @@ public static class ModuleSchemaExtensions
             if (entityType.IsOwned()) continue;
 
             var clr = entityType.ClrType;
-            // Supplier master lives in dbo (shared-style); do not assign pharmacy schema.
-            if (string.Equals(clr.FullName, "PharmacyService.Domain.Entities.PhrSupplier", StringComparison.Ordinal))
+            // Supplier and Form masters live in dbo (shared-style); do not assign pharmacy schema.
+            if (string.Equals(clr.FullName, "PharmacyService.Domain.Entities.PhrSupplier", StringComparison.Ordinal)
+                || string.Equals(clr.FullName, "PharmacyService.Domain.Entities.PhrForm", StringComparison.Ordinal))
                 continue;
 
             var ns = clr.Namespace ?? string.Empty;
