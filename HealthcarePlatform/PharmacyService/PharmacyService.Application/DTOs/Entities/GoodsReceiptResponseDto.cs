@@ -19,4 +19,6 @@ public sealed class GoodsReceiptResponseDto
     public decimal GstAmount { get; set; }
     public decimal OtherTaxAmount { get; set; }
     public decimal TotalAmount { get; set; }
+
+    public List<GoodsReceiptItemResponseDto> Items { get; set; } = new();
 }

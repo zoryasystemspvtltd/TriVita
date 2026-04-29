@@ -2,7 +2,7 @@ namespace PharmacyService.Application.DTOs.Entities;
 
 public sealed class CreatePurchaseOrderDto
 {
-    public string PurchaseOrderNo { get; set; }
+    public string PurchaseOrderNo { get; set; } = string.Empty;
     public string SupplierName { get; set; }
     public DateTime OrderDate { get; set; }
     public DateTime? ExpectedOn { get; set; }
@@ -12,4 +12,6 @@ public sealed class CreatePurchaseOrderDto
     public decimal DiscountAmount { get; set; }
     public decimal GstPercent { get; set; }
     public decimal OtherTaxAmount { get; set; }
+
+    public List<PurchaseOrderItemUpsertDto> Items { get; set; } = new();
 }

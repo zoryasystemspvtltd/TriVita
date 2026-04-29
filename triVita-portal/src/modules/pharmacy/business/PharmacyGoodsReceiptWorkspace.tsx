@@ -1,12 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Grid, IconButton, Link, Stack, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from '@mui/material';
-import { Add, Delete, Edit } from '@mui/icons-material';
+import { Add, Delete } from '@mui/icons-material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
-import { Controller, useForm, useWatch, type Resolver } from 'react-hook-form';
+import { Controller, useFieldArray, useForm, useWatch, type Resolver } from 'react-hook-form';
 import * as Yup from 'yup';
 import { DataTable } from '@/components/common/DataTable';
-import { LookupSelect } from '@/components/common/LookupSelect';
 import { DetailKv } from '@/components/masters/DetailKv';
 import { DetailDrawer } from '@/components/layout/DetailDrawer';
 import { PageHeader } from '@/components/layout/PageHeader';
@@ -18,18 +17,14 @@ import { TriVitaTextField } from '@/components/ds/TriVitaTextField';
 import { useToast } from '@/components/toast/ToastProvider';
 import {
   createGoodsReceipt,
-  createGoodsReceiptItem,
   deleteGoodsReceipt,
-  deleteGoodsReceiptItem,
   getGoodsReceiptById,
-  getGoodsReceiptItemsPaged,
   getGoodsReceiptPaged,
   getMedicinePaged,
   getSupplierPaged,
-  getPurchaseOrderItemsPaged,
+  getPurchaseOrderById,
   getPurchaseOrdersPaged,
   updateGoodsReceipt,
-  updateGoodsReceiptItem,
 } from '@/services/pharmacyService';
 import { buildPharmacyReferenceStatusOptions } from '@/utils/pharmacyStatusOptions';
 import { getApiErrorMessage } from '@/utils/errorMap';
@@ -55,6 +50,18 @@ type HForm = {
   gstPercent: string;
   otherTaxAmount: string;
   notes: string;
+  items: {
+    id?: number;
+    purchaseOrderItemId?: string;
+    medicineId: string;
+    orderedQuantity?: string;
+    quantityReceived: string;
+    unitPrice: string;
+    batchNo: string;
+    expiryDate: string;
+    mrp: string;
+    notes?: string;
+  }[];
 };
 
 const hSchema = Yup.object({
@@ -80,6 +87,23 @@ const hSchema = Yup.object({
   gstPercent: Yup.string().trim().default(''),
   otherTaxAmount: Yup.string().trim().default(''),
   notes: Yup.string().trim().max(2000).default(''),
+  items: Yup.array()
+    .of(
+      Yup.object({
+        id: Yup.number().notRequired(),
+        purchaseOrderItemId: Yup.string().trim().default(''),
+        medicineId: Yup.string().trim().required().matches(/^\d+$/, 'Select medicine'),
+        orderedQuantity: Yup.string().trim().default(''),
+        quantityReceived: Yup.string().trim().required(),
+        unitPrice: Yup.string().trim().required(),
+        batchNo: Yup.string().trim().required(),
+        expiryDate: Yup.string().trim().required(),
+        mrp: Yup.string().trim().default(''),
+        notes: Yup.string().trim().default(''),
+      })
+    )
+    .min(1, 'Add at least one item')
+    .required(),
 });
 
 export function PharmacyGoodsReceiptWorkspace() {
@@ -92,8 +116,6 @@ export function PharmacyGoodsReceiptWorkspace() {
   const [drawerRow, setDrawerRow] = useState<Row | null>(null);
   const [modal, setModal] = useState<null | { mode: 'create' } | { mode: 'edit'; id: number }>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
-  const [lineCtx, setLineCtx] = useState<null | { grId: number; poId?: number | null; mode: 'withPO' | 'withoutPO' }>(null);
-  const [editLine, setEditLine] = useState<null | { id: number; quantityReceived: string; unitPrice: string; batchNo: string; expiryDate: string; mrp: string; purchaseOrderItemId?: string; medicineId?: string }>(null);
   const [lineDraft, setLineDraft] = useState({
     purchaseOrderItemId: '',
     medicineId: '',
@@ -102,6 +124,7 @@ export function PharmacyGoodsReceiptWorkspace() {
     batchNo: '',
     expiryDate: '',
     mrp: '',
+    notes: '',
   });
 
   useEffect(() => {
@@ -119,6 +142,13 @@ export function PharmacyGoodsReceiptWorkspace() {
     queryFn: buildPharmacyReferenceStatusOptions,
     staleTime: 120_000,
   });
+
+  const grnStatusOpts = useMemo(() => {
+    const allowed = new Set(['Draft', 'Completed']);
+    return (statusMap.data ?? []).filter((o) => allowed.has(o.label));
+  }, [statusMap.data]);
+
+  const draftGrnStatusId = useMemo(() => grnStatusOpts.find((o) => o.label === 'Draft')?.value ?? '', [grnStatusOpts]);
 
   const sm = useMemo(() => {
     const m = new Map<string, string>();
@@ -191,18 +221,6 @@ export function PharmacyGoodsReceiptWorkspace() {
     enabled: modal != null && modal.mode === 'edit',
   });
 
-  const poItems = useQuery({
-    queryKey: ['pharmacy', 'grn-po-items', lineCtx?.poId],
-    queryFn: () => getPurchaseOrderItemsPaged({ page: 1, pageSize: 500 }),
-    enabled: lineCtx != null && lineCtx.mode === 'withPO' && lineCtx.poId != null,
-  });
-
-  const grItems = useQuery({
-    queryKey: ['pharmacy', 'grn-items', lineCtx?.grId],
-    queryFn: () => getGoodsReceiptItemsPaged({ page: 1, pageSize: 500 }),
-    enabled: lineCtx != null,
-  });
-
   const medicines = useQuery({
     queryKey: ['pharmacy', 'grn-medicines'],
     queryFn: () => getMedicinePaged({ page: 1, pageSize: 500 }),
@@ -218,29 +236,6 @@ export function PharmacyGoodsReceiptWorkspace() {
     }
     return m;
   }, [medicines.data]);
-
-  const poItemRows = useMemo(() => {
-    if (!poItems.data?.success || !poItems.data.data || lineCtx == null || lineCtx.mode !== 'withPO' || lineCtx.poId == null) return [];
-    return (poItems.data.data.items as Row[]).filter(
-      (x) => Number(x.purchaseOrderId ?? x.PurchaseOrderId) === lineCtx.poId
-    );
-  }, [poItems.data, lineCtx]);
-
-  const grLineRows = useMemo(() => {
-    if (!grItems.data?.success || !grItems.data.data || lineCtx == null) return [];
-    return (grItems.data.data.items as Row[]).filter((x) => Number(x.goodsReceiptId ?? x.GoodsReceiptId) === lineCtx.grId);
-  }, [grItems.data, lineCtx]);
-
-  const poLineLabelByItemId = useMemo(() => {
-    const m = new Map<number, string>();
-    for (const it of poItemRows) {
-      const id = Number(it.id);
-      if (!Number.isFinite(id)) continue;
-      const ln = it.lineNum ?? it.LineNum;
-      m.set(id, `PO line ${String(ln ?? '—')}`);
-    }
-    return m;
-  }, [poItemRows]);
 
   const {
     control,
@@ -260,10 +255,25 @@ export function PharmacyGoodsReceiptWorkspace() {
       gstPercent: '',
       otherTaxAmount: '',
       notes: '',
+      items: [],
     },
   });
 
   const modeWatch = useWatch({ control, name: 'mode' });
+  const poIdWatch = useWatch({ control, name: 'purchaseOrderId' });
+  const itemsWatch = useWatch({ control, name: 'items' });
+
+  const { fields: itemFields, append: appendItem, remove: removeItem, update: updateItem, replace: replaceItems } = useFieldArray({
+    control,
+    name: 'items',
+  });
+
+  const poDetail = useQuery({
+    queryKey: ['pharmacy', 'grn-po-detail', poIdWatch],
+    queryFn: () => getPurchaseOrderById(Number(poIdWatch)),
+    enabled: modeWatch === 'withPO' && Boolean(poIdWatch && /^\d+$/.test(poIdWatch)),
+    staleTime: 30_000,
+  });
 
   useEffect(() => {
     if (!modal) return;
@@ -274,12 +284,14 @@ export function PharmacyGoodsReceiptWorkspace() {
         purchaseOrderId: '',
         supplierId: '',
         receivedOn: new Date().toISOString().slice(0, 10),
-        statusReferenceValueId: statusMap.data?.[0]?.value ?? '',
+        statusReferenceValueId: draftGrnStatusId || statusMap.data?.[0]?.value || '',
         discountAmount: '',
         gstPercent: '',
         otherTaxAmount: '',
         notes: '',
+        items: [],
       });
+      replaceItems([]);
       return;
     }
     const d = editSeed.data;
@@ -293,14 +305,57 @@ export function PharmacyGoodsReceiptWorkspace() {
         purchaseOrderId: hasPo ? String(r.purchaseOrderId ?? r.PurchaseOrderId ?? '') : '',
         supplierId: hasPo ? String(r.supplierId ?? r.SupplierId ?? '') : String(r.supplierId ?? r.SupplierId ?? ''),
         receivedOn: pickStr(r, 'receivedOn', 'ReceivedOn').slice(0, 10),
-        statusReferenceValueId: String(r.statusReferenceValueId ?? ''),
+        statusReferenceValueId: String(r.statusReferenceValueId ?? '') || draftGrnStatusId,
         discountAmount: r.discountAmount != null ? String(r.discountAmount) : '',
         gstPercent: r.gstPercent != null ? String(r.gstPercent) : '',
         otherTaxAmount: r.otherTaxAmount != null ? String(r.otherTaxAmount) : '',
         notes: pickStr(r, 'notes', 'Notes'),
+        items: [],
       });
+
+      const items = (Array.isArray((r as any).items) ? ((r as any).items as Row[]) : []) as Row[];
+      replaceItems(
+        items.map((x) => ({
+          id: x.id != null ? Number(x.id) : undefined,
+          purchaseOrderItemId: x.purchaseOrderItemId != null ? String(x.purchaseOrderItemId) : '',
+          medicineId: String(x.medicineId ?? ''),
+          orderedQuantity: x.orderedQuantity != null ? String(x.orderedQuantity) : '',
+          quantityReceived: String(x.quantityReceived ?? ''),
+          unitPrice: String(x.unitPrice ?? x.UnitPrice ?? ''),
+          batchNo: String(x.batchNo ?? x.BatchNo ?? ''),
+          expiryDate: String(x.expiryDate ?? x.ExpiryDate ?? '').slice(0, 10),
+          mrp: String(x.mrp ?? x.MRP ?? ''),
+          notes: pickStr(x, 'notes', 'Notes'),
+        }))
+      );
     }
-  }, [modal, editSeed.data, reset, statusMap.data]);
+  }, [modal, editSeed.data, reset, statusMap.data, draftGrnStatusId, replaceItems]);
+
+  useEffect(() => {
+    if (modeWatch !== 'withPO') return;
+    if (!modal) return;
+    if (!poIdWatch || !/^\d+$/.test(poIdWatch)) {
+      replaceItems([]);
+      return;
+    }
+    const res = poDetail.data;
+    if (!res?.success || !res.data) return;
+    const po = res.data as Row;
+    const poItems = (Array.isArray((po as any).items) ? ((po as any).items as Row[]) : []) as Row[];
+    replaceItems(
+      poItems.map((it) => ({
+        purchaseOrderItemId: String(it.id ?? ''),
+        medicineId: String(it.medicineId ?? it.MedicineId ?? ''),
+        orderedQuantity: String(it.quantityOrdered ?? it.QuantityOrdered ?? ''),
+        quantityReceived: '',
+        unitPrice: String(it.unitPrice ?? it.UnitPrice ?? ''),
+        batchNo: '',
+        expiryDate: '',
+        mrp: '',
+        notes: '',
+      }))
+    );
+  }, [modeWatch, poIdWatch, poDetail.data, modal, replaceItems]);
 
   const saveMut = useMutation({
     mutationFn: async (args: { v: HForm; editId?: number }) => {
@@ -315,28 +370,29 @@ export function PharmacyGoodsReceiptWorkspace() {
         gstPercent: args.v.gstPercent.trim() ? Number(args.v.gstPercent) : 0,
         otherTaxAmount: args.v.otherTaxAmount.trim() ? Number(args.v.otherTaxAmount) : 0,
         notes: args.v.notes.trim() || undefined,
+        items: (args.v.items ?? []).map((x) => ({
+          id: x.id ?? undefined,
+          purchaseOrderItemId: isWithPo && x.purchaseOrderItemId?.trim() ? Number(x.purchaseOrderItemId) : null,
+          medicineId: Number(x.medicineId),
+          quantityReceived: Number(x.quantityReceived),
+          unitPrice: Number(x.unitPrice),
+          batchNo: x.batchNo.trim(),
+          expiryDate: new Date(x.expiryDate).toISOString(),
+          mrp: x.mrp.trim() ? Number(x.mrp) : undefined,
+          notes: x.notes?.trim() || undefined,
+        })),
       };
       if (args.editId != null) return updateGoodsReceipt(args.editId, body);
       return createGoodsReceipt(body);
     },
-    onSuccess: (res, vars) => {
+    onSuccess: (res) => {
       if (!res.success) {
         showToast(res.message ?? 'Save failed', 'error');
         return;
       }
       showToast('Goods receipt saved', 'success');
-      const created = res.data as Row | undefined;
-      const newId = vars.editId ?? (created?.id != null ? Number(created.id) : NaN);
       void qc.invalidateQueries({ queryKey: ['pharmacy', 'grn'] });
       setModal(null);
-      if (Number.isFinite(newId)) {
-        if (vars.v.mode === 'withPO') {
-          const poId = Number(vars.v.purchaseOrderId);
-          if (Number.isFinite(poId)) setLineCtx({ grId: newId, poId, mode: 'withPO' });
-        } else {
-          setLineCtx({ grId: newId, poId: null, mode: 'withoutPO' });
-        }
-      }
     },
     onError: (e) => showToast(getApiErrorMessage(e), 'error'),
   });
@@ -356,111 +412,6 @@ export function PharmacyGoodsReceiptWorkspace() {
     onError: (e) => showToast(getApiErrorMessage(e), 'error'),
   });
 
-  const addLineMut = useMutation({
-    mutationFn: async () => {
-      if (lineCtx == null) throw new Error('No ctx');
-      const isWithPo = lineCtx.mode === 'withPO';
-
-      let purchaseOrderItemId: number | null = null;
-      let medicineId: number | null = null;
-      let unitPrice: number | null = null;
-
-      if (isWithPo) {
-        const poItem = poItemRows.find((x) => String(x.id) === lineDraft.purchaseOrderItemId);
-        if (!poItem) throw new Error('PO item');
-
-        purchaseOrderItemId = Number(lineDraft.purchaseOrderItemId);
-        medicineId = Number(poItem.medicineId ?? poItem.MedicineId);
-        unitPrice = Number(lineDraft.unitPrice);
-      } else {
-        medicineId = Number(lineDraft.medicineId);
-        unitPrice = Number(lineDraft.unitPrice);
-      }
-
-      if (medicineId == null || !Number.isFinite(medicineId)) throw new Error('MedicineId required');
-      if (isWithPo && (purchaseOrderItemId == null || !Number.isFinite(purchaseOrderItemId))) throw new Error('PO item required');
-      if (unitPrice == null || !Number.isFinite(unitPrice) || unitPrice <= 0) throw new Error('UnitPrice required');
-      if (!lineDraft.batchNo.trim()) throw new Error('BatchNo required');
-      if (!lineDraft.expiryDate.trim()) throw new Error('ExpiryDate required');
-      const nextLine = grLineRows.length === 0 ? 1 : Math.max(...grLineRows.map((r) => Number(r.lineNum ?? 0))) + 1;
-      return createGoodsReceiptItem({
-        goodsReceiptId: lineCtx.grId,
-        lineNum: nextLine,
-        purchaseOrderItemId,
-        medicineId,
-        quantityReceived: Number(lineDraft.quantityReceived),
-        unitPrice,
-        batchNo: lineDraft.batchNo.trim(),
-        expiryDate: new Date(lineDraft.expiryDate).toISOString(),
-        mrp: lineDraft.mrp.trim() ? Number(lineDraft.mrp) : undefined,
-      });
-    },
-    onSuccess: (res) => {
-      if (!res.success) {
-        showToast(res.message ?? 'Line failed', 'error');
-        return;
-      }
-      showToast('Receipt line saved', 'success');
-      setLineDraft({
-        purchaseOrderItemId: '',
-        medicineId: '',
-        quantityReceived: '',
-        unitPrice: '',
-        batchNo: '',
-        expiryDate: '',
-        mrp: '',
-      });
-      void qc.invalidateQueries({ queryKey: ['pharmacy', 'grn-items'] });
-    },
-    onError: (e) => showToast(getApiErrorMessage(e), 'error'),
-  });
-
-  const delLineMut = useMutation({
-    mutationFn: (id: number) => deleteGoodsReceiptItem(id),
-    onSuccess: (res) => {
-      if (!res.success) {
-        showToast(res.message ?? 'Delete failed', 'error');
-        return;
-      }
-      void qc.invalidateQueries({ queryKey: ['pharmacy', 'grn-items'] });
-    },
-    onError: (e) => showToast(getApiErrorMessage(e), 'error'),
-  });
-
-  const updLineMut = useMutation({
-    mutationFn: async () => {
-      if (editLine == null || lineCtx == null) throw new Error('No line');
-      const isWithPo = lineCtx.mode === 'withPO';
-      const poItemId = isWithPo ? Number(editLine.purchaseOrderItemId) : null;
-      const medId = isWithPo
-        ? (() => {
-            const poItem = poItemRows.find((x) => String(x.id) === String(editLine.purchaseOrderItemId));
-            return poItem ? Number(poItem.medicineId ?? poItem.MedicineId) : NaN;
-          })()
-        : Number(editLine.medicineId);
-      return updateGoodsReceiptItem(editLine.id, {
-        goodsReceiptId: lineCtx.grId,
-        lineNum: 1,
-        purchaseOrderItemId: poItemId,
-        medicineId: medId,
-        quantityReceived: Number(editLine.quantityReceived),
-        unitPrice: Number(editLine.unitPrice),
-        batchNo: editLine.batchNo.trim(),
-        expiryDate: new Date(editLine.expiryDate).toISOString(),
-        mrp: editLine.mrp.trim() ? Number(editLine.mrp) : undefined,
-      });
-    },
-    onSuccess: (res) => {
-      if (!res.success) {
-        showToast(res.message ?? 'Update failed', 'error');
-        return;
-      }
-      showToast('Line updated', 'success');
-      setEditLine(null);
-      void qc.invalidateQueries({ queryKey: ['pharmacy', 'grn-items'] });
-    },
-    onError: (e) => showToast(getApiErrorMessage(e), 'error'),
-  });
 
   const detailData = (detail.data?.success ? detail.data.data : null) as Row | null;
 
@@ -514,7 +465,6 @@ export function PharmacyGoodsReceiptWorkspace() {
               minWidth: 220,
               format: (r) => {
                 const id = Number(r.id);
-                const poId = Number(r.purchaseOrderId ?? r.PurchaseOrderId);
                 return (
                   <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
                     <Link component="button" type="button" variant="body2" onClick={() => setDrawerRow(r)}>
@@ -529,11 +479,6 @@ export function PharmacyGoodsReceiptWorkspace() {
                       variant="body2"
                       onClick={() => {
                         setModal({ mode: 'edit', id });
-                        setLineCtx({
-                          grId: id,
-                          poId: Number.isFinite(poId) ? poId : null,
-                          mode: Number.isFinite(poId) ? 'withPO' : 'withoutPO',
-                        });
                       }}
                     >
                       Edit
@@ -543,23 +488,6 @@ export function PharmacyGoodsReceiptWorkspace() {
                     </Typography>
                     <Link component="button" type="button" variant="body2" color="error" onClick={() => setDeleteId(id)}>
                       Delete
-                    </Link>
-                    <Typography variant="body2" color="text.disabled">
-                      |
-                    </Typography>
-                    <Link
-                      component="button"
-                      type="button"
-                      variant="body2"
-                      onClick={() => {
-                        setLineCtx({
-                          grId: id,
-                          poId: Number.isFinite(poId) ? poId : null,
-                          mode: Number.isFinite(poId) ? 'withPO' : 'withoutPO',
-                        });
-                      }}
-                    >
-                      Lines
                     </Link>
                   </Stack>
                 );
@@ -579,225 +507,6 @@ export function PharmacyGoodsReceiptWorkspace() {
           emptyTitle="No goods receipts"
         />
       </FormSection>
-
-      {lineCtx != null ? (
-        <FormSection
-          title="Receipt lines"
-          action={<TriVitaButton onClick={() => setLineCtx(null)}>Close</TriVitaButton>}
-        >
-          <Table size="small" sx={{ mb: 2 }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>{lineCtx.mode === 'withPO' ? 'PO line' : '—'}</TableCell>
-                <TableCell>Medicine</TableCell>
-                <TableCell align="right">Qty received</TableCell>
-                <TableCell>Batch</TableCell>
-                <TableCell>Expiry</TableCell>
-                <TableCell align="right">Unit price</TableCell>
-                <TableCell align="right">Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {grLineRows.map((lr) => (
-                <TableRow key={String(lr.id)} hover>
-                  <TableCell>
-                    {lineCtx.mode === 'withPO'
-                      ? poLineLabelByItemId.get(Number(lr.purchaseOrderItemId ?? lr.PurchaseOrderItemId)) ?? '—'
-                      : '—'}
-                </TableCell>
-                  <TableCell>{medMap.get(Number(lr.medicineId ?? lr.MedicineId)) ?? '—'}</TableCell>
-                  <TableCell align="right">{String(lr.quantityReceived ?? '')}</TableCell>
-                  <TableCell>{String(lr.batchNo ?? lr.BatchNo ?? '—')}</TableCell>
-                  <TableCell>{String(lr.expiryDate ?? lr.ExpiryDate ?? '').slice(0, 10) || '—'}</TableCell>
-                  <TableCell align="right">{String(lr.unitPrice ?? lr.UnitPrice ?? '')}</TableCell>
-                  <TableCell align="right">
-                    <Stack direction="row" spacing={1} justifyContent="flex-end">
-                      <IconButton
-                        size="small"
-                        onClick={() =>
-                          lr.id != null &&
-                          setEditLine({
-                            id: Number(lr.id),
-                            quantityReceived: String(lr.quantityReceived ?? ''),
-                            unitPrice: String(lr.unitPrice ?? lr.UnitPrice ?? ''),
-                            batchNo: String(lr.batchNo ?? lr.BatchNo ?? ''),
-                            expiryDate: String(lr.expiryDate ?? lr.ExpiryDate ?? '').slice(0, 10),
-                            mrp: String(lr.mrp ?? lr.MRP ?? ''),
-                            purchaseOrderItemId: String(lr.purchaseOrderItemId ?? lr.PurchaseOrderItemId ?? ''),
-                            medicineId: String(lr.medicineId ?? lr.MedicineId ?? ''),
-                          })
-                        }
-                      >
-                        <Edit fontSize="small" />
-                      </IconButton>
-                      <IconButton size="small" onClick={() => lr.id != null && delLineMut.mutate(Number(lr.id))}>
-                        <Delete fontSize="small" />
-                      </IconButton>
-                    </Stack>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-          {lineCtx.mode === 'withPO' ? (
-            <>
-              <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                Add line from PO
-              </Typography>
-              <Stack spacing={2}>
-                <TriVitaTextField
-                  select
-                  SelectProps={{ native: true }}
-                  label="PO line"
-                  size="small"
-                  value={lineDraft.purchaseOrderItemId}
-                  onChange={(e) =>
-                    setLineDraft((d) => ({ ...d, purchaseOrderItemId: e.target.value, medicineBatchId: '' }))
-                  }
-                >
-                  <option value="">Select line</option>
-                  {poItemRows.map((it) => (
-                    <option key={String(it.id)} value={String(it.id)}>
-                      #{String(it.lineNum ?? '')} — medicine {medMap.get(Number(it.medicineId ?? it.MedicineId)) ?? '—'}
-                    </option>
-                  ))}
-                </TriVitaTextField>
-
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ sm: 'center' }}>
-                  <TriVitaTextField label="Batch number" size="small" value={lineDraft.batchNo} onChange={(e) => setLineDraft((d) => ({ ...d, batchNo: e.target.value }))} sx={{ flex: 1 }} />
-                </Stack>
-
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                  <TriVitaTextField
-                    label="Qty received"
-                    size="small"
-                    value={lineDraft.quantityReceived}
-                    onChange={(e) => setLineDraft((d) => ({ ...d, quantityReceived: e.target.value }))}
-                  />
-                  <TriVitaTextField
-                    label="Unit price"
-                    size="small"
-                    value={lineDraft.unitPrice}
-                    onChange={(e) => setLineDraft((d) => ({ ...d, unitPrice: e.target.value }))}
-                  />
-                  <TriVitaTextField
-                    label="Expiry"
-                    type="date"
-                    size="small"
-                    InputLabelProps={{ shrink: true }}
-                    value={lineDraft.expiryDate}
-                    onChange={(e) => setLineDraft((d) => ({ ...d, expiryDate: e.target.value }))}
-                  />
-                  <TriVitaTextField
-                    label="MRP"
-                    size="small"
-                    value={lineDraft.mrp}
-                    onChange={(e) => setLineDraft((d) => ({ ...d, mrp: e.target.value }))}
-                  />
-                </Stack>
-
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <TriVitaButton
-                    variant="contained"
-                    startIcon={<Add />}
-                    disabled={
-                      addLineMut.isPending ||
-                      !lineDraft.purchaseOrderItemId ||
-                      !lineDraft.batchNo.trim() ||
-                      !lineDraft.expiryDate.trim() ||
-                      !lineDraft.unitPrice.trim() ||
-                      !lineDraft.quantityReceived.trim()
-                    }
-                    onClick={() => addLineMut.mutate()}
-                  >
-                    Add line
-                  </TriVitaButton>
-                </Box>
-              </Stack>
-            </>
-          ) : (
-            <>
-              <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                Add line (direct entry)
-              </Typography>
-              <Stack spacing={2}>
-                <TriVitaTextField
-                  select
-                  SelectProps={{ native: true }}
-                  label="Medicine"
-                  size="small"
-                  value={lineDraft.medicineId}
-                  onChange={(e) =>
-                    setLineDraft((d) => ({
-                      ...d,
-                      medicineId: e.target.value,
-                      medicineBatchId: '',
-                    }))
-                  }
-                >
-                  <option value="">Select medicine</option>
-                  {(medicines.data?.success && medicines.data.data ? (medicines.data.data.items as Row[]) : []).map((m) => (
-                    <option key={String(m.id ?? '')} value={String(m.id ?? '')}>
-                      {pickStr(m, 'medicineName', 'MedicineName')}
-                    </option>
-                  ))}
-                </TriVitaTextField>
-
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ sm: 'center' }}>
-                  <TriVitaTextField label="Batch number" size="small" value={lineDraft.batchNo} onChange={(e) => setLineDraft((d) => ({ ...d, batchNo: e.target.value }))} sx={{ flex: 1 }} />
-                </Stack>
-
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-                  <TriVitaTextField
-                    label="Qty received"
-                    size="small"
-                    value={lineDraft.quantityReceived}
-                    onChange={(e) => setLineDraft((d) => ({ ...d, quantityReceived: e.target.value }))}
-                  />
-                  <TriVitaTextField
-                    label="Unit price"
-                    size="small"
-                    value={lineDraft.unitPrice}
-                    onChange={(e) => setLineDraft((d) => ({ ...d, unitPrice: e.target.value }))}
-                  />
-                  <TriVitaTextField
-                    label="Expiry"
-                    type="date"
-                    size="small"
-                    InputLabelProps={{ shrink: true }}
-                    value={lineDraft.expiryDate}
-                    onChange={(e) => setLineDraft((d) => ({ ...d, expiryDate: e.target.value }))}
-                  />
-                  <TriVitaTextField
-                    label="MRP"
-                    size="small"
-                    value={lineDraft.mrp}
-                    onChange={(e) => setLineDraft((d) => ({ ...d, mrp: e.target.value }))}
-                  />
-                </Stack>
-
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <TriVitaButton
-                    variant="contained"
-                    startIcon={<Add />}
-                    disabled={
-                      addLineMut.isPending ||
-                      !lineDraft.medicineId ||
-                      !lineDraft.batchNo.trim() ||
-                      !lineDraft.expiryDate.trim() ||
-                      !lineDraft.unitPrice.trim() ||
-                      !lineDraft.quantityReceived.trim()
-                    }
-                    onClick={() => addLineMut.mutate()}
-                  >
-                    Add line
-                  </TriVitaButton>
-                </Box>
-              </Stack>
-            </>
-          )}
-        </FormSection>
-      ) : null}
 
       <DetailDrawer
         open={drawerRow != null}
@@ -945,36 +654,203 @@ export function PharmacyGoodsReceiptWorkspace() {
               />
             </Grid>
             <Grid item xs={12} md={6}>
-              <LookupSelect<Record<string, string>>
-                name="statusReferenceValueId"
-                control={control as never}
-                label="Status"
-                required
-                editId={null}
-                queryKey={['pharmacy', 'grn-status']}
-                loadOptions={async () => {
-                  const o = await buildPharmacyReferenceStatusOptions();
-                  return o.length ? o : [{ value: '1', label: 'Default' }];
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Controller name="discountAmount" control={control} render={({ field }) => <TriVitaTextField {...field} label="Discount amount" disabled={modeWatch === 'withPO'} />} />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Controller name="gstPercent" control={control} render={({ field }) => <TriVitaTextField {...field} label="GST %" disabled={modeWatch === 'withPO'} />} />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Controller name="otherTaxAmount" control={control} render={({ field }) => <TriVitaTextField {...field} label="Other tax amount" disabled={modeWatch === 'withPO'} />} />
-            </Grid>
-            <Grid item xs={12}>
               <Controller
-                name="notes"
+                name="statusReferenceValueId"
                 control={control}
-                render={({ field }) => <TriVitaTextField {...field} label="Notes" multiline minRows={2} />}
+                render={({ field }) => (
+                  <TriVitaTextField
+                    {...field}
+                    select
+                    SelectProps={{ native: true }}
+                    label="Status"
+                    required
+                    error={Boolean(errors.statusReferenceValueId)}
+                    helperText={errors.statusReferenceValueId?.message}
+                  >
+                    {(grnStatusOpts.length ? grnStatusOpts : [{ value: '', label: 'Draft' }]).map((o) => (
+                      <option key={o.value || o.label} value={o.value}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </TriVitaTextField>
+                )}
               />
             </Grid>
           </FormGroup>
+
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+              Items
+            </Typography>
+
+            <Table size="small" sx={{ mb: 2 }}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Medicine</TableCell>
+                  <TableCell align="right">Ordered qty</TableCell>
+                  <TableCell align="right">Received qty</TableCell>
+                  <TableCell>Batch number</TableCell>
+                  <TableCell>Expiry date</TableCell>
+                  <TableCell align="right">Unit price</TableCell>
+                  <TableCell align="right">Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {itemFields.map((f, idx) => {
+                  const w = (itemsWatch ?? [])[idx];
+                  const isWithPo = modeWatch === 'withPO';
+                  return (
+                    <TableRow key={f.id} hover>
+                      <TableCell>{medMap.get(Number(w?.medicineId)) ?? '—'}</TableCell>
+                      <TableCell align="right">{w?.orderedQuantity ?? '—'}</TableCell>
+                      <TableCell align="right" sx={{ width: 140 }}>
+                        <TriVitaTextField
+                          size="small"
+                          value={w?.quantityReceived ?? ''}
+                          onChange={(e) => updateItem(idx, { ...(w ?? {}), quantityReceived: e.target.value })}
+                          sx={{ width: 120 }}
+                        />
+                      </TableCell>
+                      <TableCell sx={{ minWidth: 160 }}>
+                        <TriVitaTextField
+                          size="small"
+                          value={w?.batchNo ?? ''}
+                          onChange={(e) => updateItem(idx, { ...(w ?? {}), batchNo: e.target.value })}
+                        />
+                      </TableCell>
+                      <TableCell sx={{ width: 160 }}>
+                        <TriVitaTextField
+                          size="small"
+                          type="date"
+                          InputLabelProps={{ shrink: true }}
+                          value={(w?.expiryDate ?? '').slice(0, 10)}
+                          onChange={(e) => updateItem(idx, { ...(w ?? {}), expiryDate: e.target.value })}
+                        />
+                      </TableCell>
+                      <TableCell align="right" sx={{ width: 160 }}>
+                        <TriVitaTextField
+                          size="small"
+                          value={w?.unitPrice ?? ''}
+                          onChange={(e) => updateItem(idx, { ...(w ?? {}), unitPrice: e.target.value })}
+                          disabled={isWithPo}
+                          sx={{ width: 120 }}
+                        />
+                      </TableCell>
+                      <TableCell align="right">
+                        <Stack direction="row" spacing={1} justifyContent="flex-end">
+                          <IconButton size="small" onClick={() => removeItem(idx)} disabled={modeWatch === 'withPO'}>
+                            <Delete fontSize="small" />
+                          </IconButton>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+                {itemFields.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7}>
+                      <Typography variant="body2" color="text.secondary">
+                        {modeWatch === 'withPO' ? 'Select a purchase order to load items.' : 'No items yet. Add at least one item.'}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ) : null}
+              </TableBody>
+            </Table>
+
+            {modeWatch === 'withoutPO' ? (
+              <>
+                <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                  Add item
+                </Typography>
+
+                <TriVitaTextField
+                  select
+                  SelectProps={{ native: true }}
+                  label="Medicine"
+                  size="small"
+                  value={lineDraft.medicineId}
+                  onChange={(e) => setLineDraft((d) => ({ ...d, medicineId: e.target.value }))}
+                  sx={{ mb: 2 }}
+                >
+                  <option value="">Select medicine</option>
+                  {(medicines.data?.success && medicines.data.data ? (medicines.data.data.items as Row[]) : []).map((m) => (
+                    <option key={String(m.id ?? '')} value={String(m.id ?? '')}>
+                      {pickStr(m, 'medicineName', 'MedicineName')}
+                    </option>
+                  ))}
+                </TriVitaTextField>
+
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mb: 2 }}>
+                  <TriVitaTextField label="Qty received" size="small" value={lineDraft.quantityReceived} onChange={(e) => setLineDraft((d) => ({ ...d, quantityReceived: e.target.value }))} />
+                  <TriVitaTextField label="Unit price" size="small" value={lineDraft.unitPrice} onChange={(e) => setLineDraft((d) => ({ ...d, unitPrice: e.target.value }))} />
+                  <TriVitaTextField label="Batch number" size="small" value={lineDraft.batchNo} onChange={(e) => setLineDraft((d) => ({ ...d, batchNo: e.target.value }))} sx={{ flex: 1 }} />
+                  <TriVitaTextField label="Expiry" type="date" size="small" InputLabelProps={{ shrink: true }} value={lineDraft.expiryDate} onChange={(e) => setLineDraft((d) => ({ ...d, expiryDate: e.target.value }))} />
+                  <TriVitaTextField label="MRP" size="small" value={lineDraft.mrp} onChange={(e) => setLineDraft((d) => ({ ...d, mrp: e.target.value }))} />
+                </Stack>
+                <TriVitaTextField label="Notes" size="small" value={lineDraft.notes} onChange={(e) => setLineDraft((d) => ({ ...d, notes: e.target.value }))} sx={{ mb: 2 }} />
+
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <TriVitaButton
+                    variant="contained"
+                    startIcon={<Add />}
+                    disabled={
+                      !lineDraft.medicineId ||
+                      !lineDraft.quantityReceived.trim() ||
+                      Number.isNaN(Number(lineDraft.quantityReceived)) ||
+                      Number(lineDraft.quantityReceived) <= 0 ||
+                      !lineDraft.unitPrice.trim() ||
+                      Number.isNaN(Number(lineDraft.unitPrice)) ||
+                      Number(lineDraft.unitPrice) <= 0 ||
+                      !lineDraft.batchNo.trim() ||
+                      !lineDraft.expiryDate.trim()
+                    }
+                    onClick={() => {
+                      appendItem({
+                        medicineId: lineDraft.medicineId,
+                        quantityReceived: lineDraft.quantityReceived,
+                        unitPrice: lineDraft.unitPrice,
+                        batchNo: lineDraft.batchNo,
+                        expiryDate: lineDraft.expiryDate,
+                        mrp: lineDraft.mrp,
+                        notes: lineDraft.notes,
+                      });
+                      setLineDraft({
+                        purchaseOrderItemId: '',
+                        medicineId: '',
+                        quantityReceived: '',
+                        unitPrice: '',
+                        batchNo: '',
+                        expiryDate: '',
+                        mrp: '',
+                        notes: '',
+                      });
+                    }}
+                  >
+                    Add
+                  </TriVitaButton>
+                </Box>
+              </>
+            ) : null}
+          </Box>
+
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+              Billing
+            </Typography>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+              <Controller name="discountAmount" control={control} render={({ field }) => <TriVitaTextField {...field} label="Discount amount" disabled={modeWatch === 'withPO'} />} />
+              <Controller name="gstPercent" control={control} render={({ field }) => <TriVitaTextField {...field} label="GST %" disabled={modeWatch === 'withPO'} />} />
+              <Controller name="otherTaxAmount" control={control} render={({ field }) => <TriVitaTextField {...field} label="Other tax amount" disabled={modeWatch === 'withPO'} />} />
+            </Stack>
+          </Box>
+
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+              Notes
+            </Typography>
+            <Controller name="notes" control={control} render={({ field }) => <TriVitaTextField {...field} label="Notes" multiline minRows={2} />} />
+          </Box>
         </Box>
       </TriVitaModal>
 
@@ -989,29 +865,6 @@ export function PharmacyGoodsReceiptWorkspace() {
         <Typography>Delete this goods receipt?</Typography>
       </TriVitaModal>
 
-      <TriVitaModal
-        open={editLine != null}
-        onClose={() => setEditLine(null)}
-        title="Edit GRN line"
-        actions={
-          <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ width: '100%' }}>
-            <TriVitaButton onClick={() => setEditLine(null)}>Cancel</TriVitaButton>
-            <TriVitaButton variant="contained" onClick={() => updLineMut.mutate()} disabled={updLineMut.isPending}>
-              Save
-            </TriVitaButton>
-          </Stack>
-        }
-      >
-        {editLine ? (
-          <Stack spacing={2}>
-            <TriVitaTextField label="Qty received" value={editLine.quantityReceived} onChange={(e) => setEditLine({ ...editLine, quantityReceived: e.target.value })} />
-            <TriVitaTextField label="Unit price" value={editLine.unitPrice} onChange={(e) => setEditLine({ ...editLine, unitPrice: e.target.value })} />
-            <TriVitaTextField label="Batch number" value={editLine.batchNo} onChange={(e) => setEditLine({ ...editLine, batchNo: e.target.value })} />
-            <TriVitaTextField label="Expiry" type="date" InputLabelProps={{ shrink: true }} value={editLine.expiryDate} onChange={(e) => setEditLine({ ...editLine, expiryDate: e.target.value })} />
-            <TriVitaTextField label="MRP" value={editLine.mrp} onChange={(e) => setEditLine({ ...editLine, mrp: e.target.value })} />
-          </Stack>
-        ) : null}
-      </TriVitaModal>
     </Stack>
   );
 }

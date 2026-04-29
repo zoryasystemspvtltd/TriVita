@@ -13,4 +13,6 @@ public sealed class UpdateGoodsReceiptDto
     public decimal DiscountAmount { get; set; }
     public decimal GstPercent { get; set; }
     public decimal OtherTaxAmount { get; set; }
+
+    public List<GoodsReceiptItemUpsertDto> Items { get; set; } = new();
 }

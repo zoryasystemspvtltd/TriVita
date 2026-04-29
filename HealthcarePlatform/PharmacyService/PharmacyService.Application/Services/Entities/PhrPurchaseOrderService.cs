@@ -47,6 +47,21 @@ public sealed class PhrPurchaseOrderService : PhrCrudServiceBase<PhrPurchaseOrde
     public Task<BaseResponse<PagedResponse<PurchaseOrderResponseDto>>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default)
         => GetPagedCoreAsync(query, null, cancellationToken);
 
+    public override async Task<BaseResponse<PurchaseOrderResponseDto>> GetByIdAsync(long id, CancellationToken cancellationToken = default)
+    {
+        var entity = await _purchaseOrders.GetByIdAsync(id, cancellationToken);
+        if (entity is null) return BaseResponse<PurchaseOrderResponseDto>.Fail("PurchaseOrder not found.");
+        if (!IsEntityInFacilityScope(entity)) return BaseResponse<PurchaseOrderResponseDto>.Fail("Resource is not in the current facility scope.");
+
+        var dto = Mapper.Map<PurchaseOrderResponseDto>(entity);
+        var lines = await _items.ListAsync(x => x.PurchaseOrderId == id, cancellationToken);
+        dto.Items = lines
+            .OrderBy(x => x.LineNum)
+            .Select(x => Mapper.Map<PurchaseOrderItemResponseDto>(x))
+            .ToList();
+        return BaseResponse<PurchaseOrderResponseDto>.Ok(dto);
+    }
+
     public override async Task<BaseResponse<PurchaseOrderResponseDto>> CreateAsync(
         CreatePurchaseOrderDto dto,
         CancellationToken cancellationToken = default)
@@ -65,16 +80,28 @@ public sealed class PhrPurchaseOrderService : PhrCrudServiceBase<PhrPurchaseOrde
                 if (dup.Count > 0)
                     return BaseResponse<PurchaseOrderResponseDto>.Fail("Duplicate PO number.");
 
+                if (dto.Items is null || dto.Items.Count == 0)
+                    return BaseResponse<PurchaseOrderResponseDto>.Fail("At least one item is required.");
+
                 dto.PurchaseOrderNo = poNo;
 
-                var res = await base.CreateAsync(dto, ct);
-                if (!res.Success || res.Data is null) return res;
+                var entity = Mapper.Map<PhrPurchaseOrder>(dto);
+                AuditHelper.ApplyCreate(entity, Tenant);
+                entity.FacilityId = Tenant.FacilityId;
 
-                await RecalcTotalsAsync(res.Data.Id, ct);
-                var po = await _purchaseOrders.GetByIdAsync(res.Data.Id, ct);
-                return po is null
-                    ? BaseResponse<PurchaseOrderResponseDto>.Fail("PurchaseOrder not found.")
-                    : BaseResponse<PurchaseOrderResponseDto>.Ok(Mapper.Map<PurchaseOrderResponseDto>(po), "Created.");
+                await _purchaseOrders.AddAsync(entity, ct);
+                await _purchaseOrders.SaveChangesAsync(ct);
+
+                await UpsertItemsAsync(entity.Id, dto.Items, ct);
+                await RecalcTotalsAsync(entity.Id, ct);
+
+                var fresh = await _purchaseOrders.GetByIdAsync(entity.Id, ct);
+                if (fresh is null) return BaseResponse<PurchaseOrderResponseDto>.Fail("PurchaseOrder not found.");
+
+                var outDto = Mapper.Map<PurchaseOrderResponseDto>(fresh);
+                var outLines = await _items.ListAsync(x => x.PurchaseOrderId == entity.Id, ct);
+                outDto.Items = outLines.OrderBy(x => x.LineNum).Select(x => Mapper.Map<PurchaseOrderItemResponseDto>(x)).ToList();
+                return BaseResponse<PurchaseOrderResponseDto>.Ok(outDto, "Created.");
             }, cancellationToken);
         }
         catch (Exception ex)
@@ -82,6 +109,118 @@ public sealed class PhrPurchaseOrderService : PhrCrudServiceBase<PhrPurchaseOrde
             Logger.LogError(ex, "PO create failed tenant {TenantId}", Tenant.TenantId);
             return BaseResponse<PurchaseOrderResponseDto>.Fail("Create failed.");
         }
+    }
+
+    public override async Task<BaseResponse<PurchaseOrderResponseDto>> UpdateAsync(
+        long id,
+        UpdatePurchaseOrderDto dto,
+        CancellationToken cancellationToken = default)
+    {
+        if (dto.Items is null || dto.Items.Count == 0)
+            return BaseResponse<PurchaseOrderResponseDto>.Fail("At least one item is required.");
+
+        try
+        {
+            return await _uow.ExecuteInTransactionAsync(async ct =>
+            {
+                var entity = await _purchaseOrders.GetByIdAsync(id, ct);
+                if (entity is null) return BaseResponse<PurchaseOrderResponseDto>.Fail("PurchaseOrder not found.");
+                if (!IsEntityInFacilityScope(entity)) return BaseResponse<PurchaseOrderResponseDto>.Fail("Resource is not in the current facility scope.");
+
+                var poNo = (dto.PurchaseOrderNo ?? string.Empty).Trim();
+                if (string.IsNullOrWhiteSpace(poNo)) poNo = entity.PurchaseOrderNo;
+                if (!string.Equals(poNo, entity.PurchaseOrderNo, StringComparison.OrdinalIgnoreCase))
+                {
+                    var dup = await _purchaseOrders.ListAsync(x => x.Id != id && x.PurchaseOrderNo == poNo, ct);
+                    if (dup.Count > 0) return BaseResponse<PurchaseOrderResponseDto>.Fail("Duplicate PO number.");
+                    entity.PurchaseOrderNo = poNo;
+                }
+
+                entity.SupplierName = dto.SupplierName;
+                entity.OrderDate = dto.OrderDate;
+                entity.ExpectedOn = dto.ExpectedOn;
+                entity.StatusReferenceValueId = dto.StatusReferenceValueId;
+                entity.Notes = dto.Notes;
+                entity.DiscountAmount = dto.DiscountAmount;
+                entity.GstPercent = dto.GstPercent;
+                entity.OtherTaxAmount = dto.OtherTaxAmount;
+                AuditHelper.ApplyUpdate(entity, Tenant);
+
+                await _purchaseOrders.UpdateAsync(entity, ct);
+                await _purchaseOrders.SaveChangesAsync(ct);
+
+                await UpsertItemsAsync(id, dto.Items, ct);
+                await RecalcTotalsAsync(id, ct);
+
+                var fresh = await _purchaseOrders.GetByIdAsync(id, ct);
+                if (fresh is null) return BaseResponse<PurchaseOrderResponseDto>.Fail("PurchaseOrder not found.");
+                var outDto = Mapper.Map<PurchaseOrderResponseDto>(fresh);
+                var outLines = await _items.ListAsync(x => x.PurchaseOrderId == id, ct);
+                outDto.Items = outLines.OrderBy(x => x.LineNum).Select(x => Mapper.Map<PurchaseOrderItemResponseDto>(x)).ToList();
+                return BaseResponse<PurchaseOrderResponseDto>.Ok(outDto, "Updated.");
+            }, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "PO update failed tenant {TenantId}", Tenant.TenantId);
+            return BaseResponse<PurchaseOrderResponseDto>.Fail("Update failed.");
+        }
+    }
+
+    private async Task UpsertItemsAsync(long purchaseOrderId, List<PurchaseOrderItemUpsertDto> items, CancellationToken ct)
+    {
+        var existing = await _items.ListAsync(x => x.PurchaseOrderId == purchaseOrderId, ct);
+        var byId = existing.ToDictionary(x => x.Id, x => x);
+        var keep = new HashSet<long>();
+
+        var lineNum = 1;
+        foreach (var it in items)
+        {
+            if (it.MedicineId <= 0) throw new InvalidOperationException("MedicineId is required.");
+            if (it.QuantityOrdered <= 0) throw new InvalidOperationException("Quantity must be greater than zero.");
+            if (it.UnitPrice <= 0) throw new InvalidOperationException("UnitPrice must be greater than zero.");
+
+            if (it.Id is { } id && id > 0 && byId.TryGetValue(id, out var ent))
+            {
+                ent.LineNum = lineNum++;
+                ent.MedicineId = it.MedicineId;
+                ent.QuantityOrdered = it.QuantityOrdered;
+                ent.PurchaseRate = it.UnitPrice;
+                ent.LineTotal = it.QuantityOrdered * it.UnitPrice;
+                ent.Notes = it.Notes;
+                AuditHelper.ApplyUpdate(ent, Tenant);
+                await _items.UpdateAsync(ent, ct);
+                keep.Add(ent.Id);
+            }
+            else
+            {
+                var newEnt = new PhrPurchaseOrderItem
+                {
+                    PurchaseOrderId = purchaseOrderId,
+                    LineNum = lineNum++,
+                    MedicineId = it.MedicineId,
+                    QuantityOrdered = it.QuantityOrdered,
+                    PurchaseRate = it.UnitPrice,
+                    LineTotal = it.QuantityOrdered * it.UnitPrice,
+                    Notes = it.Notes,
+                    IsActive = true
+                };
+                AuditHelper.ApplyCreate(newEnt, Tenant);
+                newEnt.FacilityId = Tenant.FacilityId;
+                await _items.AddAsync(newEnt, ct);
+            }
+        }
+
+        foreach (var ent in existing)
+        {
+            if (keep.Contains(ent.Id)) continue;
+            ent.IsDeleted = true;
+            ent.IsActive = false;
+            AuditHelper.ApplyUpdate(ent, Tenant);
+            await _items.UpdateAsync(ent, ct);
+        }
+
+        await _items.SaveChangesAsync(ct);
     }
 
     private async Task<string> GenerateNextPoNumberAsync(int year, CancellationToken ct)
@@ -98,21 +237,6 @@ public sealed class PhrPurchaseOrderService : PhrCrudServiceBase<PhrPurchaseOrde
             if (int.TryParse(tail, out var n) && n > max) max = n;
         }
         return $"{prefix}{(max + 1):D4}";
-    }
-
-    public override async Task<BaseResponse<PurchaseOrderResponseDto>> UpdateAsync(
-        long id,
-        UpdatePurchaseOrderDto dto,
-        CancellationToken cancellationToken = default)
-    {
-        var res = await base.UpdateAsync(id, dto, cancellationToken);
-        if (!res.Success) return res;
-
-        await RecalcTotalsAsync(id, cancellationToken);
-        var po = await _purchaseOrders.GetByIdAsync(id, cancellationToken);
-        return po is null
-            ? BaseResponse<PurchaseOrderResponseDto>.Fail("PurchaseOrder not found.")
-            : BaseResponse<PurchaseOrderResponseDto>.Ok(Mapper.Map<PurchaseOrderResponseDto>(po), "Updated.");
     }
 
     private async Task RecalcTotalsAsync(long purchaseOrderId, CancellationToken ct)
