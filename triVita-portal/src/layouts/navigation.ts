@@ -155,6 +155,7 @@ export const mainNavigation: NavItem[] = [
           { label: 'Unit Master', path: '/pharmacy/masters/unit' },
           { label: 'Form Master', path: '/pharmacy/masters/form' },
           { label: 'Supplier Master', path: '/pharmacy/masters/supplier' },
+              { label: 'Customer Master', path: '/pharmacy/masters/customer' },
           { label: 'Medicine Batches', path: '/pharmacy/masters/medicine-batches' },
         ],
       },
