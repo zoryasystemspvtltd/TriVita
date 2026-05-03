@@ -4,6 +4,7 @@ using Healthcare.Common.Pagination;
 using Healthcare.Common.Responses;
 using PharmacyService.Domain.Entities;
 using PharmacyService.Application.DTOs.Entities;
+using System.Linq.Expressions;
 using PharmacyService.Domain.Repositories;
 using PharmacyService.Application.Services.Extended;
 using Microsoft.Extensions.Logging;
@@ -13,7 +14,7 @@ namespace PharmacyService.Application.Services.Entities;
 public interface IPhrPurchaseOrderService
 {
     Task<BaseResponse<PurchaseOrderResponseDto>> GetByIdAsync(long id, CancellationToken cancellationToken = default);
-    Task<BaseResponse<PagedResponse<PurchaseOrderResponseDto>>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default);
+    Task<BaseResponse<PagedResponse<PurchaseOrderResponseDto>>> GetPagedAsync(PurchaseOrderPagedQuery query, CancellationToken cancellationToken = default);
     Task<BaseResponse<PurchaseOrderResponseDto>> CreateAsync(CreatePurchaseOrderDto dto, CancellationToken cancellationToken = default);
     Task<BaseResponse<PurchaseOrderResponseDto>> UpdateAsync(long id, UpdatePurchaseOrderDto dto, CancellationToken cancellationToken = default);
     Task<BaseResponse<object?>> DeleteAsync(long id, CancellationToken cancellationToken = default);
@@ -44,8 +45,15 @@ public sealed class PhrPurchaseOrderService : PhrCrudServiceBase<PhrPurchaseOrde
 
     protected override bool RequiresFacilityId => true;
 
-    public Task<BaseResponse<PagedResponse<PurchaseOrderResponseDto>>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default)
-        => GetPagedCoreAsync(query, null, cancellationToken);
+    public Task<BaseResponse<PagedResponse<PurchaseOrderResponseDto>>> GetPagedAsync(
+        PurchaseOrderPagedQuery query,
+        CancellationToken cancellationToken = default)
+    {
+        Expression<Func<PhrPurchaseOrder, bool>>? extra = null;
+        if (query.SupplierId is { } sid && sid > 0)
+            extra = e => e.SupplierId == sid;
+        return GetPagedCoreAsync(query, extra, cancellationToken);
+    }
 
     public override async Task<BaseResponse<PurchaseOrderResponseDto>> GetByIdAsync(long id, CancellationToken cancellationToken = default)
     {
@@ -136,6 +144,7 @@ public sealed class PhrPurchaseOrderService : PhrCrudServiceBase<PhrPurchaseOrde
                     entity.PurchaseOrderNo = poNo;
                 }
 
+                entity.SupplierId = dto.SupplierId;
                 entity.SupplierName = dto.SupplierName;
                 entity.OrderDate = dto.OrderDate;
                 entity.ExpectedOn = dto.ExpectedOn;

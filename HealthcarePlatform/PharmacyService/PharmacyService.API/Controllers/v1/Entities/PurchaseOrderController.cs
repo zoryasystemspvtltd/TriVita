@@ -38,7 +38,9 @@ public sealed class PurchaseOrderController : ControllerBase
     [HttpGet]
     [SwaggerOperation(OperationId = "PurchaseOrder_GetPaged")]
     [SwaggerResponse(StatusCodes.Status200OK, "OK", typeof(BaseResponse<PagedResponse<PurchaseOrderResponseDto>>))]
-    public async Task<ActionResult<BaseResponse<PagedResponse<PurchaseOrderResponseDto>>>> GetPaged([FromQuery] PagedQuery query, CancellationToken ct)
+    public async Task<ActionResult<BaseResponse<PagedResponse<PurchaseOrderResponseDto>>>> GetPaged(
+        [FromQuery] PurchaseOrderPagedQuery query,
+        CancellationToken ct)
         => Ok(await _service.GetPagedAsync(query, ct));
 
     [HttpPost]

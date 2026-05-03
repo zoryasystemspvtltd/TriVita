@@ -31,6 +31,7 @@ import {
   getPurchaseBillPaged,
   getPurchaseOrderById,
   getPurchaseOrdersPaged,
+  getSupplierPaged,
   postPurchaseBill,
   updatePurchaseBill,
 } from '@/services/pharmacyService';
@@ -148,26 +149,6 @@ export function PharmacyPurchaseBillWorkspace() {
   );
   const total = list.data?.success && list.data.data ? list.data.data.totalCount : 0;
 
-  const poOptions = useQuery({
-    queryKey: ['pharmacy', 'pb-pos'],
-    queryFn: async () => {
-      const acc: { value: string; label: string }[] = [];
-      for (let p = 1; p <= 15; p++) {
-        const res = await getPurchaseOrdersPaged({ page: p, pageSize: 50 });
-        if (!res.success || !res.data) break;
-        for (const r of res.data.items as Row[]) {
-          const id = pickNum(r, 'id', 'Id');
-          if (!id) continue;
-          const no = pickStr(r, 'purchaseOrderNo', 'PurchaseOrderNo');
-          acc.push({ value: String(id), label: no || `PO #${id}` });
-        }
-        if (res.data.items.length < 50) break;
-      }
-      return acc;
-    },
-    staleTime: 60_000,
-  });
-
   const form = useForm<HForm>({
     resolver: yupResolver(hSchema) as Resolver<HForm>,
     defaultValues: {
@@ -190,18 +171,85 @@ export function PharmacyPurchaseBillWorkspace() {
   const mode = form.watch('mode');
   const goodsReceiptIdW = form.watch('goodsReceiptId');
   const poIdW = form.watch('purchaseOrderId');
+  const supplierIdW = form.watch('supplierId');
+
+  const poOptions = useQuery({
+    queryKey: ['pharmacy', 'pb-pos', supplierIdW],
+    queryFn: async () => {
+      const acc: { value: string; label: string }[] = [];
+      const sid = Number(supplierIdW);
+      if (!Number.isFinite(sid) || sid <= 0) return acc;
+      for (let p = 1; p <= 15; p++) {
+        const res = await getPurchaseOrdersPaged({ page: p, pageSize: 50, supplierId: sid });
+        if (!res.success || !res.data) break;
+        for (const r of res.data.items as Row[]) {
+          const id = pickNum(r, 'id', 'Id');
+          if (!id) continue;
+          const no = pickStr(r, 'purchaseOrderNo', 'PurchaseOrderNo');
+          acc.push({ value: String(id), label: no || `PO #${id}` });
+        }
+        if (res.data.items.length < 50) break;
+      }
+      return acc;
+    },
+    enabled: modal != null && mode === 'po' && /^\d+$/.test(supplierIdW),
+    staleTime: 60_000,
+  });
+
+  const supplierOptions = useQuery({
+    queryKey: ['pharmacy', 'pb-suppliers-pick'],
+    queryFn: async () => {
+      const acc: { value: string; label: string; supplierName: string }[] = [];
+      for (let p = 1; p <= 15; p++) {
+        const res = await getSupplierPaged({ page: p, pageSize: 50 });
+        if (!res.success || !res.data) break;
+        for (const r of res.data.items as Row[]) {
+          const id = pickNum(r, 'id', 'Id');
+          if (!id) continue;
+          const name = pickStr(r, 'supplierName', 'SupplierName');
+          const code = pickStr(r, 'supplierCode', 'SupplierCode');
+          acc.push({
+            value: String(id),
+            label: name ? `${name}${code ? ` (${code})` : ''}` : `Supplier #${id}`,
+            supplierName: name,
+          });
+        }
+        if (res.data.items.length < 50) break;
+      }
+      return acc;
+    },
+    enabled: modal != null,
+    staleTime: 60_000,
+  });
+
+  const poDetail = useQuery({
+    queryKey: ['pharmacy', 'pb-po-detail', poIdW],
+    queryFn: async () => getPurchaseOrderById(Number(poIdW)),
+    enabled: modal != null && mode === 'po' && /^\d+$/.test(poIdW),
+    staleTime: 30_000,
+  });
 
   const grnPickList = useQuery({
-    queryKey: ['pharmacy', 'pb-grn-pick', mode, mode === 'po' ? poIdW : 'x'],
+    queryKey: ['pharmacy', 'pb-grn-pick', mode, mode === 'po' ? poIdW : '', supplierIdW],
     queryFn: async () => {
-      const poNum = mode === 'po' ? Number(poIdW) : NaN;
-      const res = await getGoodsReceiptForPurchaseBill(
-        mode === 'po' && Number.isFinite(poNum) && poNum > 0 ? poNum : undefined
-      );
+      const sid = Number(supplierIdW);
+      const sidOk = Number.isFinite(sid) && sid > 0;
+      if (mode === 'po') {
+        const poNum = Number(poIdW);
+        if (!Number.isFinite(poNum) || poNum <= 0 || !sidOk) return [] as Row[];
+        const res = await getGoodsReceiptForPurchaseBill({ purchaseOrderId: poNum, supplierId: sid });
+        if (!res.success || !res.data) return [] as Row[];
+        return [...res.data] as Row[];
+      }
+      const res = await getGoodsReceiptForPurchaseBill(sidOk ? { supplierId: sid } : undefined);
       if (!res.success || !res.data) return [] as Row[];
       return [...res.data] as Row[];
     },
-    enabled: modal != null && (mode === 'direct' || (mode === 'po' && /^\d+$/.test(poIdW))),
+    enabled:
+      modal != null &&
+      modal.mode === 'create' &&
+      /^\d+$/.test(supplierIdW) &&
+      (mode === 'po' ? /^\d+$/.test(poIdW) : true),
   });
 
   const watchedLines = form.watch('lines');
@@ -223,24 +271,33 @@ export function PharmacyPurchaseBillWorkspace() {
 
   useEffect(() => {
     if (modal?.mode !== 'create' || mode !== 'po') return;
+    form.setValue('purchaseOrderId', '');
     form.setValue('goodsReceiptId', '');
     replace([]);
-  }, [mode, poIdW, modal?.mode, form, replace]);
+  }, [supplierIdW, modal?.mode, mode, form, replace]);
 
   useEffect(() => {
     if (modal?.mode !== 'create' || mode !== 'po') return;
-    const pid = Number(poIdW);
-    if (!Number.isFinite(pid) || pid <= 0) return;
-    void (async () => {
-      const r = await getPurchaseOrderById(pid);
-      if (!r.success || !r.data) return;
-      const p = r.data as Row;
-      form.setValue('discountAmount', String(pickNum(p, 'discountAmount', 'DiscountAmount')));
-      form.setValue('gstPercent', String(pickNum(p, 'gstPercent', 'GstPercent')));
-      form.setValue('otherTaxAmount', String(pickNum(p, 'otherTaxAmount', 'OtherTaxAmount')));
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- sync billing when PO changes
-  }, [poIdW, mode, modal?.mode]);
+    form.setValue('goodsReceiptId', '');
+    replace([]);
+  }, [poIdW, modal?.mode, mode, form, replace]);
+
+  useEffect(() => {
+    if (modal?.mode !== 'create' || mode !== 'direct') return;
+    form.setValue('goodsReceiptId', '');
+    replace([]);
+  }, [supplierIdW, modal?.mode, mode, form, replace]);
+
+  useEffect(() => {
+    if (modal?.mode !== 'create' || mode !== 'po') return;
+    const d = poDetail.data;
+    if (!d?.success || !d.data) return;
+    const p = d.data as Row;
+    form.setValue('discountAmount', String(pickNum(p, 'discountAmount', 'DiscountAmount')));
+    form.setValue('gstPercent', String(pickNum(p, 'gstPercent', 'GstPercent')));
+    form.setValue('otherTaxAmount', String(pickNum(p, 'otherTaxAmount', 'OtherTaxAmount')));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- sync when PO payload loads
+  }, [poDetail.data, mode, modal?.mode]);
 
   const loadGrnIntoForm = async (grnId: number) => {
     const gr = await getGoodsReceiptById(grnId);
@@ -250,20 +307,41 @@ export function PharmacyPurchaseBillWorkspace() {
     }
     const g = gr.data as Row;
     const sup = pickNum(g, 'supplierId', 'SupplierId');
-    form.setValue('supplierId', sup ? String(sup) : '');
     const currentMode = form.getValues('mode');
+    const chosenSup = Number(form.getValues('supplierId'));
+    if (chosenSup > 0 && sup !== chosenSup) {
+      showToast('Goods receipt does not match selected supplier.', 'error');
+      form.setValue('goodsReceiptId', '');
+      replace([]);
+      return;
+    }
     if (currentMode === 'po') {
       const pid = Number(form.getValues('purchaseOrderId'));
       if (Number.isFinite(pid) && pid > 0) {
         const pr = await getPurchaseOrderById(pid);
         if (pr.success && pr.data) {
           const p = pr.data as Row;
+          const poSup = pickNum(p, 'supplierId', 'SupplierId');
+          if (poSup <= 0) {
+            showToast('Purchase order must be linked to a supplier.', 'error');
+            form.setValue('goodsReceiptId', '');
+            replace([]);
+            return;
+          }
+          if (poSup !== chosenSup) {
+            showToast('Purchase order does not match selected supplier.', 'error');
+            form.setValue('goodsReceiptId', '');
+            replace([]);
+            return;
+          }
           form.setValue('discountAmount', String(pickNum(p, 'discountAmount', 'DiscountAmount')));
           form.setValue('gstPercent', String(pickNum(p, 'gstPercent', 'GstPercent')));
           form.setValue('otherTaxAmount', String(pickNum(p, 'otherTaxAmount', 'OtherTaxAmount')));
         }
       }
-    } else {
+    }
+    form.setValue('supplierId', sup ? String(sup) : '');
+    if (currentMode === 'direct') {
       form.setValue('discountAmount', String(pickNum(g, 'discountAmount', 'DiscountAmount')));
       form.setValue('gstPercent', String(pickNum(g, 'gstPercent', 'GstPercent')));
       form.setValue('otherTaxAmount', String(pickNum(g, 'otherTaxAmount', 'OtherTaxAmount')));
@@ -278,7 +356,7 @@ export function PharmacyPurchaseBillWorkspace() {
       const id = pickNum(it, 'id', 'Id');
       const mid = pickNum(it, 'medicineId', 'MedicineId');
       const qty = pickNum(it, 'quantityReceived', 'QuantityReceived');
-      const rate = pickNum(it, 'unitPrice', 'UnitPrice');
+      const rate = pickNum(it, 'unitPrice', 'UnitPrice', 'purchaseRate', 'PurchaseRate');
       return {
         goodsReceiptItemId: String(id),
         medicineId: String(mid),
@@ -589,9 +667,49 @@ export function PharmacyPurchaseBillWorkspace() {
                   name="mode"
                   control={form.control}
                   render={({ field }) => (
-                    <TextField select label="Mode" fullWidth {...field}>
-                      <MenuItem value="po">PO-linked (GRN from purchase order)</MenuItem>
-                      <MenuItem value="direct">Direct GRN (no PO)</MenuItem>
+                    <TextField
+                      select
+                      label="Mode"
+                      fullWidth
+                      name={field.name}
+                      value={field.value}
+                      onBlur={field.onBlur}
+                      inputRef={field.ref}
+                      onChange={(e) => {
+                        const v = e.target.value as 'po' | 'direct';
+                        field.onChange(v);
+                        form.setValue('purchaseOrderId', '');
+                        form.setValue('goodsReceiptId', '');
+                        form.setValue('supplierId', '');
+                        replace([]);
+                      }}
+                    >
+                      <MenuItem value="po">From PO (choose GRN received against PO)</MenuItem>
+                      <MenuItem value="direct">Direct GRN (no purchase order)</MenuItem>
+                    </TextField>
+                  )}
+                />
+                <Controller
+                  name="supplierId"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <TextField
+                      select
+                      label="Supplier"
+                      fullWidth
+                      {...field}
+                      error={!!fieldState.error}
+                      helperText={
+                        fieldState.error?.message ??
+                        (mode === 'po' ? 'Then choose a purchase order for this supplier' : 'Then choose a direct GRN for this supplier')
+                      }
+                      disabled={supplierOptions.isLoading}
+                    >
+                      {(supplierOptions.data ?? []).map((o) => (
+                        <MenuItem key={o.value} value={o.value}>
+                          {o.label}
+                        </MenuItem>
+                      ))}
                     </TextField>
                   )}
                 />
@@ -606,8 +724,15 @@ export function PharmacyPurchaseBillWorkspace() {
                         fullWidth
                         {...field}
                         error={!!fieldState.error}
-                        helperText={fieldState.error?.message}
-                        disabled={poOptions.isLoading}
+                        helperText={
+                          fieldState.error?.message ??
+                          (!supplierIdW
+                            ? 'Select supplier first'
+                            : (poOptions.data ?? []).length === 0
+                              ? 'No purchase orders for this supplier'
+                              : undefined)
+                        }
+                        disabled={poOptions.isLoading || !supplierIdW}
                       >
                         {(poOptions.data ?? []).map((o) => (
                           <MenuItem key={o.value} value={o.value}>
@@ -629,7 +754,11 @@ export function PharmacyPurchaseBillWorkspace() {
                       {...field}
                       error={!!fieldState.error}
                       helperText={fieldState.error?.message}
-                      disabled={grnPickList.isLoading}
+                      disabled={
+                        grnPickList.isLoading ||
+                        !supplierIdW ||
+                        (mode === 'po' && !/^\d+$/.test(poIdW))
+                      }
                     >
                       {(grnPickList.data ?? []).map((g) => (
                         <MenuItem key={pickNum(g, 'id', 'Id')} value={String(pickNum(g, 'id', 'Id'))}>
@@ -644,24 +773,50 @@ export function PharmacyPurchaseBillWorkspace() {
             )}
             {modal.mode === 'edit' && (
               <Typography variant="body2" color="text.secondary">
-                GRN and mode are fixed for this bill. Edit invoice details and line quantities/rates only.
+                GRN lines are fixed from the goods receipt. Edit invoice and billing fields only (when draft).
                 {mode === 'po' ? ' Billing terms follow the purchase order (read-only).' : ''}
               </Typography>
             )}
-            <Controller
-              name="supplierId"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <TextField
-                  label="Supplier ID"
-                  fullWidth
-                  {...field}
-                  disabled
-                  error={!!fieldState.error}
-                  helperText={fieldState.error?.message ?? 'From goods receipt'}
-                />
-              )}
-            />
+
+            <Typography variant="subtitle2">Items (from GRN)</Typography>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Medicine</TableCell>
+                  <TableCell>Batch</TableCell>
+                  <TableCell align="right">Qty</TableCell>
+                  <TableCell align="right">Rate</TableCell>
+                  <TableCell align="right">Amount</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {fields.map((f, idx) => {
+                  const mid = Number(form.watch(`lines.${idx}.medicineId`));
+                  const mname = medNameForLines.data?.get(mid) ?? `Medicine #${mid}`;
+                  const q = Number(form.watch(`lines.${idx}.quantity`));
+                  const rt = Number(form.watch(`lines.${idx}.rate`));
+                  const amt = Number.isFinite(q) && Number.isFinite(rt) ? Math.round(q * rt * 10000) / 10000 : 0;
+                  return (
+                    <TableRow key={f.id}>
+                      <TableCell>{mname}</TableCell>
+                      <TableCell>{form.watch(`lines.${idx}.batchNo`)}</TableCell>
+                      <TableCell align="right">
+                        <Typography variant="body2" component="span">
+                          {q}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography variant="body2" component="span">
+                          {rt}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">{amt}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
               <Controller
                 name="invoiceNo"
@@ -753,53 +908,6 @@ export function PharmacyPurchaseBillWorkspace() {
               control={form.control}
               render={({ field }) => <TextField label="Notes" fullWidth multiline minRows={2} {...field} disabled={posted} />}
             />
-
-            <Typography variant="subtitle2">Lines (from GRN)</Typography>
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Medicine</TableCell>
-                  <TableCell>Batch</TableCell>
-                  <TableCell align="right">Qty</TableCell>
-                  <TableCell align="right">Rate</TableCell>
-                  <TableCell align="right">Amount</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {fields.map((f, idx) => {
-                  const mid = Number(form.watch(`lines.${idx}.medicineId`));
-                  const mname = medNameForLines.data?.get(mid) ?? `Medicine #${mid}`;
-                  const q = Number(form.watch(`lines.${idx}.quantity`));
-                  const rt = Number(form.watch(`lines.${idx}.rate`));
-                  const amt = Number.isFinite(q) && Number.isFinite(rt) ? Math.round(q * rt * 10000) / 10000 : 0;
-                  return (
-                    <TableRow key={f.id}>
-                      <TableCell>{mname}</TableCell>
-                      <TableCell>{form.watch(`lines.${idx}.batchNo`)}</TableCell>
-                      <TableCell align="right">
-                        <Controller
-                          name={`lines.${idx}.quantity`}
-                          control={form.control}
-                          render={({ field: lf }) => (
-                            <TextField size="small" type="number" inputProps={{ step: 'any' }} {...lf} disabled={posted} />
-                          )}
-                        />
-                      </TableCell>
-                      <TableCell align="right">
-                        <Controller
-                          name={`lines.${idx}.rate`}
-                          control={form.control}
-                          render={({ field: lf }) => (
-                            <TextField size="small" type="number" inputProps={{ step: 'any' }} {...lf} disabled={posted} />
-                          )}
-                        />
-                      </TableCell>
-                      <TableCell align="right">{amt}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
 
             <Box>
               <Typography variant="subtitle2" sx={{ mb: 0.5 }}>

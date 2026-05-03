@@ -18,7 +18,10 @@ public interface IPhrGoodsReceiptService
 {
     Task<BaseResponse<GoodsReceiptResponseDto>> GetByIdAsync(long id, CancellationToken cancellationToken = default);
     Task<BaseResponse<PagedResponse<GoodsReceiptResponseDto>>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default);
-    Task<BaseResponse<IReadOnlyList<GoodsReceiptPickListDto>>> ListForPurchaseBillAsync(long? purchaseOrderId, CancellationToken cancellationToken = default);
+    Task<BaseResponse<IReadOnlyList<GoodsReceiptPickListDto>>> ListForPurchaseBillAsync(
+        long? purchaseOrderId,
+        long? supplierId,
+        CancellationToken cancellationToken = default);
     Task<BaseResponse<GoodsReceiptResponseDto>> CreateAsync(CreateGoodsReceiptDto dto, CancellationToken cancellationToken = default);
     Task<BaseResponse<GoodsReceiptResponseDto>> UpdateAsync(long id, UpdateGoodsReceiptDto dto, CancellationToken cancellationToken = default);
     Task<BaseResponse<object?>> DeleteAsync(long id, CancellationToken cancellationToken = default);
@@ -66,6 +69,7 @@ public sealed class PhrGoodsReceiptService : PhrCrudServiceBase<PhrGoodsReceipt,
 
     public async Task<BaseResponse<IReadOnlyList<GoodsReceiptPickListDto>>> ListForPurchaseBillAsync(
         long? purchaseOrderId,
+        long? supplierId,
         CancellationToken cancellationToken = default)
     {
         if (RequiresFacilityId && Tenant.FacilityId is null)
@@ -77,13 +81,19 @@ public sealed class PhrGoodsReceiptService : PhrCrudServiceBase<PhrGoodsReceipt,
         if (purchaseOrderId is { } po)
         {
             list = await _goodsReceipts.ListAsync(
-                g => !g.IsDeleted && (fid == null || g.FacilityId == fid) && g.PurchaseOrderId == po,
+                g => !g.IsDeleted && (fid == null || g.FacilityId == fid) && g.PurchaseOrderId == po
+                    && (!supplierId.HasValue || supplierId.Value <= 0 || g.SupplierId == supplierId),
                 cancellationToken);
         }
         else
         {
+            if (!supplierId.HasValue || supplierId.Value <= 0)
+                return BaseResponse<IReadOnlyList<GoodsReceiptPickListDto>>.Fail(
+                    "Supplier is required to list direct goods receipts for purchase bill.");
+
             list = await _goodsReceipts.ListAsync(
-                g => !g.IsDeleted && (fid == null || g.FacilityId == fid) && g.PurchaseOrderId == null,
+                g => !g.IsDeleted && (fid == null || g.FacilityId == fid) && g.PurchaseOrderId == null
+                    && g.SupplierId == supplierId,
                 cancellationToken);
         }
 

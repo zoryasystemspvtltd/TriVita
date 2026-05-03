@@ -12,7 +12,9 @@ public sealed class PhrPurchaseOrderConfiguration : IEntityTypeConfiguration<Phr
         builder.HasKey(e => e.Id);
         builder.Property(e => e.RowVersion).IsRowVersion();
         builder.Property(e => e.PurchaseOrderNo).HasMaxLength(60);
+        builder.Property(e => e.SupplierId);
         builder.Property(e => e.SupplierName).HasMaxLength(250);
+        builder.HasIndex(e => e.SupplierId);
         builder.Property(e => e.Notes).HasMaxLength(1000);
 
         builder.Property(e => e.SubTotal).HasPrecision(18, 4);

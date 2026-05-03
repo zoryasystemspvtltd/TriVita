@@ -88,6 +88,15 @@ function pickStr(r: Record<string, unknown>, ...keys: string[]) {
   return '';
 }
 
+function pickNum(r: Record<string, unknown>, ...keys: string[]) {
+  for (const k of keys) {
+    const v = r[k];
+    const n = Number(v);
+    if (Number.isFinite(n)) return n;
+  }
+  return 0;
+}
+
 export function PharmacyPurchaseOrderWorkspace() {
   const qc = useQueryClient();
   const { showToast } = useToast();
@@ -258,9 +267,10 @@ export function PharmacyPurchaseOrderWorkspace() {
       const r = d.data as Row;
       const supplierName = pickStr(r, 'supplierName', 'SupplierName').trim().toLowerCase();
       const sup = supplierOptions.data?.find((x) => x.name.trim().toLowerCase() === supplierName) ?? null;
+      const sid = pickNum(r, 'supplierId', 'SupplierId');
       reset({
         purchaseOrderNo: pickStr(r, 'purchaseOrderNo', 'PurchaseOrderNo'),
-        supplierId: sup?.value ?? '',
+        supplierId: sid ? String(sid) : sup?.value ?? '',
         orderDate: pickStr(r, 'orderDate', 'OrderDate').slice(0, 10),
         expectedOn: r.expectedOn != null ? String(r.expectedOn).slice(0, 10) : '',
         statusReferenceValueId: String(r.statusReferenceValueId ?? '') || draftPoStatusId,
@@ -288,6 +298,7 @@ export function PharmacyPurchaseOrderWorkspace() {
       const sup = supplierOptions.data?.find((o) => o.value === args.v.supplierId) ?? null;
       const body = {
         purchaseOrderNo: args.v.purchaseOrderNo.trim(), // can be blank -> server generates PO/YYYY/XXXX
+        supplierId: Number(args.v.supplierId),
         supplierName: (sup?.name ?? '').trim(),
         orderDate: new Date(args.v.orderDate).toISOString(),
         expectedOn: args.v.expectedOn.trim() ? new Date(args.v.expectedOn).toISOString() : undefined,

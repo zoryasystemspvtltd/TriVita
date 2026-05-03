@@ -455,14 +455,16 @@ export async function getGoodsReceiptById(id: number) {
   return data;
 }
 
-export async function getGoodsReceiptForPurchaseBill(purchaseOrderId?: number) {
-  const params =
-    purchaseOrderId != null && Number.isFinite(purchaseOrderId) && purchaseOrderId > 0
-      ? { purchaseOrderId }
-      : {};
+export async function getGoodsReceiptForPurchaseBill(params?: {
+  purchaseOrderId?: number;
+  supplierId?: number;
+}) {
+  const query: Record<string, number> = {};
+  if (params?.purchaseOrderId != null && params.purchaseOrderId > 0) query.purchaseOrderId = params.purchaseOrderId;
+  if (params?.supplierId != null && params.supplierId > 0) query.supplierId = params.supplierId;
   const { data } = await pharmacyClient.get<BaseResponse<Record<string, unknown>[]>>(
     '/api/v1/goods-receipt/for-purchase-bill',
-    { params }
+    { params: query }
   );
   return data;
 }

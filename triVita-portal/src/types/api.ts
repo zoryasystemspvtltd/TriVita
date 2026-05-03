@@ -19,6 +19,7 @@ export interface PagedQueryParams {
   sortBy?: string;
   sortDescending?: boolean;
   search?: string;
+  supplierId?: number;
 }
 
 export interface TokenResponseDto {

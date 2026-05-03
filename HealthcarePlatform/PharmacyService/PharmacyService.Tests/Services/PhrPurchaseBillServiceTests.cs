@@ -76,6 +76,15 @@ public sealed class PhrPurchaseBillServiceTests
             IsDeleted = false
         });
 
+        _pos.Setup(x => x.GetByIdAsync(7, It.IsAny<CancellationToken>())).ReturnsAsync(new PhrPurchaseOrder
+        {
+            Id = 7,
+            TenantId = 1,
+            FacilityId = 10,
+            SupplierId = 5,
+            IsDeleted = false
+        });
+
         var sut = Sut();
         var r = await sut.CreateAsync(new CreatePurchaseBillDto
         {
@@ -100,5 +109,156 @@ public sealed class PhrPurchaseBillServiceTests
         typeof(PhrPurchaseBillService).GetConstructors().Single().GetParameters()
             .Select(p => p.ParameterType)
             .Should().NotContain(t => t.Name.Contains("StockMovement", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public async Task CreateAsync_Fails_WhenLineReferencesUnknownGrnItem()
+    {
+        _bills.Setup(x => x.ListAsync(It.IsAny<System.Linq.Expressions.Expression<Func<PhrPurchaseBill, bool>>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<PhrPurchaseBill>());
+        _grn.Setup(x => x.GetByIdAsync(100, It.IsAny<CancellationToken>())).ReturnsAsync(new PhrGoodsReceipt
+        {
+            Id = 100,
+            TenantId = 1,
+            FacilityId = 10,
+            SupplierId = 5,
+            PurchaseOrderId = null,
+            IsDeleted = false
+        });
+        _grnItems.Setup(x => x.ListAsync(It.IsAny<System.Linq.Expressions.Expression<Func<PhrGoodsReceiptItem, bool>>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<PhrGoodsReceiptItem>
+            {
+                new()
+                {
+                    Id = 10,
+                    GoodsReceiptId = 100,
+                    LineNum = 1,
+                    QuantityReceived = 5,
+                    PurchaseRate = 1m,
+                    IsDeleted = false
+                }
+            });
+
+        var sut = Sut();
+        var r = await sut.CreateAsync(new CreatePurchaseBillDto
+        {
+            SourceMode = PharmacyPurchaseBillSourceMode.DirectGrn,
+            PurchaseOrderId = null,
+            GoodsReceiptId = 100,
+            SupplierId = 5,
+            InvoiceNo = "INV-X",
+            InvoiceDate = DateTime.UtcNow.Date,
+            DiscountAmount = 0,
+            GstPercent = 0,
+            OtherTaxAmount = 0,
+            Items = new List<PurchaseBillLineInputDto>
+            {
+                new() { GoodsReceiptItemId = 999, Quantity = 1, Rate = 1 }
+            }
+        });
+
+        r.Success.Should().BeFalse();
+        r.Message.Should().Contain("goods receipt");
+    }
+
+    [Fact]
+    public async Task CreateAsync_Fails_WhenDuplicateGrnItemLines()
+    {
+        _bills.Setup(x => x.ListAsync(It.IsAny<System.Linq.Expressions.Expression<Func<PhrPurchaseBill, bool>>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<PhrPurchaseBill>());
+        _grn.Setup(x => x.GetByIdAsync(100, It.IsAny<CancellationToken>())).ReturnsAsync(new PhrGoodsReceipt
+        {
+            Id = 100,
+            TenantId = 1,
+            FacilityId = 10,
+            SupplierId = 5,
+            PurchaseOrderId = null,
+            IsDeleted = false
+        });
+        _grnItems.Setup(x => x.ListAsync(It.IsAny<System.Linq.Expressions.Expression<Func<PhrGoodsReceiptItem, bool>>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<PhrGoodsReceiptItem>
+            {
+                new()
+                {
+                    Id = 10,
+                    GoodsReceiptId = 100,
+                    LineNum = 1,
+                    QuantityReceived = 5,
+                    PurchaseRate = 1m,
+                    IsDeleted = false
+                }
+            });
+
+        var sut = Sut();
+        var r = await sut.CreateAsync(new CreatePurchaseBillDto
+        {
+            SourceMode = PharmacyPurchaseBillSourceMode.DirectGrn,
+            PurchaseOrderId = null,
+            GoodsReceiptId = 100,
+            SupplierId = 5,
+            InvoiceNo = "INV-DUP",
+            InvoiceDate = DateTime.UtcNow.Date,
+            DiscountAmount = 0,
+            GstPercent = 0,
+            OtherTaxAmount = 0,
+            Items = new List<PurchaseBillLineInputDto>
+            {
+                new() { GoodsReceiptItemId = 10, Quantity = 1, Rate = 1 },
+                new() { GoodsReceiptItemId = 10, Quantity = 1, Rate = 1 }
+            }
+        });
+
+        r.Success.Should().BeFalse();
+        r.Message.Should().Contain("Duplicate");
+    }
+
+    [Fact]
+    public async Task CreateAsync_Fails_WhenQuantityDoesNotMatchGrn()
+    {
+        _bills.Setup(x => x.ListAsync(It.IsAny<System.Linq.Expressions.Expression<Func<PhrPurchaseBill, bool>>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<PhrPurchaseBill>());
+        _grn.Setup(x => x.GetByIdAsync(100, It.IsAny<CancellationToken>())).ReturnsAsync(new PhrGoodsReceipt
+        {
+            Id = 100,
+            TenantId = 1,
+            FacilityId = 10,
+            SupplierId = 5,
+            PurchaseOrderId = null,
+            IsDeleted = false
+        });
+        _grnItems.Setup(x => x.ListAsync(It.IsAny<System.Linq.Expressions.Expression<Func<PhrGoodsReceiptItem, bool>>>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<PhrGoodsReceiptItem>
+            {
+                new()
+                {
+                    Id = 10,
+                    GoodsReceiptId = 100,
+                    LineNum = 1,
+                    QuantityReceived = 5,
+                    PurchaseRate = 2m,
+                    IsDeleted = false
+                }
+            });
+
+        var sut = Sut();
+        var r = await sut.CreateAsync(new CreatePurchaseBillDto
+        {
+            SourceMode = PharmacyPurchaseBillSourceMode.DirectGrn,
+            PurchaseOrderId = null,
+            GoodsReceiptId = 100,
+            SupplierId = 5,
+            InvoiceNo = "INV-QTY",
+            InvoiceDate = DateTime.UtcNow.Date,
+            DiscountAmount = 0,
+            GstPercent = 0,
+            OtherTaxAmount = 0,
+            Items = new List<PurchaseBillLineInputDto>
+            {
+                new() { GoodsReceiptItemId = 10, Quantity = 3, Rate = 2m }
+            }
+        });
+
+        r.Success.Should().BeFalse();
+        r.Message.Should().Contain("quantity");
     }
 }

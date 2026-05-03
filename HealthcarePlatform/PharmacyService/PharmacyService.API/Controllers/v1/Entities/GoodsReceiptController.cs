@@ -31,8 +31,9 @@ public sealed class GoodsReceiptController : ControllerBase
     [SwaggerResponse(StatusCodes.Status200OK, "OK", typeof(BaseResponse<IReadOnlyList<GoodsReceiptPickListDto>>))]
     public async Task<ActionResult<BaseResponse<IReadOnlyList<GoodsReceiptPickListDto>>>> ListForPurchaseBill(
         [FromQuery] long? purchaseOrderId,
+        [FromQuery] long? supplierId,
         CancellationToken ct)
-        => Ok(await _service.ListForPurchaseBillAsync(purchaseOrderId, ct));
+        => Ok(await _service.ListForPurchaseBillAsync(purchaseOrderId, supplierId, ct));
 
     [HttpGet("{id:long}")]
     [SwaggerOperation(OperationId = "GoodsReceipt_GetById")]

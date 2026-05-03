@@ -10878,6 +10878,9 @@ namespace TriVita.UnifiedDatabase.Migrations
                         .HasPrecision(18, 4)
                         .HasColumnType("decimal(18,4)");
 
+                    b.Property<long?>("SupplierId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("SupplierName")
                         .IsRequired()
                         .HasMaxLength(250)
@@ -10891,6 +10894,8 @@ namespace TriVita.UnifiedDatabase.Migrations
                         .HasColumnType("decimal(18,4)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("PurchaseOrder", (string)null);
                 });
@@ -11637,15 +11642,6 @@ namespace TriVita.UnifiedDatabase.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<long?>("GrnSupplierId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("SaleCustomerId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("SalePatientId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("TenantId")
                         .HasColumnType("bigint");
 
@@ -11670,10 +11666,6 @@ namespace TriVita.UnifiedDatabase.Migrations
                     b.HasIndex("MedicineId");
 
                     b.HasIndex("TenantId", "FacilityId", "TransactionDate");
-
-                    b.HasIndex("TenantId", "FacilityId", "GrnSupplierId");
-
-                    b.HasIndex("TenantId", "FacilityId", "MedicineBatchId", "TransactionDate");
 
                     b.HasIndex("TenantId", "MedicineId", "TransactionDate");
 

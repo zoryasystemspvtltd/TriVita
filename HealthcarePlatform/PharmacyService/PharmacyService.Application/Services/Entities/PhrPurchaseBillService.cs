@@ -141,12 +141,22 @@ public sealed class PhrPurchaseBillService : IPhrPurchaseBillService
         if (grn.SupplierId != dto.SupplierId)
             return BaseResponse<PurchaseBillResponseDto>.Fail("Supplier must match the goods receipt.");
 
+        PhrPurchaseOrder? poLinked = null;
         if (dto.SourceMode == PharmacyPurchaseBillSourceMode.PurchaseOrderLinked)
         {
             if (dto.PurchaseOrderId is null || dto.PurchaseOrderId <= 0)
                 return BaseResponse<PurchaseBillResponseDto>.Fail("Purchase order is required for PO-linked mode.");
             if (grn.PurchaseOrderId != dto.PurchaseOrderId)
                 return BaseResponse<PurchaseBillResponseDto>.Fail("Goods receipt is not linked to the selected purchase order.");
+            poLinked = await _purchaseOrders.GetByIdAsync(dto.PurchaseOrderId.Value, cancellationToken);
+            if (poLinked is null || poLinked.IsDeleted)
+                return BaseResponse<PurchaseBillResponseDto>.Fail("Purchase order not found.");
+            if (!IsPoInFacilityScope(poLinked))
+                return BaseResponse<PurchaseBillResponseDto>.Fail("Resource is not in the current facility scope.");
+            if (poLinked.SupplierId is null || poLinked.SupplierId <= 0)
+                return BaseResponse<PurchaseBillResponseDto>.Fail("Purchase order must be linked to a supplier.");
+            if (poLinked.SupplierId != dto.SupplierId)
+                return BaseResponse<PurchaseBillResponseDto>.Fail("Purchase order does not match the selected supplier.");
         }
         else
         {
@@ -189,14 +199,11 @@ public sealed class PhrPurchaseBillService : IPhrPurchaseBillService
         decimal otherTaxAmt;
         if (dto.SourceMode == PharmacyPurchaseBillSourceMode.PurchaseOrderLinked)
         {
-            var po = await _purchaseOrders.GetByIdAsync(dto.PurchaseOrderId!.Value, cancellationToken);
-            if (po is null || po.IsDeleted)
+            if (poLinked is null)
                 return BaseResponse<PurchaseBillResponseDto>.Fail("Purchase order not found.");
-            if (!IsPoInFacilityScope(po))
-                return BaseResponse<PurchaseBillResponseDto>.Fail("Resource is not in the current facility scope.");
-            discountAmt = po.DiscountAmount;
-            gstPct = po.GstPercent;
-            otherTaxAmt = po.OtherTaxAmount;
+            discountAmt = poLinked.DiscountAmount;
+            gstPct = poLinked.GstPercent;
+            otherTaxAmt = poLinked.OtherTaxAmount;
         }
         else
         {
@@ -299,6 +306,8 @@ public sealed class PhrPurchaseBillService : IPhrPurchaseBillService
                 return BaseResponse<PurchaseBillResponseDto>.Fail("Purchase order not found.");
             if (!IsPoInFacilityScope(poUpd))
                 return BaseResponse<PurchaseBillResponseDto>.Fail("Resource is not in the current facility scope.");
+            if (poUpd.SupplierId != existing.SupplierId)
+                return BaseResponse<PurchaseBillResponseDto>.Fail("Purchase order does not match bill supplier.");
             discountAmt = poUpd.DiscountAmount;
             gstPct = poUpd.GstPercent;
             otherTaxAmt = poUpd.OtherTaxAmount;
@@ -410,7 +419,10 @@ public sealed class PhrPurchaseBillService : IPhrPurchaseBillService
             Quantity = l.Quantity,
             Rate = l.Rate
         }).ToList();
-        var qErr = await ValidateQuantitiesAgainstGrn(grnLines.Values.ToList(), inputs, excludePurchaseBillId: id, cancellationToken);
+        var glOrderedPre = grnLines.Values.OrderBy(i => i.LineNum).ThenBy(i => i.Id).ToList();
+        var shapeErr = ValidateLineInputsAgainstGrn(glOrderedPre, inputs);
+        if (shapeErr is not null) return BaseResponse<PurchaseBillResponseDto>.Fail(shapeErr);
+        var qErr = await ValidateQuantitiesAgainstGrn(glOrderedPre, inputs, excludePurchaseBillId: id, cancellationToken);
         if (qErr is not null) return BaseResponse<PurchaseBillResponseDto>.Fail(qErr);
 
         decimal postDisc;
@@ -425,6 +437,8 @@ public sealed class PhrPurchaseBillService : IPhrPurchaseBillService
                 return BaseResponse<PurchaseBillResponseDto>.Fail("Purchase order not found.");
             if (!IsPoInFacilityScope(poPost))
                 return BaseResponse<PurchaseBillResponseDto>.Fail("Resource is not in the current facility scope.");
+            if (poPost.SupplierId != bill.SupplierId)
+                return BaseResponse<PurchaseBillResponseDto>.Fail("Purchase order does not match bill supplier.");
             postDisc = poPost.DiscountAmount;
             postGst = poPost.GstPercent;
             postOther = poPost.OtherTaxAmount;
@@ -498,14 +512,24 @@ public sealed class PhrPurchaseBillService : IPhrPurchaseBillService
         IReadOnlyList<PhrGoodsReceiptItem> grnLines,
         List<PurchaseBillLineInputDto> inputs)
     {
+        if (inputs.Count == 0) return "At least one line is required.";
         var expected = grnLines.Select(l => l.Id).OrderBy(x => x).ToList();
         var got = inputs.Select(i => i.GoodsReceiptItemId).OrderBy(x => x).ToList();
+        if (got.Count != got.Distinct().Count()) return "Duplicate goods receipt item in bill lines.";
         if (expected.Count != got.Count || !expected.SequenceEqual(got))
-            return "Bill lines must include exactly the goods receipt items (no manual add/remove).";
+            return "Bill lines must match all goods receipt lines exactly (no additions or removals).";
+
+        const decimal tol = 0.0000001m;
+        var byId = grnLines.ToDictionary(i => i.Id, i => i);
         foreach (var inp in inputs)
         {
-            if (inp.Quantity <= 0) return "Each line quantity must be greater than zero.";
+            var grnLine = byId[inp.GoodsReceiptItemId];
             if (inp.Rate < 0) return "Rate cannot be negative.";
+            if (Math.Abs(inp.Quantity - grnLine.QuantityReceived) > tol)
+                return $"Line {grnLine.LineNum} quantity must equal GRN received quantity.";
+            var expectedRate = grnLine.PurchaseRate ?? 0m;
+            if (Math.Abs(inp.Rate - expectedRate) > tol)
+                return $"Line {grnLine.LineNum} rate must equal GRN purchase rate.";
         }
 
         return null;
@@ -522,7 +546,7 @@ public sealed class PhrPurchaseBillService : IPhrPurchaseBillService
         {
             if (!byId.TryGetValue(inp.GoodsReceiptItemId, out var grnLine))
                 return "Invalid goods receipt item.";
-            var postedElsewhere = await SumPostedQtyForGrnItemAsync(inp.GoodsReceiptItemId, excludePurchaseBillId, ct);
+            var postedElsewhere = await SumBilledQtyForGrnItemAsync(inp.GoodsReceiptItemId, excludePurchaseBillId, ct);
             if (postedElsewhere + inp.Quantity > grnLine.QuantityReceived + 0.0000001m)
                 return $"Billed quantity cannot exceed GRN received quantity for line {grnLine.LineNum}.";
         }
@@ -530,12 +554,13 @@ public sealed class PhrPurchaseBillService : IPhrPurchaseBillService
         return null;
     }
 
-    private async Task<decimal> SumPostedQtyForGrnItemAsync(long goodsReceiptItemId, long? excludePurchaseBillId, CancellationToken ct)
+    private async Task<decimal> SumBilledQtyForGrnItemAsync(long goodsReceiptItemId, long? excludePurchaseBillId, CancellationToken ct)
     {
-        var postedBills = await _bills.ListAsync(
-            b => !b.IsDeleted && b.Status == PharmacyPurchaseBillStatus.Posted,
+        var bills = await _bills.ListAsync(
+            b => !b.IsDeleted
+                && (b.Status == PharmacyPurchaseBillStatus.Posted || b.Status == PharmacyPurchaseBillStatus.Draft),
             ct);
-        var ids = postedBills
+        var ids = bills
             .Where(b => excludePurchaseBillId is null || b.Id != excludePurchaseBillId)
             .Select(b => b.Id)
             .ToHashSet();
