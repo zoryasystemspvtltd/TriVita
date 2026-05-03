@@ -14,5 +14,15 @@ public sealed class PhrStockAdjustmentItemConfiguration : IEntityTypeConfigurati
         builder.Property(e => e.QuantityDelta).HasPrecision(18, 4);
         builder.Property(e => e.UnitCost).HasPrecision(18, 4);
         builder.Property(e => e.Notes).HasMaxLength(1000);
+
+        builder.HasOne<PhrStockAdjustment>()
+            .WithMany()
+            .HasForeignKey(e => e.StockAdjustmentId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne<PhrMedicineBatch>()
+            .WithMany()
+            .HasForeignKey(e => e.MedicineBatchId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

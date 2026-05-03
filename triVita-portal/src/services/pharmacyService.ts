@@ -240,6 +240,73 @@ export async function getGoodsReceiptPaged(params: PagedQueryParams) {
   return data;
 }
 
+export async function getStockAdjustmentPaged(params: PagedQueryParams) {
+  const { data } = await pharmacyClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/stock-adjustment',
+    { params }
+  );
+  return data;
+}
+
+export async function getStockAdjustmentById(id: number) {
+  const { data } = await pharmacyClient.get<BaseResponse<Record<string, unknown>>>(`/api/v1/stock-adjustment/${id}`);
+  return data;
+}
+
+export async function createStockAdjustment(body: Record<string, unknown>) {
+  const { data } = await pharmacyClient.post<BaseResponse<Record<string, unknown>>>('/api/v1/stock-adjustment', body);
+  return data;
+}
+
+export async function updateStockAdjustment(id: number, body: Record<string, unknown>) {
+  const { data } = await pharmacyClient.put<BaseResponse<Record<string, unknown>>>(
+    `/api/v1/stock-adjustment/${id}`,
+    body
+  );
+  return data;
+}
+
+export async function deleteStockAdjustment(id: number) {
+  const { data } = await pharmacyClient.delete<BaseResponse<unknown>>(`/api/v1/stock-adjustment/${id}`);
+  return data;
+}
+
+export async function postStockAdjustment(id: number) {
+  const { data } = await pharmacyClient.post<BaseResponse<Record<string, unknown>>>(
+    `/api/v1/stock-adjustment/${id}/post`,
+    {}
+  );
+  return data;
+}
+
+export async function getStockAdjustmentItemsByAdjustment(stockAdjustmentId: number) {
+  const { data } = await pharmacyClient.get<BaseResponse<readonly Record<string, unknown>[]>>(
+    `/api/v1/stock-adjustment-item/by-adjustment/${stockAdjustmentId}`
+  );
+  return data;
+}
+
+export async function createStockAdjustmentItem(body: Record<string, unknown>) {
+  const { data } = await pharmacyClient.post<BaseResponse<Record<string, unknown>>>(
+    '/api/v1/stock-adjustment-item',
+    body
+  );
+  return data;
+}
+
+export async function updateStockAdjustmentItem(id: number, body: Record<string, unknown>) {
+  const { data } = await pharmacyClient.put<BaseResponse<Record<string, unknown>>>(
+    `/api/v1/stock-adjustment-item/${id}`,
+    body
+  );
+  return data;
+}
+
+export async function deleteStockAdjustmentItem(id: number) {
+  const { data } = await pharmacyClient.delete<BaseResponse<unknown>>(`/api/v1/stock-adjustment-item/${id}`);
+  return data;
+}
+
 export async function getStockLedgerPaged(params: PagedQueryParams) {
   const { data } = await pharmacyClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
     '/api/v1/stock-ledger',
@@ -342,6 +409,56 @@ export async function deletePurchaseOrderItem(id: number) {
 
 export async function getGoodsReceiptById(id: number) {
   const { data } = await pharmacyClient.get<BaseResponse<Record<string, unknown>>>(`/api/v1/goods-receipt/${id}`);
+  return data;
+}
+
+export async function getGoodsReceiptForPurchaseBill(purchaseOrderId?: number) {
+  const params =
+    purchaseOrderId != null && Number.isFinite(purchaseOrderId) && purchaseOrderId > 0
+      ? { purchaseOrderId }
+      : {};
+  const { data } = await pharmacyClient.get<BaseResponse<Record<string, unknown>[]>>(
+    '/api/v1/goods-receipt/for-purchase-bill',
+    { params }
+  );
+  return data;
+}
+
+export async function getPurchaseBillPaged(params: PagedQueryParams) {
+  const { data } = await pharmacyClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/purchase-bill',
+    { params }
+  );
+  return data;
+}
+
+export async function getPurchaseBillById(id: number) {
+  const { data } = await pharmacyClient.get<BaseResponse<Record<string, unknown>>>(`/api/v1/purchase-bill/${id}`);
+  return data;
+}
+
+export async function createPurchaseBill(body: Record<string, unknown>) {
+  const { data } = await pharmacyClient.post<BaseResponse<Record<string, unknown>>>('/api/v1/purchase-bill', body);
+  return data;
+}
+
+export async function updatePurchaseBill(id: number, body: Record<string, unknown>) {
+  const { data } = await pharmacyClient.put<BaseResponse<Record<string, unknown>>>(
+    `/api/v1/purchase-bill/${id}`,
+    body
+  );
+  return data;
+}
+
+export async function deletePurchaseBill(id: number) {
+  const { data } = await pharmacyClient.delete<BaseResponse<unknown>>(`/api/v1/purchase-bill/${id}`);
+  return data;
+}
+
+export async function postPurchaseBill(id: number) {
+  const { data } = await pharmacyClient.post<BaseResponse<Record<string, unknown>>>(
+    `/api/v1/purchase-bill/${id}/post`
+  );
   return data;
 }
 

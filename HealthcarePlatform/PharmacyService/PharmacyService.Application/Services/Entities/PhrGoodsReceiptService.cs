@@ -17,6 +17,7 @@ public interface IPhrGoodsReceiptService
 {
     Task<BaseResponse<GoodsReceiptResponseDto>> GetByIdAsync(long id, CancellationToken cancellationToken = default);
     Task<BaseResponse<PagedResponse<GoodsReceiptResponseDto>>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default);
+    Task<BaseResponse<IReadOnlyList<GoodsReceiptPickListDto>>> ListForPurchaseBillAsync(long? purchaseOrderId, CancellationToken cancellationToken = default);
     Task<BaseResponse<GoodsReceiptResponseDto>> CreateAsync(CreateGoodsReceiptDto dto, CancellationToken cancellationToken = default);
     Task<BaseResponse<GoodsReceiptResponseDto>> UpdateAsync(long id, UpdateGoodsReceiptDto dto, CancellationToken cancellationToken = default);
     Task<BaseResponse<object?>> DeleteAsync(long id, CancellationToken cancellationToken = default);
@@ -61,6 +62,45 @@ public sealed class PhrGoodsReceiptService : PhrCrudServiceBase<PhrGoodsReceipt,
 
     public Task<BaseResponse<PagedResponse<GoodsReceiptResponseDto>>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default)
         => GetPagedCoreAsync(query, null, cancellationToken);
+
+    public async Task<BaseResponse<IReadOnlyList<GoodsReceiptPickListDto>>> ListForPurchaseBillAsync(
+        long? purchaseOrderId,
+        CancellationToken cancellationToken = default)
+    {
+        if (RequiresFacilityId && Tenant.FacilityId is null)
+            return BaseResponse<IReadOnlyList<GoodsReceiptPickListDto>>.Fail(
+                "FacilityId is required (header X-Facility-Id or claim facility_id).");
+
+        var fid = Tenant.FacilityId;
+        IReadOnlyList<PhrGoodsReceipt> list;
+        if (purchaseOrderId is { } po)
+        {
+            list = await _goodsReceipts.ListAsync(
+                g => !g.IsDeleted && (fid == null || g.FacilityId == fid) && g.PurchaseOrderId == po,
+                cancellationToken);
+        }
+        else
+        {
+            list = await _goodsReceipts.ListAsync(
+                g => !g.IsDeleted && (fid == null || g.FacilityId == fid) && g.PurchaseOrderId == null,
+                cancellationToken);
+        }
+
+        var dtos = list
+            .OrderByDescending(g => g.ReceivedOn)
+            .ThenByDescending(g => g.Id)
+            .Select(g => new GoodsReceiptPickListDto
+            {
+                Id = g.Id,
+                GoodsReceiptNo = g.GoodsReceiptNo,
+                PurchaseOrderId = g.PurchaseOrderId,
+                SupplierId = g.SupplierId,
+                ReceivedOn = g.ReceivedOn
+            })
+            .ToList();
+
+        return BaseResponse<IReadOnlyList<GoodsReceiptPickListDto>>.Ok(dtos);
+    }
 
     public override async Task<BaseResponse<GoodsReceiptResponseDto>> GetByIdAsync(long id, CancellationToken cancellationToken = default)
     {

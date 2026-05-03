@@ -124,8 +124,14 @@ export const PharmacyBatchesView = lazy(() =>
 export const PharmacyGoodsReceiptView = lazy(() =>
   import('@/modules/pharmacy/extendedViews').then((m) => ({ default: m.PharmacyGoodsReceiptView }))
 );
+export const PharmacyPurchaseBillView = lazy(() =>
+  import('@/modules/pharmacy/extendedViews').then((m) => ({ default: m.PharmacyPurchaseBillView }))
+);
 export const PharmacyStockLedgerView = lazy(() =>
   import('@/modules/pharmacy/extendedViews').then((m) => ({ default: m.PharmacyStockLedgerView }))
+);
+export const PharmacyStockAdjustmentView = lazy(() =>
+  import('@/modules/pharmacy/extendedViews').then((m) => ({ default: m.PharmacyStockAdjustmentView }))
 );
 
 export const SharedHierarchyView = lazy(() =>

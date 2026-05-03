@@ -10,6 +10,7 @@ public sealed class PhrStockAdjustmentConfiguration : IEntityTypeConfiguration<P
     {
         builder.ToTable("StockAdjustment");
         builder.HasKey(e => e.Id);
+        builder.Property(e => e.Status).HasConversion<int>();
         builder.Property(e => e.RowVersion).IsRowVersion();
         builder.Property(e => e.AdjustmentNo).HasMaxLength(60);
         builder.Property(e => e.ReasonNotes).HasMaxLength(1000);

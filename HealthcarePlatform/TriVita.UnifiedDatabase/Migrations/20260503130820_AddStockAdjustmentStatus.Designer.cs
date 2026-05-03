@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TriVita.UnifiedDatabase;
 
@@ -11,9 +12,11 @@ using TriVita.UnifiedDatabase;
 namespace TriVita.UnifiedDatabase.Migrations
 {
     [DbContext(typeof(HealthcareDbContext))]
-    partial class HealthcareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260503130820_AddStockAdjustmentStatus")]
+    partial class AddStockAdjustmentStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -10623,188 +10626,6 @@ namespace TriVita.UnifiedDatabase.Migrations
                     b.ToTable("PrescriptionMapping", (string)null);
                 });
 
-            modelBuilder.Entity("PharmacyService.Domain.Entities.PhrPurchaseBill", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("BillNo")
-                        .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
-
-                    b.Property<long>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("DiscountAmount")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<long?>("FacilityId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("GoodsReceiptId")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("GstAmount")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("GstPercent")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<DateTime>("InvoiceDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("InvoiceNo")
-                        .IsRequired()
-                        .HasMaxLength(120)
-                        .HasColumnType("nvarchar(120)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<long>("ModifiedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("NetAmount")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<decimal>("OtherTaxAmount")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<long?>("PurchaseOrderId")
-                        .HasColumnType("bigint");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<int>("SourceMode")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("SubTotal")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<long>("SupplierId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("TenantId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GoodsReceiptId");
-
-                    b.HasIndex("PurchaseOrderId");
-
-                    b.HasIndex("SupplierId");
-
-                    b.HasIndex("TenantId", "SupplierId", "InvoiceNo")
-                        .IsUnique()
-                        .HasFilter("[IsDeleted] = 0");
-
-                    b.ToTable("PurchaseBill", (string)null);
-                });
-
-            modelBuilder.Entity("PharmacyService.Domain.Entities.PhrPurchaseBillItem", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<long>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("FacilityId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("GoodsReceiptId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("GoodsReceiptItemId")
-                        .HasColumnType("bigint");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("LineNum")
-                        .HasColumnType("int");
-
-                    b.Property<long>("ModifiedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("PurchaseBillId")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("Quantity")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<decimal>("Rate")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<long>("TenantId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GoodsReceiptId");
-
-                    b.HasIndex("GoodsReceiptItemId");
-
-                    b.HasIndex("PurchaseBillId");
-
-                    b.ToTable("PurchaseBillItems", (string)null);
-                });
-
             modelBuilder.Entity("PharmacyService.Domain.Entities.PhrPurchaseOrder", b =>
                 {
                     b.Property<long>("Id")
@@ -11394,10 +11215,6 @@ namespace TriVita.UnifiedDatabase.Migrations
                         .HasColumnType("decimal(18,4)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MedicineBatchId");
-
-                    b.HasIndex("StockAdjustmentId");
 
                     b.ToTable("StockAdjustmentItems", (string)null);
                 });
@@ -13414,47 +13231,6 @@ namespace TriVita.UnifiedDatabase.Migrations
                         .OnDelete(DeleteBehavior.NoAction);
                 });
 
-            modelBuilder.Entity("PharmacyService.Domain.Entities.PhrPurchaseBill", b =>
-                {
-                    b.HasOne("PharmacyService.Domain.Entities.PhrGoodsReceipt", null)
-                        .WithMany()
-                        .HasForeignKey("GoodsReceiptId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("PharmacyService.Domain.Entities.PhrPurchaseOrder", null)
-                        .WithMany()
-                        .HasForeignKey("PurchaseOrderId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("PharmacyService.Domain.Entities.PhrSupplier", null)
-                        .WithMany()
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PharmacyService.Domain.Entities.PhrPurchaseBillItem", b =>
-                {
-                    b.HasOne("PharmacyService.Domain.Entities.PhrGoodsReceipt", null)
-                        .WithMany()
-                        .HasForeignKey("GoodsReceiptId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("PharmacyService.Domain.Entities.PhrGoodsReceiptItem", null)
-                        .WithMany()
-                        .HasForeignKey("GoodsReceiptItemId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("PharmacyService.Domain.Entities.PhrPurchaseBill", null)
-                        .WithMany()
-                        .HasForeignKey("PurchaseBillId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("PharmacyService.Domain.Entities.PhrSalesReturnItem", b =>
                 {
                     b.HasOne("PharmacyService.Domain.Entities.PhrSalesReturn", null)
@@ -13462,21 +13238,6 @@ namespace TriVita.UnifiedDatabase.Migrations
                         .HasForeignKey("TenantId", "FacilityId", "SalesReturnId")
                         .HasPrincipalKey("TenantId", "FacilityId", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PharmacyService.Domain.Entities.PhrStockAdjustmentItem", b =>
-                {
-                    b.HasOne("PharmacyService.Domain.Entities.PhrMedicineBatch", null)
-                        .WithMany()
-                        .HasForeignKey("MedicineBatchId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("PharmacyService.Domain.Entities.PhrStockAdjustment", null)
-                        .WithMany()
-                        .HasForeignKey("StockAdjustmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 

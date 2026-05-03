@@ -340,6 +340,22 @@ export function AppRoutes() {
           }
         />
         <Route
+          path="pharmacy/transactions/purchase-bill"
+          element={
+            <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
+              <Lazy.PharmacyPurchaseBillView />
+            </RequirePermission>
+          }
+        />
+        <Route
+          path="pharmacy/transactions/stock-adjustment"
+          element={
+            <RequirePermission permission={TriVitaPermissions.PharmacyApi}>
+              <Lazy.PharmacyStockAdjustmentView />
+            </RequirePermission>
+          }
+        />
+        <Route
           path="pharmacy/transactions/sales"
           element={
             <RequirePermission permission={TriVitaPermissions.PharmacyApi}>

@@ -1,10 +1,8 @@
-using System.Data;
 using AutoMapper;
 using FluentValidation;
 using Healthcare.Common.Pagination;
 using Healthcare.Common.Responses;
 using PharmacyService.Application.DTOs.Entities;
-using PharmacyService.Application.Services;
 using PharmacyService.Application.Services.Extended;
 using PharmacyService.Domain.Entities;
 using PharmacyService.Domain.Enums;
@@ -17,6 +15,7 @@ public interface IPhrStockAdjustmentItemService
 {
     Task<BaseResponse<StockAdjustmentItemResponseDto>> GetByIdAsync(long id, CancellationToken cancellationToken = default);
     Task<BaseResponse<PagedResponse<StockAdjustmentItemResponseDto>>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default);
+    Task<BaseResponse<IReadOnlyList<StockAdjustmentItemResponseDto>>> GetByStockAdjustmentIdAsync(long stockAdjustmentId, CancellationToken cancellationToken = default);
     Task<BaseResponse<StockAdjustmentItemResponseDto>> CreateAsync(CreateStockAdjustmentItemDto dto, CancellationToken cancellationToken = default);
     Task<BaseResponse<StockAdjustmentItemResponseDto>> UpdateAsync(long id, UpdateStockAdjustmentItemDto dto, CancellationToken cancellationToken = default);
     Task<BaseResponse<object?>> DeleteAsync(long id, CancellationToken cancellationToken = default);
@@ -26,15 +25,15 @@ public sealed class PhrStockAdjustmentItemService : PhrCrudServiceBase<PhrStockA
 {
     private readonly IRepository<PhrStockAdjustment> _adjustments;
     private readonly IRepository<PhrMedicineBatch> _batches;
-    private readonly IPharmacyStockMovementService _stockMovement;
-    private readonly IPharmacyUnitOfWork _uow;
+    private readonly IRepository<PhrMedicine> _medicines;
+    private readonly IRepository<PhrBatchStock> _batchStocks;
 
     public PhrStockAdjustmentItemService(
         IRepository<PhrStockAdjustmentItem> repository,
         IRepository<PhrStockAdjustment> adjustments,
         IRepository<PhrMedicineBatch> batches,
-        IPharmacyStockMovementService stockMovement,
-        IPharmacyUnitOfWork uow,
+        IRepository<PhrMedicine> medicines,
+        IRepository<PhrBatchStock> batchStocks,
         IMapper mapper,
         Healthcare.Common.MultiTenancy.ITenantContext tenant,
         IValidator<CreateStockAdjustmentItemDto>? createValidator,
@@ -45,8 +44,8 @@ public sealed class PhrStockAdjustmentItemService : PhrCrudServiceBase<PhrStockA
     {
         _adjustments = adjustments;
         _batches = batches;
-        _stockMovement = stockMovement;
-        _uow = uow;
+        _medicines = medicines;
+        _batchStocks = batchStocks;
     }
 
     protected override bool RequiresFacilityId => true;
@@ -54,56 +53,77 @@ public sealed class PhrStockAdjustmentItemService : PhrCrudServiceBase<PhrStockA
     public Task<BaseResponse<PagedResponse<StockAdjustmentItemResponseDto>>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default)
         => GetPagedCoreAsync(query, null, cancellationToken);
 
+    public async Task<BaseResponse<IReadOnlyList<StockAdjustmentItemResponseDto>>> GetByStockAdjustmentIdAsync(
+        long stockAdjustmentId,
+        CancellationToken cancellationToken = default)
+    {
+        var adj = await _adjustments.GetByIdAsync(stockAdjustmentId, cancellationToken);
+        if (adj is null)
+            return BaseResponse<IReadOnlyList<StockAdjustmentItemResponseDto>>.Fail("Stock adjustment not found.");
+        if (Tenant.FacilityId is { } tf && adj.FacilityId is { } af && af != tf)
+            return BaseResponse<IReadOnlyList<StockAdjustmentItemResponseDto>>.Fail("Resource is not in the current facility scope.");
+
+        var lines = await Repository.ListAsync(
+            i => i.StockAdjustmentId == stockAdjustmentId && !i.IsDeleted,
+            cancellationToken);
+        var ordered = lines.OrderBy(i => i.LineNum).ThenBy(i => i.Id).ToList();
+        var list = new List<StockAdjustmentItemResponseDto>();
+        foreach (var line in ordered)
+        {
+            var dto = Mapper.Map<StockAdjustmentItemResponseDto>(line);
+            await EnrichLineAsync(dto, cancellationToken);
+            list.Add(dto);
+        }
+
+        return BaseResponse<IReadOnlyList<StockAdjustmentItemResponseDto>>.Ok(list);
+    }
+
+    public override async Task<BaseResponse<StockAdjustmentItemResponseDto>> GetByIdAsync(long id, CancellationToken cancellationToken = default)
+    {
+        var r = await base.GetByIdAsync(id, cancellationToken);
+        if (!r.Success || r.Data is null)
+            return r;
+        await EnrichLineAsync(r.Data, cancellationToken);
+        return r;
+    }
+
     public override async Task<BaseResponse<StockAdjustmentItemResponseDto>> CreateAsync(
         CreateStockAdjustmentItemDto dto,
         CancellationToken cancellationToken = default)
     {
         if (dto.QuantityDelta == 0)
             return BaseResponse<StockAdjustmentItemResponseDto>.Fail("QuantityDelta must be non-zero.");
+        if (dto.MedicineId <= 0)
+            return BaseResponse<StockAdjustmentItemResponseDto>.Fail("Medicine is required.");
+        if (dto.MedicineBatchId <= 0)
+            return BaseResponse<StockAdjustmentItemResponseDto>.Fail("Batch is required.");
 
         var adj = await _adjustments.GetByIdAsync(dto.StockAdjustmentId, cancellationToken);
         if (adj is null) return BaseResponse<StockAdjustmentItemResponseDto>.Fail("Stock adjustment not found.");
         if (Tenant.FacilityId is { } tf && adj.FacilityId is { } af && af != tf)
             return BaseResponse<StockAdjustmentItemResponseDto>.Fail("Resource is not in the current facility scope.");
+        if (adj.Status != PharmacyStockAdjustmentStatus.Draft)
+            return BaseResponse<StockAdjustmentItemResponseDto>.Fail("Lines cannot be added to a posted adjustment.");
 
         var batch = await _batches.GetByIdAsync(dto.MedicineBatchId, cancellationToken);
         if (batch is null || batch.IsDeleted)
             return BaseResponse<StockAdjustmentItemResponseDto>.Fail("Medicine batch not found.");
+        if (batch.MedicineId != dto.MedicineId)
+            return BaseResponse<StockAdjustmentItemResponseDto>.Fail("Medicine does not match the selected batch.");
 
-        try
-        {
-            return await _uow.ExecuteInTransactionAsync(async ct =>
-            {
-                var entity = Mapper.Map<PhrStockAdjustmentItem>(dto);
-                AuditHelper.ApplyCreate(entity, Tenant);
-                entity.FacilityId = Tenant.FacilityId;
+        var entity = Mapper.Map<PhrStockAdjustmentItem>(dto);
+        if (entity.LineNum <= 0)
+            entity.LineNum = await NextLineNumAsync(dto.StockAdjustmentId, cancellationToken);
 
-                await Repository.AddAsync(entity, ct);
-                await Repository.SaveChangesAsync(ct);
+        AuditHelper.ApplyCreate(entity, Tenant);
+        entity.FacilityId = Tenant.FacilityId;
 
-                var txnDate = adj.AdjustmentOn == default ? DateTime.UtcNow : adj.AdjustmentOn;
-                var mv = await _stockMovement.ApplyMovementAsync(
-                    StockLedgerTransactionType.ADJUSTMENT,
-                    dto.StockAdjustmentId,
-                    entity.Id,
-                    batch.MedicineId,
-                    dto.MedicineBatchId,
-                    dto.QuantityDelta,
-                    txnDate,
-                    dto.UnitCost,
-                    dto.Notes,
-                    ct);
-                if (!mv.Success)
-                    return BaseResponse<StockAdjustmentItemResponseDto>.Fail(mv.Message ?? "Stock adjustment movement failed.");
+        await Repository.AddAsync(entity, cancellationToken);
+        await Repository.SaveChangesAsync(cancellationToken);
 
-                return BaseResponse<StockAdjustmentItemResponseDto>.Ok(Mapper.Map<StockAdjustmentItemResponseDto>(entity), "Created.");
-            }, cancellationToken, IsolationLevel.Serializable);
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "Stock adjustment item create failed tenant {TenantId}", Tenant.TenantId);
-            return BaseResponse<StockAdjustmentItemResponseDto>.Fail("Create failed.");
-        }
+        var response = Mapper.Map<StockAdjustmentItemResponseDto>(entity);
+        await EnrichLineAsync(response, cancellationToken);
+        return BaseResponse<StockAdjustmentItemResponseDto>.Ok(response, "Created.");
     }
 
     public override async Task<BaseResponse<StockAdjustmentItemResponseDto>> UpdateAsync(
@@ -113,6 +133,10 @@ public sealed class PhrStockAdjustmentItemService : PhrCrudServiceBase<PhrStockA
     {
         if (dto.QuantityDelta == 0)
             return BaseResponse<StockAdjustmentItemResponseDto>.Fail("QuantityDelta must be non-zero.");
+        if (dto.MedicineId <= 0)
+            return BaseResponse<StockAdjustmentItemResponseDto>.Fail("Medicine is required.");
+        if (dto.MedicineBatchId <= 0)
+            return BaseResponse<StockAdjustmentItemResponseDto>.Fail("Batch is required.");
 
         var entity = await Repository.GetByIdAsync(id, cancellationToken);
         if (entity is null) return BaseResponse<StockAdjustmentItemResponseDto>.Fail("StockAdjustmentItem not found.");
@@ -120,66 +144,23 @@ public sealed class PhrStockAdjustmentItemService : PhrCrudServiceBase<PhrStockA
 
         var adj = await _adjustments.GetByIdAsync(entity.StockAdjustmentId, cancellationToken);
         if (adj is null) return BaseResponse<StockAdjustmentItemResponseDto>.Fail("Stock adjustment not found.");
+        if (adj.Status != PharmacyStockAdjustmentStatus.Draft)
+            return BaseResponse<StockAdjustmentItemResponseDto>.Fail("Posted adjustments are locked.");
 
         var batch = await _batches.GetByIdAsync(dto.MedicineBatchId, cancellationToken);
         if (batch is null || batch.IsDeleted)
             return BaseResponse<StockAdjustmentItemResponseDto>.Fail("Medicine batch not found.");
+        if (batch.MedicineId != dto.MedicineId)
+            return BaseResponse<StockAdjustmentItemResponseDto>.Fail("Medicine does not match the selected batch.");
 
-        try
-        {
-            return await _uow.ExecuteInTransactionAsync(async ct =>
-            {
-                var txnDate = adj.AdjustmentOn == default ? DateTime.UtcNow : adj.AdjustmentOn;
+        Mapper.Map(dto, entity);
+        AuditHelper.ApplyUpdate(entity, Tenant);
+        await Repository.UpdateAsync(entity, cancellationToken);
+        await Repository.SaveChangesAsync(cancellationToken);
 
-                var priorBatch = await _batches.GetByIdAsync(entity.MedicineBatchId, ct);
-                if (priorBatch is null)
-                    return BaseResponse<StockAdjustmentItemResponseDto>.Fail("Medicine batch not found.");
-
-                var rev = await _stockMovement.ApplyMovementAsync(
-                    StockLedgerTransactionType.ADJUSTMENT,
-                    entity.StockAdjustmentId,
-                    entity.Id,
-                    priorBatch.MedicineId,
-                    entity.MedicineBatchId,
-                    -entity.QuantityDelta,
-                    txnDate,
-                    entity.UnitCost,
-                    "Adjust line update (reverse)",
-                    ct);
-                if (!rev.Success)
-                    return BaseResponse<StockAdjustmentItemResponseDto>.Fail(rev.Message ?? "Stock reversal failed.");
-
-                Mapper.Map(dto, entity);
-                AuditHelper.ApplyUpdate(entity, Tenant);
-                await Repository.UpdateAsync(entity, ct);
-                await Repository.SaveChangesAsync(ct);
-
-                var newBatch = await _batches.GetByIdAsync(entity.MedicineBatchId, ct);
-                if (newBatch is null)
-                    return BaseResponse<StockAdjustmentItemResponseDto>.Fail("Medicine batch not found.");
-
-                var mv = await _stockMovement.ApplyMovementAsync(
-                    StockLedgerTransactionType.ADJUSTMENT,
-                    entity.StockAdjustmentId,
-                    entity.Id,
-                    newBatch.MedicineId,
-                    entity.MedicineBatchId,
-                    dto.QuantityDelta,
-                    txnDate,
-                    dto.UnitCost,
-                    dto.Notes,
-                    ct);
-                if (!mv.Success)
-                    return BaseResponse<StockAdjustmentItemResponseDto>.Fail(mv.Message ?? "Stock adjustment movement failed.");
-
-                return BaseResponse<StockAdjustmentItemResponseDto>.Ok(Mapper.Map<StockAdjustmentItemResponseDto>(entity), "Updated.");
-            }, cancellationToken, IsolationLevel.Serializable);
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "Stock adjustment item update failed tenant {TenantId}", Tenant.TenantId);
-            return BaseResponse<StockAdjustmentItemResponseDto>.Fail("Update failed.");
-        }
+        var response = Mapper.Map<StockAdjustmentItemResponseDto>(entity);
+        await EnrichLineAsync(response, cancellationToken);
+        return BaseResponse<StockAdjustmentItemResponseDto>.Ok(response, "Updated.");
     }
 
     public override async Task<BaseResponse<object?>> DeleteAsync(long id, CancellationToken cancellationToken = default)
@@ -190,44 +171,43 @@ public sealed class PhrStockAdjustmentItemService : PhrCrudServiceBase<PhrStockA
 
         var adj = await _adjustments.GetByIdAsync(entity.StockAdjustmentId, cancellationToken);
         if (adj is null) return BaseResponse<object?>.Fail("Stock adjustment not found.");
+        if (adj.Status != PharmacyStockAdjustmentStatus.Draft)
+            return BaseResponse<object?>.Fail("Posted adjustments are locked.");
 
-        var batch = await _batches.GetByIdAsync(entity.MedicineBatchId, cancellationToken);
+        entity.IsDeleted = true;
+        entity.IsActive = false;
+        AuditHelper.ApplyUpdate(entity, Tenant);
+        await Repository.UpdateAsync(entity, cancellationToken);
+        await Repository.SaveChangesAsync(cancellationToken);
+
+        return BaseResponse<object?>.Ok(null, "Deleted.");
+    }
+
+    private async Task EnrichLineAsync(StockAdjustmentItemResponseDto dto, CancellationToken cancellationToken)
+    {
+        var batch = await _batches.GetByIdAsync(dto.MedicineBatchId, cancellationToken);
         if (batch is null)
-            return BaseResponse<object?>.Fail("Medicine batch not found.");
+            return;
 
-        try
+        dto.MedicineId = batch.MedicineId;
+        dto.BatchNo = batch.BatchNo;
+        dto.ExpiryDate = batch.ExpiryDate;
+
+        var med = await _medicines.GetByIdAsync(batch.MedicineId, cancellationToken);
+        dto.MedicineName = med?.MedicineName;
+
+        if (Tenant.FacilityId is { } fid)
         {
-            return await _uow.ExecuteInTransactionAsync(async ct =>
-            {
-                var txnDate = adj.AdjustmentOn == default ? DateTime.UtcNow : adj.AdjustmentOn;
-
-                var rev = await _stockMovement.ApplyMovementAsync(
-                    StockLedgerTransactionType.ADJUSTMENT,
-                    entity.StockAdjustmentId,
-                    entity.Id,
-                    batch.MedicineId,
-                    entity.MedicineBatchId,
-                    -entity.QuantityDelta,
-                    txnDate,
-                    entity.UnitCost,
-                    "Adjust line deleted",
-                    ct);
-                if (!rev.Success)
-                    return BaseResponse<object?>.Fail(rev.Message ?? "Stock reversal failed.");
-
-                entity.IsDeleted = true;
-                entity.IsActive = false;
-                AuditHelper.ApplyUpdate(entity, Tenant);
-                await Repository.UpdateAsync(entity, ct);
-                await Repository.SaveChangesAsync(ct);
-
-                return BaseResponse<object?>.Ok(null, "Deleted.");
-            }, cancellationToken, IsolationLevel.Serializable);
+            var stocks = await _batchStocks.ListAsync(
+                s => s.MedicineBatchId == dto.MedicineBatchId && s.FacilityId == fid && !s.IsDeleted,
+                cancellationToken);
+            dto.CurrentQty = stocks.FirstOrDefault()?.CurrentQty ?? 0m;
         }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "Stock adjustment item delete failed tenant {TenantId}", Tenant.TenantId);
-            return BaseResponse<object?>.Fail("Delete failed.");
-        }
+    }
+
+    private async Task<int> NextLineNumAsync(long stockAdjustmentId, CancellationToken cancellationToken)
+    {
+        var lines = await Repository.ListAsync(i => i.StockAdjustmentId == stockAdjustmentId && !i.IsDeleted, cancellationToken);
+        return lines.Count == 0 ? 1 : lines.Max(i => i.LineNum) + 1;
     }
 }

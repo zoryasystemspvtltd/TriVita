@@ -26,6 +26,14 @@ public sealed class GoodsReceiptController : ControllerBase
     public GoodsReceiptController(IPhrGoodsReceiptService service, ITenantContext tenant, ILogger<GoodsReceiptController> logger)
     { _service = service; _tenant = tenant; _logger = logger; }
 
+    [HttpGet("for-purchase-bill")]
+    [SwaggerOperation(OperationId = "GoodsReceipt_ListForPurchaseBill")]
+    [SwaggerResponse(StatusCodes.Status200OK, "OK", typeof(BaseResponse<IReadOnlyList<GoodsReceiptPickListDto>>))]
+    public async Task<ActionResult<BaseResponse<IReadOnlyList<GoodsReceiptPickListDto>>>> ListForPurchaseBill(
+        [FromQuery] long? purchaseOrderId,
+        CancellationToken ct)
+        => Ok(await _service.ListForPurchaseBillAsync(purchaseOrderId, ct));
+
     [HttpGet("{id:long}")]
     [SwaggerOperation(OperationId = "GoodsReceipt_GetById")]
     [SwaggerResponse(StatusCodes.Status200OK, "OK", typeof(BaseResponse<GoodsReceiptResponseDto>))]

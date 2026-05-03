@@ -3,6 +3,8 @@ namespace PharmacyService.Application.DTOs.Entities;
 public sealed class UpdateStockAdjustmentItemDto
 {
     public long StockAdjustmentId { get; set; }
+
+    public long MedicineId { get; set; }
     public int LineNum { get; set; }
     public long MedicineBatchId { get; set; }
     public decimal QuantityDelta { get; set; }

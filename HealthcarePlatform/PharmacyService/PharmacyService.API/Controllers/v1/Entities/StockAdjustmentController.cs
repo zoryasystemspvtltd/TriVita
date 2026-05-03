@@ -52,4 +52,10 @@ public sealed class StockAdjustmentController : ControllerBase
     [HttpDelete("{id:long}")]
     public async Task<ActionResult<BaseResponse<object?>>> Delete(long id, CancellationToken ct)
         => Ok(await _service.DeleteAsync(id, ct));
+
+    [HttpPost("{id:long}/post")]
+    [SwaggerOperation(OperationId = "StockAdjustment_Post")]
+    [SwaggerResponse(StatusCodes.Status200OK, "OK", typeof(BaseResponse<StockAdjustmentResponseDto>))]
+    public async Task<ActionResult<BaseResponse<StockAdjustmentResponseDto>>> Post(long id, CancellationToken ct)
+        => Ok(await _service.PostAsync(id, ct));
 }

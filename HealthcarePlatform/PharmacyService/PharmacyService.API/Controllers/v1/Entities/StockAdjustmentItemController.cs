@@ -26,6 +26,14 @@ public sealed class StockAdjustmentItemController : ControllerBase
     public StockAdjustmentItemController(IPhrStockAdjustmentItemService service, ITenantContext tenant, ILogger<StockAdjustmentItemController> logger)
     { _service = service; _tenant = tenant; _logger = logger; }
 
+    [HttpGet("by-adjustment/{stockAdjustmentId:long}")]
+    [SwaggerOperation(OperationId = "StockAdjustmentItem_GetByStockAdjustmentId")]
+    [SwaggerResponse(StatusCodes.Status200OK, "OK", typeof(BaseResponse<IReadOnlyList<StockAdjustmentItemResponseDto>>))]
+    public async Task<ActionResult<BaseResponse<IReadOnlyList<StockAdjustmentItemResponseDto>>>> GetByStockAdjustmentId(
+        long stockAdjustmentId,
+        CancellationToken ct)
+        => Ok(await _service.GetByStockAdjustmentIdAsync(stockAdjustmentId, ct));
+
     [HttpGet("{id:long}")]
     [SwaggerOperation(OperationId = "StockAdjustmentItem_GetById")]
     [SwaggerResponse(StatusCodes.Status200OK, "OK", typeof(BaseResponse<StockAdjustmentItemResponseDto>))]

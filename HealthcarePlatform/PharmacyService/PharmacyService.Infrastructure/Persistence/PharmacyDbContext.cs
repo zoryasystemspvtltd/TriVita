@@ -38,6 +38,8 @@ public sealed class PharmacyDbContext : DbContext
     public DbSet<PhrPrescriptionMapping> PhrPrescriptionMappings => Set<PhrPrescriptionMapping>();
     public DbSet<PhrStockAdjustment> PhrStockAdjustments => Set<PhrStockAdjustment>();
     public DbSet<PhrStockAdjustmentItem> PhrStockAdjustmentItems => Set<PhrStockAdjustmentItem>();
+    public DbSet<PhrPurchaseBill> PhrPurchaseBills => Set<PhrPurchaseBill>();
+    public DbSet<PhrPurchaseBillItem> PhrPurchaseBillItems => Set<PhrPurchaseBillItem>();
     public DbSet<PhrStockTransfer> PhrStockTransfers => Set<PhrStockTransfer>();
     public DbSet<PhrStockTransferItem> PhrStockTransferItems => Set<PhrStockTransferItem>();
     public DbSet<PhrExpiryTracking> PhrExpiryTrackings => Set<PhrExpiryTracking>();
