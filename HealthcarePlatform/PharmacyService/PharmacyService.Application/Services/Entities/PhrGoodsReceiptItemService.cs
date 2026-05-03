@@ -4,6 +4,7 @@ using FluentValidation;
 using Healthcare.Common.Pagination;
 using Healthcare.Common.Responses;
 using PharmacyService.Application.DTOs.Entities;
+using PharmacyService.Application.DTOs.Stock;
 using PharmacyService.Application.Services;
 using PharmacyService.Application.Services.Extended;
 using PharmacyService.Domain.Entities;
@@ -143,6 +144,11 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
                 await _items.SaveChangesAsync(ct);
 
                 var grnDate = receipt.ReceivedOn == default ? DateTime.UtcNow : receipt.ReceivedOn;
+                var grnX = new StockLedgerMovementExtras
+                {
+                    SourceReference = receipt.GoodsReceiptNo,
+                    GrnSupplierId = receipt.SupplierId
+                };
                 var mv = await _stockMovement.ApplyMovementAsync(
                     StockLedgerTransactionType.GRN,
                     dto.GoodsReceiptId,
@@ -153,6 +159,7 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
                     grnDate,
                     dto.UnitPrice,
                     null,
+                    grnX,
                     ct);
                 if (!mv.Success)
                     return BaseResponse<GoodsReceiptItemResponseDto>.Fail(mv.Message ?? "Stock movement failed.");
@@ -197,6 +204,7 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
             {
                 var grnDate = receipt.ReceivedOn == default ? DateTime.UtcNow : receipt.ReceivedOn;
 
+                var grnX = new StockLedgerMovementExtras { SourceReference = receipt.GoodsReceiptNo, GrnSupplierId = receipt.SupplierId };
                 var rev = await _stockMovement.ApplyMovementAsync(
                     StockLedgerTransactionType.GRN,
                     entity.GoodsReceiptId,
@@ -207,6 +215,7 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
                     grnDate,
                     entity.PurchaseRate,
                     "GRN line correction (reverse)",
+                    grnX,
                     ct);
                 if (!rev.Success)
                     return BaseResponse<GoodsReceiptItemResponseDto>.Fail(rev.Message ?? "Stock reversal failed.");
@@ -281,6 +290,7 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
                     grnDate,
                     dto.UnitPrice,
                     null,
+                    grnX,
                     ct);
                 if (!mv.Success)
                     return BaseResponse<GoodsReceiptItemResponseDto>.Fail(mv.Message ?? "Stock movement failed.");
@@ -315,6 +325,7 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
             return await _uow.ExecuteInTransactionAsync(async ct =>
             {
                 var grnDate = receipt.ReceivedOn == default ? DateTime.UtcNow : receipt.ReceivedOn;
+                var grnX = new StockLedgerMovementExtras { SourceReference = receipt.GoodsReceiptNo, GrnSupplierId = receipt.SupplierId };
                 var rev = await _stockMovement.ApplyMovementAsync(
                     StockLedgerTransactionType.GRN,
                     entity.GoodsReceiptId,
@@ -325,6 +336,7 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
                     grnDate,
                     entity.PurchaseRate,
                     "GRN line deleted",
+                    grnX,
                     ct);
                 if (!rev.Success)
                     return BaseResponse<object?>.Fail(rev.Message ?? "Stock reversal failed.");

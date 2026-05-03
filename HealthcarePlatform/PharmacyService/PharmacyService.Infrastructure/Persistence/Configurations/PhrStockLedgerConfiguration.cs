@@ -35,5 +35,7 @@ public sealed class PhrStockLedgerConfiguration : IEntityTypeConfiguration<PhrSt
         builder.HasIndex(e => new { e.TenantId, e.FacilityId, e.TransactionDate });
         builder.HasIndex(e => new { e.TenantId, e.ReferenceId, e.TransactionType });
         builder.HasIndex(e => new { e.TenantId, e.MedicineId, e.TransactionDate });
+        builder.HasIndex(e => new { e.TenantId, e.FacilityId, e.MedicineBatchId, e.TransactionDate });
+        builder.HasIndex(e => new { e.TenantId, e.FacilityId, e.GrnSupplierId });
     }
 }

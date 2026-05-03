@@ -124,7 +124,7 @@ public sealed class PhrSalesBillServiceTests
         var r = await sut.PostAsync(1);
 
         r.Success.Should().BeFalse();
-        _stock.Verify(x => x.ApplyMovementAsync(It.IsAny<StockLedgerTransactionType>(), It.IsAny<long>(), It.IsAny<long?>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<decimal>(), It.IsAny<DateTime>(), It.IsAny<decimal?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()), Times.Never);
+        _stock.Verify(x => x.ApplyMovementAsync(It.IsAny<StockLedgerTransactionType>(), It.IsAny<long>(), It.IsAny<long?>(), It.IsAny<long>(), It.IsAny<long>(), It.IsAny<decimal>(), It.IsAny<DateTime>(), It.IsAny<decimal?>(), It.IsAny<string?>(), It.IsAny<StockLedgerMovementExtras>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]

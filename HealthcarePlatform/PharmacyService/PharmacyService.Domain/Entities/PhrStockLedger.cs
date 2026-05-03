@@ -31,5 +31,11 @@ public sealed class PhrStockLedger : BaseEntity
 
     public string? SourceReference { get; set; }
 
+    public long? GrnSupplierId { get; set; }
+
+    public long? SalePatientId { get; set; }
+
+    public long? SaleCustomerId { get; set; }
+
     public string? Notes { get; set; }
 }

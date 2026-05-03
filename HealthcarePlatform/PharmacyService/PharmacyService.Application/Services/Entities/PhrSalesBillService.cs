@@ -5,6 +5,7 @@ using Healthcare.Common.MultiTenancy;
 using Healthcare.Common.Pagination;
 using Healthcare.Common.Responses;
 using PharmacyService.Application.DTOs.Entities;
+using PharmacyService.Application.DTOs.Stock;
 using PharmacyService.Application.Services;
 using PharmacyService.Domain.Entities;
 using PharmacyService.Domain.Enums;
@@ -340,6 +341,12 @@ public sealed class PhrSalesBillService : IPhrSalesBillService
                 await _items.SaveChangesAsync(ct);
 
                 var saleDate = b2.SalesDate == default ? DateTime.UtcNow : b2.SalesDate;
+                var billX = new StockLedgerMovementExtras
+                {
+                    SourceReference = b2.BillNo,
+                    SalePatientId = b2.PatientId,
+                    SaleCustomerId = b2.CustomerId
+                };
                 var lineNum = 1;
                 foreach (var s in snapshots)
                 {
@@ -376,6 +383,7 @@ public sealed class PhrSalesBillService : IPhrSalesBillService
                             saleDate,
                             s.UnitPrice,
                             $"Sales bill {b2.BillNo}",
+                            billX,
                             ct);
                         if (!mv.Success)
                             return BaseResponse<SalesBillResponseDto>.Fail(mv.Message ?? "Stock deduction failed.");

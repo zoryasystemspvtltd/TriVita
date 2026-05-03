@@ -21,6 +21,7 @@ public interface IPharmacyStockMovementService
         DateTime transactionDate,
         decimal? unitCost,
         string? notes,
+        StockLedgerMovementExtras? extras = null,
         CancellationToken cancellationToken = default);
 
     Task<BaseResponse<IReadOnlyList<StockFefoAllocation>>> AllocateSaleFefoAsync(
@@ -61,6 +62,7 @@ public sealed class PharmacyStockMovementService : IPharmacyStockMovementService
         DateTime transactionDate,
         decimal? unitCost,
         string? notes,
+        StockLedgerMovementExtras? extras = null,
         CancellationToken cancellationToken = default)
     {
         if (_tenant.FacilityId is null)
@@ -126,6 +128,10 @@ public sealed class PharmacyStockMovementService : IPharmacyStockMovementService
             UnitCost = unitCost,
             TotalCost = totalCost,
             Notes = notes,
+            SourceReference = extras?.SourceReference,
+            GrnSupplierId = extras?.GrnSupplierId,
+            SalePatientId = extras?.SalePatientId,
+            SaleCustomerId = extras?.SaleCustomerId,
             IsActive = true
         };
         AuditHelper.ApplyCreate(row, _tenant);

@@ -335,6 +335,49 @@ export async function deleteStockLedger(id: number) {
   return data;
 }
 
+export type StockLedgerReportParams = PagedQueryParams & {
+  fromTransactionDate?: string;
+  toTransactionDate?: string;
+  transactionType?: number;
+  medicineId?: number;
+  medicineBatchId?: number;
+  supplierId?: number;
+  salePartyId?: number;
+  facilityId?: number;
+};
+
+export async function getStockLedgerDetailedReport(params: StockLedgerReportParams) {
+  const { data } = await pharmacyClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/stock-ledger/detailed',
+    { params }
+  );
+  return data;
+}
+
+export async function getStockLedgerSummaryReport(params: StockLedgerReportParams) {
+  const { data } = await pharmacyClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/stock-ledger/summary',
+    { params }
+  );
+  return data;
+}
+
+export async function downloadStockLedgerDetailedExcel(params: StockLedgerReportParams) {
+  const { data } = await pharmacyClient.get<Blob>('/api/v1/stock-ledger/detailed/export', {
+    params,
+    responseType: 'blob',
+  });
+  return data;
+}
+
+export async function downloadStockLedgerSummaryExcel(params: StockLedgerReportParams) {
+  const { data } = await pharmacyClient.get<Blob>('/api/v1/stock-ledger/summary/export', {
+    params,
+    responseType: 'blob',
+  });
+  return data;
+}
+
 export async function getBatchStockPaged(params: PagedQueryParams) {
   const { data } = await pharmacyClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
     '/api/v1/batch-stock',

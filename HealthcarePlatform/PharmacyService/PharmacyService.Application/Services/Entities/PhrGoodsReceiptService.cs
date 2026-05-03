@@ -4,6 +4,7 @@ using FluentValidation;
 using Healthcare.Common.Pagination;
 using Healthcare.Common.Responses;
 using PharmacyService.Application.DTOs.Entities;
+using PharmacyService.Application.DTOs.Stock;
 using PharmacyService.Application.Services;
 using PharmacyService.Application.Services.Extended;
 using PharmacyService.Domain.Entities;
@@ -236,6 +237,7 @@ public sealed class PhrGoodsReceiptService : PhrCrudServiceBase<PhrGoodsReceipt,
             {
                 var lines = await _items.ListAsync(x => x.GoodsReceiptId == id && !x.IsDeleted, ct);
                 var grnDate = entity.ReceivedOn == default ? DateTime.UtcNow : entity.ReceivedOn;
+                var grnX = new StockLedgerMovementExtras { SourceReference = entity.GoodsReceiptNo, GrnSupplierId = entity.SupplierId };
 
                 foreach (var line in lines)
                 {
@@ -249,6 +251,7 @@ public sealed class PhrGoodsReceiptService : PhrCrudServiceBase<PhrGoodsReceipt,
                         grnDate,
                         line.PurchaseRate,
                         "GRN deleted",
+                        grnX,
                         ct);
                     if (!rev.Success)
                         return BaseResponse<object?>.Fail(rev.Message ?? "Stock reversal failed.");
@@ -283,6 +286,7 @@ public sealed class PhrGoodsReceiptService : PhrCrudServiceBase<PhrGoodsReceipt,
         var byId = existing.ToDictionary(x => x.Id, x => x);
         var keep = new HashSet<long>();
         var grnDate = receipt.ReceivedOn == default ? DateTime.UtcNow : receipt.ReceivedOn;
+        var grnX = new StockLedgerMovementExtras { SourceReference = receipt.GoodsReceiptNo, GrnSupplierId = receipt.SupplierId };
 
         var lineNum = 1;
         foreach (var dto in lines)
@@ -358,6 +362,7 @@ public sealed class PhrGoodsReceiptService : PhrCrudServiceBase<PhrGoodsReceipt,
                     grnDate,
                     ent.PurchaseRate,
                     "GRN bulk upsert reverse",
+                    grnX,
                     ct);
                 if (!rev.Success)
                     throw new InvalidOperationException(rev.Message ?? "Stock reversal failed.");
@@ -386,6 +391,7 @@ public sealed class PhrGoodsReceiptService : PhrCrudServiceBase<PhrGoodsReceipt,
                     grnDate,
                     dto.UnitPrice,
                     null,
+                    grnX,
                     ct);
                 if (!mv.Success)
                     throw new InvalidOperationException(mv.Message ?? "Stock movement failed.");
@@ -429,6 +435,7 @@ public sealed class PhrGoodsReceiptService : PhrCrudServiceBase<PhrGoodsReceipt,
                     grnDate,
                     dto.UnitPrice,
                     null,
+                    grnX,
                     ct);
                 if (!mv.Success)
                     throw new InvalidOperationException(mv.Message ?? "Stock movement failed.");
@@ -456,6 +463,7 @@ public sealed class PhrGoodsReceiptService : PhrCrudServiceBase<PhrGoodsReceipt,
                 grnDate,
                 ent.PurchaseRate,
                 "GRN bulk upsert line removed",
+                grnX,
                 ct);
             if (!rev.Success)
                 throw new InvalidOperationException(rev.Message ?? "Stock reversal failed.");

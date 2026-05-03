@@ -101,6 +101,11 @@ public sealed class PhrPharmacySalesItemService : PhrCrudServiceBase<PhrPharmacy
                 await Repository.SaveChangesAsync(ct);
 
                 var saleDate = sale.SalesDate == default ? DateTime.UtcNow : sale.SalesDate;
+                var saleX = new StockLedgerMovementExtras
+                {
+                    SourceReference = sale.SalesNo,
+                    SalePatientId = sale.PatientId
+                };
                 foreach (var a in allocations)
                 {
                     var mv = await _stockMovement.ApplyMovementAsync(
@@ -113,6 +118,7 @@ public sealed class PhrPharmacySalesItemService : PhrCrudServiceBase<PhrPharmacy
                         saleDate,
                         dto.UnitPrice,
                         dto.Notes,
+                        saleX,
                         ct);
                     if (!mv.Success)
                         return BaseResponse<PharmacySalesItemResponseDto>.Fail(mv.Message ?? "Sale stock movement failed.");
@@ -176,6 +182,11 @@ public sealed class PhrPharmacySalesItemService : PhrCrudServiceBase<PhrPharmacy
                 await Repository.SaveChangesAsync(ct);
 
                 var saleDate = sale.SalesDate == default ? DateTime.UtcNow : sale.SalesDate;
+                var saleX = new StockLedgerMovementExtras
+                {
+                    SourceReference = sale.SalesNo,
+                    SalePatientId = sale.PatientId
+                };
                 foreach (var a in allocations)
                 {
                     var mv = await _stockMovement.ApplyMovementAsync(
@@ -188,6 +199,7 @@ public sealed class PhrPharmacySalesItemService : PhrCrudServiceBase<PhrPharmacy
                         saleDate,
                         dto.UnitPrice,
                         dto.Notes,
+                        saleX,
                         ct);
                     if (!mv.Success)
                         return BaseResponse<PharmacySalesItemResponseDto>.Fail(mv.Message ?? "Sale stock movement failed.");
@@ -249,6 +261,7 @@ public sealed class PhrPharmacySalesItemService : PhrCrudServiceBase<PhrPharmacy
             return "Pharmacy sale not found.";
 
         var saleDate = sale.SalesDate == default ? DateTime.UtcNow : sale.SalesDate;
+        var saleX = new StockLedgerMovementExtras { SourceReference = sale.SalesNo, SalePatientId = sale.PatientId };
 
         foreach (var row in rows.OrderBy(r => r.Id))
         {
@@ -262,6 +275,7 @@ public sealed class PhrPharmacySalesItemService : PhrCrudServiceBase<PhrPharmacy
                 saleDate,
                 row.UnitCost,
                 "Sale line reversal",
+                saleX,
                 ct);
             if (!mv.Success)
                 return mv.Message ?? "Sale reversal failed.";

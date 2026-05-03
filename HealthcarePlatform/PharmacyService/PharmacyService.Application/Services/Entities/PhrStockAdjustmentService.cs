@@ -4,6 +4,7 @@ using FluentValidation;
 using Healthcare.Common.Pagination;
 using Healthcare.Common.Responses;
 using PharmacyService.Application.DTOs.Entities;
+using PharmacyService.Application.DTOs.Stock;
 using PharmacyService.Application.Services;
 using PharmacyService.Application.Services.Extended;
 using PharmacyService.Domain.Entities;
@@ -137,6 +138,7 @@ public sealed class PhrStockAdjustmentService : PhrCrudServiceBase<PhrStockAdjus
                     return BaseResponse<StockAdjustmentResponseDto>.Fail("Add at least one line before posting.");
 
                 var txnDate = adj2.AdjustmentOn == default ? DateTime.UtcNow : adj2.AdjustmentOn;
+                var adjX = new StockLedgerMovementExtras { SourceReference = adj2.AdjustmentNo };
                 foreach (var line in lines2.OrderBy(l => l.LineNum).ThenBy(l => l.Id))
                 {
                     var batch = await _batches.GetByIdAsync(line.MedicineBatchId, ct);
@@ -153,6 +155,7 @@ public sealed class PhrStockAdjustmentService : PhrCrudServiceBase<PhrStockAdjus
                         txnDate,
                         line.UnitCost,
                         line.Notes,
+                        adjX,
                         ct);
                     if (!mv.Success)
                         return BaseResponse<StockAdjustmentResponseDto>.Fail(mv.Message ?? "Stock adjustment movement failed.");

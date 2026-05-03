@@ -11,6 +11,8 @@ using PharmacyService.Domain.Repositories;
 using PharmacyService.Infrastructure.Notifications;
 using PharmacyService.Infrastructure.Persistence;
 using PharmacyService.Infrastructure.Persistence.Repositories;
+using PharmacyService.Infrastructure.Reporting;
+using PharmacyService.Application.Services.Entities;
 
 namespace PharmacyService.Infrastructure;
 
@@ -38,6 +40,7 @@ public static class DependencyInjection
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
         services.AddScoped<IPharmacyUnitOfWork, PharmacyUnitOfWork>();
         services.AddScoped<IPharmacyLockedStockReader, PharmacyLockedStockReader>();
+        services.AddScoped<IStockLedgerReportingService, StockLedgerReportingService>();
 
         return services;
     }
