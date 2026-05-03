@@ -462,6 +462,52 @@ export async function postPurchaseBill(id: number) {
   return data;
 }
 
+export async function getCustomerPaged(params: PagedQueryParams) {
+  const { data } = await pharmacyClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/customer',
+    { params }
+  );
+  return data;
+}
+
+export async function getSalesBillPaged(params: PagedQueryParams) {
+  const { data } = await pharmacyClient.get<BaseResponse<PagedResponse<Record<string, unknown>>>>(
+    '/api/v1/sales-bill',
+    { params }
+  );
+  return data;
+}
+
+export async function getSalesBillById(id: number) {
+  const { data } = await pharmacyClient.get<BaseResponse<Record<string, unknown>>>(`/api/v1/sales-bill/${id}`);
+  return data;
+}
+
+export async function createSalesBill(body: Record<string, unknown>) {
+  const { data } = await pharmacyClient.post<BaseResponse<Record<string, unknown>>>('/api/v1/sales-bill', body);
+  return data;
+}
+
+export async function updateSalesBill(id: number, body: Record<string, unknown>) {
+  const { data } = await pharmacyClient.put<BaseResponse<Record<string, unknown>>>(
+    `/api/v1/sales-bill/${id}`,
+    body
+  );
+  return data;
+}
+
+export async function deleteSalesBill(id: number) {
+  const { data } = await pharmacyClient.delete<BaseResponse<unknown>>(`/api/v1/sales-bill/${id}`);
+  return data;
+}
+
+export async function postSalesBill(id: number) {
+  const { data } = await pharmacyClient.post<BaseResponse<Record<string, unknown>>>(
+    `/api/v1/sales-bill/${id}/post`
+  );
+  return data;
+}
+
 export async function createGoodsReceipt(body: Record<string, unknown>) {
   const { data } = await pharmacyClient.post<BaseResponse<Record<string, unknown>>>('/api/v1/goods-receipt', body);
   return data;

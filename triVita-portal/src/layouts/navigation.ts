@@ -166,6 +166,7 @@ export const mainNavigation: NavItem[] = [
           { label: 'Purchase order', path: '/pharmacy/transactions/purchase-order' },
           { label: 'Goods receipt (GRN)', path: '/pharmacy/transactions/goods-receipt' },
           { label: 'Purchase Bill', path: '/pharmacy/transactions/purchase-bill' },
+          { label: 'Sales Bill', path: '/pharmacy/transactions/sales-bill' },
           { label: 'Stock adjustment', path: '/pharmacy/transactions/stock-adjustment' },
           { label: 'Sales / billing', path: '/pharmacy/transactions/sales' },
         ],

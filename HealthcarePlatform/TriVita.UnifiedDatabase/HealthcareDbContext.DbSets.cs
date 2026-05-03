@@ -175,6 +175,8 @@ public sealed partial class HealthcareDbContext
     public DbSet<PhrControlledDrugRegister> PhrControlledDrugRegisters => Set<PhrControlledDrugRegister>();
     public DbSet<PhrBatchStockLocation> PhrBatchStockLocations => Set<PhrBatchStockLocation>();
     public DbSet<PhrReorderPolicy> PhrReorderPolicies => Set<PhrReorderPolicy>();
+    public DbSet<PhrSalesBill> PhrSalesBills => Set<PhrSalesBill>();
+    public DbSet<PhrSalesBillItem> PhrSalesBillItems => Set<PhrSalesBillItem>();
 
     // Shared
     public DbSet<Address> Addresses => Set<Address>();

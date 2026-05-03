@@ -127,6 +127,9 @@ export const PharmacyGoodsReceiptView = lazy(() =>
 export const PharmacyPurchaseBillView = lazy(() =>
   import('@/modules/pharmacy/extendedViews').then((m) => ({ default: m.PharmacyPurchaseBillView }))
 );
+export const PharmacySalesBillView = lazy(() =>
+  import('@/modules/pharmacy/extendedViews').then((m) => ({ default: m.PharmacySalesBillView }))
+);
 export const PharmacyStockLedgerView = lazy(() =>
   import('@/modules/pharmacy/extendedViews').then((m) => ({ default: m.PharmacyStockLedgerView }))
 );

@@ -474,6 +474,12 @@ public sealed class PhrGeneratedMappingProfile : Profile
         CreateMap<PhrPurchaseBill, PurchaseBillResponseDto>()
             .ForMember(d => d.Items, o => o.Ignore());
 
+        CreateMap<PhrSalesBill, SalesBillResponseDto>()
+            .ForMember(d => d.Items, o => o.Ignore());
+        CreateMap<PhrSalesBillItem, SalesBillItemResponseDto>()
+            .ForMember(d => d.MedicineName, o => o.Ignore())
+            .ForMember(d => d.BatchNo, o => o.Ignore());
+
         CreateMap<PhrStockTransfer, StockTransferResponseDto>();
         CreateMap<CreateStockTransferDto, PhrStockTransfer>()
             .ForMember(d => d.Id, o => o.Ignore())
