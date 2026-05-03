@@ -35,4 +35,23 @@ public sealed class PhrBatchStockService : PhrCrudServiceBase<PhrBatchStock, Cre
 
     public Task<BaseResponse<PagedResponse<BatchStockResponseDto>>> GetPagedAsync(PagedQuery query, CancellationToken cancellationToken = default)
         => GetPagedCoreAsync(query, null, cancellationToken);
+
+    public override Task<BaseResponse<BatchStockResponseDto>> CreateAsync(
+        CreateBatchStockDto dto,
+        CancellationToken cancellationToken = default) =>
+        Task.FromResult(
+            BaseResponse<BatchStockResponseDto>.Fail(
+                "Batch stock cannot be created directly. Use StockLedger flows (GRN, adjustment, sale)."));
+
+    public override Task<BaseResponse<BatchStockResponseDto>> UpdateAsync(
+        long id,
+        UpdateBatchStockDto dto,
+        CancellationToken cancellationToken = default) =>
+        Task.FromResult(
+            BaseResponse<BatchStockResponseDto>.Fail(
+                "Batch stock quantities cannot be edited directly. Use StockLedger flows (GRN, adjustment, sale)."));
+
+    public override Task<BaseResponse<object?>> DeleteAsync(long id, CancellationToken cancellationToken = default) =>
+        Task.FromResult(
+            BaseResponse<object?>.Fail("Batch stock rows cannot be deleted via API; they follow ledger movements."));
 }

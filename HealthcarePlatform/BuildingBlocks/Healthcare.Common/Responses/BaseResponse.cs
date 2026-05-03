@@ -1,6 +1,11 @@
 namespace Healthcare.Common.Responses;
 
-public class BaseResponse<T>
+public interface IBaseResponse
+{
+    bool Success { get; }
+}
+
+public class BaseResponse<T> : IBaseResponse
 {
     public bool Success { get; set; }
 

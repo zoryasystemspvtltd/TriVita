@@ -41,15 +41,17 @@ public sealed class StockLedgerController : ControllerBase
     public async Task<ActionResult<BaseResponse<PagedResponse<StockLedgerResponseDto>>>> GetPaged([FromQuery] PagedQuery query, CancellationToken ct)
         => Ok(await _service.GetPagedAsync(query, ct));
 
-    [HttpPost]
-    public async Task<ActionResult<BaseResponse<StockLedgerResponseDto>>> Create([FromBody] CreateStockLedgerDto dto, CancellationToken ct)
-        => Ok(await _service.CreateAsync(dto, ct));
+    [HttpGet("report/detail")]
+    [SwaggerOperation(OperationId = "StockLedger_GetReportDetailPaged")]
+    public async Task<ActionResult<BaseResponse<PagedResponse<StockLedgerResponseDto>>>> GetReportDetailPaged(
+        [FromQuery] StockLedgerReportQuery query,
+        CancellationToken ct)
+        => Ok(await _service.GetReportPagedAsync(query, ct));
 
-    [HttpPut("{id:long}")]
-    public async Task<ActionResult<BaseResponse<StockLedgerResponseDto>>> Update(long id, [FromBody] UpdateStockLedgerDto dto, CancellationToken ct)
-        => Ok(await _service.UpdateAsync(id, dto, ct));
-
-    [HttpDelete("{id:long}")]
-    public async Task<ActionResult<BaseResponse<object?>>> Delete(long id, CancellationToken ct)
-        => Ok(await _service.DeleteAsync(id, ct));
+    [HttpGet("report/summary")]
+    [SwaggerOperation(OperationId = "StockLedger_GetSummaryReport")]
+    public async Task<ActionResult<BaseResponse<IReadOnlyList<StockLedgerSummaryRowDto>>>> GetSummaryReport(
+        [FromQuery] StockLedgerReportQuery filter,
+        CancellationToken ct)
+        => Ok(await _service.GetSummaryReportAsync(filter, ct));
 }

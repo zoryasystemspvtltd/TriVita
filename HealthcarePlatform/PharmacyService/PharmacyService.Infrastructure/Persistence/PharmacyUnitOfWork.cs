@@ -1,3 +1,5 @@
+using System.Data;
+using Healthcare.Common.Responses;
 using PharmacyService.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,9 +14,12 @@ public sealed class PharmacyUnitOfWork : IPharmacyUnitOfWork
         _db = db;
     }
 
-    public async Task ExecuteInTransactionAsync(Func<CancellationToken, Task> action, CancellationToken cancellationToken = default)
+    public async Task ExecuteInTransactionAsync(
+        Func<CancellationToken, Task> action,
+        CancellationToken cancellationToken = default,
+        IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
-        await using var tx = await _db.Database.BeginTransactionAsync(cancellationToken);
+        await using var tx = await _db.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
         try
         {
             await action(cancellationToken);
@@ -28,12 +33,22 @@ public sealed class PharmacyUnitOfWork : IPharmacyUnitOfWork
         }
     }
 
-    public async Task<T> ExecuteInTransactionAsync<T>(Func<CancellationToken, Task<T>> action, CancellationToken cancellationToken = default)
+    public async Task<T> ExecuteInTransactionAsync<T>(
+        Func<CancellationToken, Task<T>> action,
+        CancellationToken cancellationToken = default,
+        IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
-        await using var tx = await _db.Database.BeginTransactionAsync(cancellationToken);
+        await using var tx = await _db.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
         try
         {
             var result = await action(cancellationToken);
+            if (result is IBaseResponse { Success: false })
+            {
+                await tx.RollbackAsync(cancellationToken);
+                _db.ChangeTracker.Clear();
+                return result;
+            }
+
             await _db.SaveChangesAsync(cancellationToken);
             await tx.CommitAsync(cancellationToken);
             return result;

@@ -105,16 +105,29 @@ export function PharmacyStockLedger() {
             tableAriaLabel="Stock ledger"
             columns={[
               {
-                id: 'transactionOn',
+                id: 'transactionDate',
                 label: 'Date',
                 minWidth: 120,
-                format: (r) => (r.transactionOn != null ? String(r.transactionOn).slice(0, 16).replace('T', ' ') : '—'),
+                format: (r) => {
+                  const dt =
+                    r.transactionDate ??
+                    r.TransactionDate ??
+                    r.transactionOn ??
+                    r.TransactionOn;
+                  return dt != null ? String(dt).slice(0, 16).replace('T', ' ') : '—';
+                },
               },
               {
                 id: 'type',
                 label: 'Transaction type',
                 minWidth: 140,
-                format: (r) => tm.get(String(r.ledgerTypeReferenceValueId ?? r.LedgerTypeReferenceValueId ?? '')) ?? '—',
+                format: (r) => {
+                  const tt = num(r, 'transactionType', 'TransactionType');
+                  if (tt === 1) return 'GRN';
+                  if (tt === 2) return 'SALE';
+                  if (tt === 3) return 'ADJUSTMENT';
+                  return tm.get(String(r.ledgerTypeReferenceValueId ?? r.LedgerTypeReferenceValueId ?? '')) ?? '—';
+                },
               },
               {
                 id: 'qty',
@@ -173,7 +186,20 @@ export function PharmacyStockLedger() {
       <DetailDrawer
         open={drawerId != null}
         onClose={() => setDrawerId(null)}
-        title={detailData && detailData.transactionOn != null ? String(detailData.transactionOn).slice(0, 16).replace('T', ' ') : 'Movement'}
+        title={
+          detailData &&
+          (detailData.transactionDate ??
+            detailData.TransactionDate ??
+            detailData.transactionOn ??
+            detailData.TransactionOn) != null
+            ? String(
+                detailData.transactionDate ??
+                  detailData.TransactionDate ??
+                  detailData.transactionOn ??
+                  detailData.TransactionOn
+              ).slice(0, 16).replace('T', ' ')
+            : 'Movement'
+        }
         subtitle={batchLabel || undefined}
       >
         {detailData ? (
@@ -181,7 +207,13 @@ export function PharmacyStockLedger() {
             <DetailKv label="Batch" value={batchLabel} />
             <DetailKv
               label="Transaction type"
-              value={tm.get(String(detailData.ledgerTypeReferenceValueId ?? detailData.LedgerTypeReferenceValueId ?? '')) ?? ''}
+              value={(() => {
+                const tt = num(detailData, 'transactionType', 'TransactionType');
+                if (tt === 1) return 'GRN';
+                if (tt === 2) return 'SALE';
+                if (tt === 3) return 'ADJUSTMENT';
+                return tm.get(String(detailData.ledgerTypeReferenceValueId ?? detailData.LedgerTypeReferenceValueId ?? '')) ?? '';
+              })()}
             />
             <DetailKv
               label="Quantity change"

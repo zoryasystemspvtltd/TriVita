@@ -5,6 +5,7 @@ using Healthcare.Common.MultiTenancy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PharmacyService.Application.Abstractions;
 using PharmacyService.Application.Options;
 using PharmacyService.Domain.Repositories;
 using PharmacyService.Infrastructure.Notifications;
@@ -36,6 +37,7 @@ public static class DependencyInjection
 
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
         services.AddScoped<IPharmacyUnitOfWork, PharmacyUnitOfWork>();
+        services.AddScoped<IPharmacyLockedStockReader, PharmacyLockedStockReader>();
 
         return services;
     }

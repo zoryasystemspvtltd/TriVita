@@ -1,11 +1,14 @@
+using System.Data;
 using AutoMapper;
 using FluentValidation;
 using Healthcare.Common.Pagination;
 using Healthcare.Common.Responses;
-using PharmacyService.Domain.Entities;
 using PharmacyService.Application.DTOs.Entities;
-using PharmacyService.Domain.Repositories;
+using PharmacyService.Application.Services;
 using PharmacyService.Application.Services.Extended;
+using PharmacyService.Domain.Entities;
+using PharmacyService.Domain.Enums;
+using PharmacyService.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 
 namespace PharmacyService.Application.Services.Entities;
@@ -26,7 +29,7 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
     private readonly IRepository<PhrPurchaseOrderItem> _purchaseOrderItems;
     private readonly IRepository<PhrPurchaseOrder> _purchaseOrders;
     private readonly IRepository<PhrMedicineBatch> _batches;
-    private readonly IRepository<PhrBatchStock> _batchStocks;
+    private readonly IPharmacyStockMovementService _stockMovement;
     private readonly IPharmacyUnitOfWork _uow;
 
     public PhrGoodsReceiptItemService(
@@ -35,7 +38,7 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
         IRepository<PhrPurchaseOrder> purchaseOrders,
         IRepository<PhrPurchaseOrderItem> purchaseOrderItems,
         IRepository<PhrMedicineBatch> batches,
-        IRepository<PhrBatchStock> batchStocks,
+        IPharmacyStockMovementService stockMovement,
         IMapper mapper,
         Healthcare.Common.MultiTenancy.ITenantContext tenant,
         IValidator<CreateGoodsReceiptItemDto>? createValidator,
@@ -50,7 +53,7 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
         _purchaseOrders = purchaseOrders;
         _purchaseOrderItems = purchaseOrderItems;
         _batches = batches;
-        _batchStocks = batchStocks;
+        _stockMovement = stockMovement;
         _uow = uow;
     }
 
@@ -77,7 +80,6 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
         {
             return await _uow.ExecuteInTransactionAsync(async ct =>
             {
-                // PO validation (mode rules + remaining qty)
                 if (receipt.PurchaseOrderId is { } poId)
                 {
                     if (dto.PurchaseOrderItemId is not { } poiId || poiId <= 0)
@@ -128,39 +130,6 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
                         return BaseResponse<GoodsReceiptItemResponseDto>.Fail("Batch already exists with a different ExpiryDate for the same medicine.");
                 }
 
-                var existingStocks = await _batchStocks.ListAsync(s => s.MedicineBatchId == batch.Id, ct);
-                var stock = existingStocks.FirstOrDefault();
-
-                if (stock is null)
-                {
-                    stock = new PhrBatchStock
-                    {
-                        MedicineBatchId = batch.Id,
-                        CurrentQty = dto.QuantityReceived,
-                        ReservedQty = 0m,
-                        AvailableQty = dto.QuantityReceived,
-                        LastUpdatedOn = DateTime.UtcNow,
-                        IsActive = true
-                    };
-                    AuditHelper.ApplyCreate(stock, Tenant);
-                    stock.FacilityId = Tenant.FacilityId;
-                    await _batchStocks.AddAsync(stock, ct);
-                }
-                else
-                {
-                    stock.CurrentQty += dto.QuantityReceived;
-                    stock.AvailableQty += dto.QuantityReceived;
-                    stock.LastUpdatedOn = DateTime.UtcNow;
-                    AuditHelper.ApplyUpdate(stock, Tenant);
-                    await _batchStocks.UpdateAsync(stock, ct);
-                }
-
-                batch.AvailableQuantity += dto.QuantityReceived;
-                batch.PurchaseRate = dto.UnitPrice;
-                if (dto.MRP is not null) batch.MRP = dto.MRP;
-                AuditHelper.ApplyUpdate(batch, Tenant);
-                await _batches.UpdateAsync(batch, ct);
-
                 var item = Mapper.Map<PhrGoodsReceiptItem>(dto);
                 item.MedicineBatchId = batch.Id;
                 item.BatchNo = batchNo;
@@ -173,10 +142,30 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
                 await _items.AddAsync(item, ct);
                 await _items.SaveChangesAsync(ct);
 
+                var grnDate = receipt.ReceivedOn == default ? DateTime.UtcNow : receipt.ReceivedOn;
+                var mv = await _stockMovement.ApplyMovementAsync(
+                    StockLedgerTransactionType.GRN,
+                    dto.GoodsReceiptId,
+                    item.Id,
+                    dto.MedicineId,
+                    batch.Id,
+                    dto.QuantityReceived,
+                    grnDate,
+                    dto.UnitPrice,
+                    null,
+                    ct);
+                if (!mv.Success)
+                    return BaseResponse<GoodsReceiptItemResponseDto>.Fail(mv.Message ?? "Stock movement failed.");
+
+                batch.PurchaseRate = dto.UnitPrice;
+                if (dto.MRP is not null) batch.MRP = dto.MRP;
+                AuditHelper.ApplyUpdate(batch, Tenant);
+                await _batches.UpdateAsync(batch, ct);
+
                 await RecalcGoodsReceiptTotalsAsync(dto.GoodsReceiptId, ct);
 
                 return BaseResponse<GoodsReceiptItemResponseDto>.Ok(Mapper.Map<GoodsReceiptItemResponseDto>(item), "Created.");
-            }, cancellationToken);
+            }, cancellationToken, IsolationLevel.Serializable);
         }
         catch (Exception ex)
         {
@@ -206,27 +195,22 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
         {
             return await _uow.ExecuteInTransactionAsync(async ct =>
             {
-                // Reverse old quantities from stock/batch
-                var oldBatch = await _batches.GetByIdAsync(entity.MedicineBatchId, ct);
-                if (oldBatch is not null)
-                {
-                    var oldStockList = await _batchStocks.ListAsync(s => s.MedicineBatchId == oldBatch.Id, ct);
-                    var oldStock = oldStockList.FirstOrDefault();
-                    if (oldStock is not null)
-                    {
-                        oldStock.CurrentQty -= entity.QuantityReceived;
-                        oldStock.AvailableQty -= entity.QuantityReceived;
-                        oldStock.LastUpdatedOn = DateTime.UtcNow;
-                        AuditHelper.ApplyUpdate(oldStock, Tenant);
-                        await _batchStocks.UpdateAsync(oldStock, ct);
-                    }
+                var grnDate = receipt.ReceivedOn == default ? DateTime.UtcNow : receipt.ReceivedOn;
 
-                    oldBatch.AvailableQuantity -= entity.QuantityReceived;
-                    AuditHelper.ApplyUpdate(oldBatch, Tenant);
-                    await _batches.UpdateAsync(oldBatch, ct);
-                }
+                var rev = await _stockMovement.ApplyMovementAsync(
+                    StockLedgerTransactionType.GRN,
+                    entity.GoodsReceiptId,
+                    entity.Id,
+                    entity.MedicineId,
+                    entity.MedicineBatchId,
+                    -entity.QuantityReceived,
+                    grnDate,
+                    entity.PurchaseRate,
+                    "GRN line correction (reverse)",
+                    ct);
+                if (!rev.Success)
+                    return BaseResponse<GoodsReceiptItemResponseDto>.Fail(rev.Message ?? "Stock reversal failed.");
 
-                // Mode validation for PO-based receipts (remaining qty excluding this line)
                 if (receipt.PurchaseOrderId is { } poId)
                 {
                     if (dto.PurchaseOrderItemId is not { } poiId || poiId <= 0)
@@ -250,7 +234,6 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
                         return BaseResponse<GoodsReceiptItemResponseDto>.Fail("SupplierId is required on Goods Receipt when PurchaseOrderId is null.");
                 }
 
-                // Resolve (or create) batch from new input
                 var batchNo = dto.BatchNo.Trim();
                 var existingBatches = await _batches.ListAsync(b => b.MedicineId == dto.MedicineId && b.BatchNo == batchNo, ct);
                 var batch = existingBatches.FirstOrDefault();
@@ -278,39 +261,6 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
                         return BaseResponse<GoodsReceiptItemResponseDto>.Fail("Batch already exists with a different ExpiryDate for the same medicine.");
                 }
 
-                var stockList = await _batchStocks.ListAsync(s => s.MedicineBatchId == batch.Id, ct);
-                var stock = stockList.FirstOrDefault();
-                if (stock is null)
-                {
-                    stock = new PhrBatchStock
-                    {
-                        MedicineBatchId = batch.Id,
-                        CurrentQty = dto.QuantityReceived,
-                        ReservedQty = 0m,
-                        AvailableQty = dto.QuantityReceived,
-                        LastUpdatedOn = DateTime.UtcNow,
-                        IsActive = true
-                    };
-                    AuditHelper.ApplyCreate(stock, Tenant);
-                    stock.FacilityId = Tenant.FacilityId;
-                    await _batchStocks.AddAsync(stock, ct);
-                }
-                else
-                {
-                    stock.CurrentQty += dto.QuantityReceived;
-                    stock.AvailableQty += dto.QuantityReceived;
-                    stock.LastUpdatedOn = DateTime.UtcNow;
-                    AuditHelper.ApplyUpdate(stock, Tenant);
-                    await _batchStocks.UpdateAsync(stock, ct);
-                }
-
-                batch.AvailableQuantity += dto.QuantityReceived;
-                batch.PurchaseRate = dto.UnitPrice;
-                if (dto.MRP is not null) batch.MRP = dto.MRP;
-                AuditHelper.ApplyUpdate(batch, Tenant);
-                await _batches.UpdateAsync(batch, ct);
-
-                // Update entity fields
                 Mapper.Map(dto, entity);
                 entity.MedicineBatchId = batch.Id;
                 entity.BatchNo = batchNo;
@@ -321,9 +271,28 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
                 await _items.UpdateAsync(entity, ct);
                 await _items.SaveChangesAsync(ct);
 
+                var mv = await _stockMovement.ApplyMovementAsync(
+                    StockLedgerTransactionType.GRN,
+                    entity.GoodsReceiptId,
+                    entity.Id,
+                    dto.MedicineId,
+                    batch.Id,
+                    dto.QuantityReceived,
+                    grnDate,
+                    dto.UnitPrice,
+                    null,
+                    ct);
+                if (!mv.Success)
+                    return BaseResponse<GoodsReceiptItemResponseDto>.Fail(mv.Message ?? "Stock movement failed.");
+
+                batch.PurchaseRate = dto.UnitPrice;
+                if (dto.MRP is not null) batch.MRP = dto.MRP;
+                AuditHelper.ApplyUpdate(batch, Tenant);
+                await _batches.UpdateAsync(batch, ct);
+
                 await RecalcGoodsReceiptTotalsAsync(entity.GoodsReceiptId, ct);
                 return BaseResponse<GoodsReceiptItemResponseDto>.Ok(Mapper.Map<GoodsReceiptItemResponseDto>(entity), "Updated.");
-            }, cancellationToken);
+            }, cancellationToken, IsolationLevel.Serializable);
         }
         catch (Exception ex)
         {
@@ -338,39 +307,38 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
         if (entity is null) return BaseResponse<object?>.Fail("GoodsReceiptItem not found.");
         if (!IsEntityInFacilityScope(entity)) return BaseResponse<object?>.Fail("Resource is not in the current facility scope.");
 
+        var receipt = await _goodsReceipts.GetByIdAsync(entity.GoodsReceiptId, cancellationToken);
+        if (receipt is null) return BaseResponse<object?>.Fail("Goods receipt not found.");
+
         try
         {
             return await _uow.ExecuteInTransactionAsync(async ct =>
             {
+                var grnDate = receipt.ReceivedOn == default ? DateTime.UtcNow : receipt.ReceivedOn;
+                var rev = await _stockMovement.ApplyMovementAsync(
+                    StockLedgerTransactionType.GRN,
+                    entity.GoodsReceiptId,
+                    entity.Id,
+                    entity.MedicineId,
+                    entity.MedicineBatchId,
+                    -entity.QuantityReceived,
+                    grnDate,
+                    entity.PurchaseRate,
+                    "GRN line deleted",
+                    ct);
+                if (!rev.Success)
+                    return BaseResponse<object?>.Fail(rev.Message ?? "Stock reversal failed.");
+
                 entity.IsDeleted = true;
                 entity.IsActive = false;
                 AuditHelper.ApplyUpdate(entity, Tenant);
                 await _items.UpdateAsync(entity, ct);
 
-                var batch = await _batches.GetByIdAsync(entity.MedicineBatchId, ct);
-                if (batch is not null)
-                {
-                    var stockList = await _batchStocks.ListAsync(s => s.MedicineBatchId == batch.Id, ct);
-                    var stock = stockList.FirstOrDefault();
-                    if (stock is not null)
-                    {
-                        stock.CurrentQty -= entity.QuantityReceived;
-                        stock.AvailableQty -= entity.QuantityReceived;
-                        stock.LastUpdatedOn = DateTime.UtcNow;
-                        AuditHelper.ApplyUpdate(stock, Tenant);
-                        await _batchStocks.UpdateAsync(stock, ct);
-                    }
-
-                    batch.AvailableQuantity -= entity.QuantityReceived;
-                    AuditHelper.ApplyUpdate(batch, Tenant);
-                    await _batches.UpdateAsync(batch, ct);
-                }
-
                 await _items.SaveChangesAsync(ct);
 
                 await RecalcGoodsReceiptTotalsAsync(entity.GoodsReceiptId, ct);
                 return BaseResponse<object?>.Ok(null, "Deleted.");
-            }, cancellationToken);
+            }, cancellationToken, IsolationLevel.Serializable);
         }
         catch (Exception ex)
         {
@@ -396,7 +364,7 @@ public sealed class PhrGoodsReceiptItemService : PhrCrudServiceBase<PhrGoodsRece
         }
 
         var lines = await _items.ListAsync(x => x.GoodsReceiptId == goodsReceiptId, ct);
-        var subTotal = lines.Sum(x => x.LineTotal);
+        var subTotal = lines.Where(x => !x.IsDeleted).Sum(x => x.LineTotal);
 
         gr.SubTotal = subTotal;
         var taxable = Math.Max(0m, gr.SubTotal - gr.DiscountAmount);
